@@ -1,0 +1,28 @@
+.master {
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  background-color: #FAFAFA;
+  display: flex;
+}
+
+.content {
+  background-color: #fafafa;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  margin-top: 80px;
+  /* margin-left: 240px; */
+}
+
+.main {
+  max-width: 1200px;
+  width: 100%;
+  margin:auto;
+  margin-top: 64px;
+  border-radius: 5px;
+  padding-bottom: 64px;
+}
+

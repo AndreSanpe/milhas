@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 80px;
+  margin-left: 48px;
+  margin-right: 48px;
+  border-bottom: 1px solid #E0E0E0;
+  
+}
+
+.header span {
+  font-weight: 600;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #292929;
+}
+
+.subtitle {
+  font-size: 14px;
+  font-weight: 400;
+  padding-top: 20px;
+  line-height: 1.5;
+  color: #525252;
+}
+
+.data {
+  font-size: 14px;
+  font-weight: 400;
+  padding-top: 8px;
+  line-height: 1.5;
+  color: #525252;
+  padding-bottom: 48px;
+}
+
+.avatar {
+  border-radius: 50;
+}

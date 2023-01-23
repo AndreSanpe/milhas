@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  font-size: 32px;
+  line-height: 1.25;
+  font-weight: 500;
+  color: #292929;
+}
+
+.containerLine {
+  display: flex;
+  align-items:flex-end;
+  max-height: 32px;
+  height: 32px;
+  margin-left: 8px;
+}
+
+.line {
+  display: block;
+  height: 4px;
+  width: 12px;
+  background-color: #E92D30;
+}

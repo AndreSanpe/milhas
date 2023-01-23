@@ -1,0 +1,103 @@
+.aux {
+  border-right: 1px solid #E0E0E0;
+  position: fixed;
+  top: 80px;
+  left: 0;
+  transition: all ease .2s;
+}
+
+.container {
+  background-color:#FAFAFA;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: calc(100vh - 80px);
+  max-width: 280px;
+  z-index: 999;
+  justify-content: space-between;
+  transition: all ease .2s;
+}
+
+.sidebar {
+  width: 280px;
+  padding-top: 48px;
+  transition: all ease .2s;
+  
+}
+
+.sidebar ul {
+  display: flex;
+  flex-direction: column;
+  background-color: aqua;
+  list-style: none;
+}
+
+.sidebar li {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 20px;
+}
+
+.sidebar li:hover {
+  background-color: #F0F0F0;
+  border-right: 5px solid #E92D30;
+  cursor: pointer;
+}
+
+.sidebar a {
+  text-decoration: none;
+  text-align: center;
+  color: #3D3D3D;
+  display: flex;
+  line-height: 1.5;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+}
+
+.oneIcon {
+  fill:#525252;
+}
+
+.label {
+  display: block;
+  padding-top: 2px;
+  padding-left: 8px;
+  transition: all ease .2s;
+}
+
+.item {
+  background-color: #FAFAFA;
+  
+}
+
+.itemActive {
+  background-color: #F0F0F0;
+  border-right: 5px solid #E92D30;
+}
+
+.auxBtn {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  border: none;
+  border-top: 1px solid #E0E0E0;
+  padding-left: 24px;
+  height: 40px;
+  display: flex;
+  background-color: #FAFAFA;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.btnLabel {
+  padding-left: 8px;
+  color: #3D3D3D;
+  transition: all ease .2s;
+}
