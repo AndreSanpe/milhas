@@ -12,19 +12,16 @@ const Header = () => {
   
   return (<>
 
-    {/* Header begin */}
-    <div className={styles.container}>
+    <div className={styles.container}>{/* Header begin */}
       <div className={styles.icon} onClick={() => setMenuOpen(true)}>
         <MenuIcon className={styles.oneIcon} />
       </div>
-      <div className={styles.logo}>LOGO</div>  
+      <div className={styles.logo}>LOGO</div> 
     </div> {/* Header end */} 
-
+    
  
     {/* Menu begin - overlay */}
-    
     <div className={styles.overlay} style={{ width: menuOpen ? '100%' : '0px'}}>
-     
       {/* Content begin */}
       <div className={styles.containerMenu} style={{ width: menuOpen ? '300px' : '0px'}}>
         <div style={{display: menuOpen ? 'flex' : ' none'}}>

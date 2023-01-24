@@ -5,14 +5,30 @@ import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { User } from '../../types/User';
 import { useAuthContext } from '../../contexts/auth';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Session, unstable_getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
 import api from '../../libs/api';
+import Input from '../../components/Input';
+
+interface Inputs {
+  cep: string;
+  currency: string;
+}
 
 const Dashboard = (data: Props) => {
  
   const { user, setUser } = useAuthContext();
+
+  const [ value, setValue ] = useState<Inputs>({} as Inputs)
+
+  const handleChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+    setValue({
+      ...value,
+      [e.currentTarget.name]: e.currentTarget.value
+    })
+  }, [value])
+
 
   useEffect(() => {
     if(user === null || user != data.user) {
@@ -26,14 +42,27 @@ const Dashboard = (data: Props) => {
     </Head>
     <Layout>
       <div className={styles.container}>
-        <div className={styles.header}>
+        {/* <div className={styles.header}>
           <h1 className={styles.title}>Olá, {user?.name}!</h1>
           <h2 className={styles.subtitle}>Você está logado na conta de: <span>{user?.email}</span></h2>
           <h2 className={styles.data}>Data de expiração: <span>{}</span></h2>
-        </div>
-      
-        </div>
-         
+        </div> */}
+      {/* <InputField /> */}
+      <Input
+        onSet={handleChange}
+        name='cep'
+        placeholder='Digite seu cep'
+        mask='cep'/>
+
+      <Input
+        onSet={handleChange}
+        name='currency'
+        placeholder='R$ 0,00'
+        mask='currency'/>
+
+        <button onClick={() => console.log(value)}>Enviar</button>
+      </div>
+        
     </Layout>
   </>
     

@@ -1,8 +1,5 @@
 import React, { ReactElement } from 'react'
 import Header from '../Header';
-import Sidebar from '../Sidebar';
-import Menu from '../Menu';
-
 import styles from './styles.module.css';
 
 type Props = {
@@ -12,16 +9,12 @@ type Props = {
 const Layout = ({ children } : Props) => {
   return (
     <> 
-      <div className={styles.master}>
-        <Header  />
         <div className={styles.container}>
-          {/* <Menu /> */}
-          {/* <Sidebar /> */}
-            {/* <div className={styles.content}>
-              <main className={styles.main}>{children}</main>
-            </div> */}
+          <Header  />
+          <div className={styles.content}>
+            <main className={styles.main}>{children}</main>
+          </div> 
         </div>
-      </div>
     </>
   )
 }
