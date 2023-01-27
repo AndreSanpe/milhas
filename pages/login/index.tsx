@@ -50,22 +50,20 @@ const Login = () => {
   const handleSubmit = async () => {
     if(verifyUser()){
       setErrorFields([])
-      
       const request = await signIn('credentials', {
         redirect: false,
         email, password
       });
 
-      if(request && request.ok){
-        router.push('/dashboard');
-        } else {
-          router.push('/login');
-          setHasError(true);
-        }
-      } 
+    if(request && request.ok && request.status){
+      router.push('/dashboard');
+      } else {
+        router.push('/login');
+        setHasError(true);
+      }
+    } 
    }
   
-
   return (
 
     <div className={styles.container}>
@@ -101,6 +99,7 @@ const Login = () => {
                 onSet={handleChange}
                 name='password' 
                 placeholder='Digite sua senha'
+                password
                 warning={errorFields.includes('password')}
               />
             <div className={styles.forget}>Esqueci minha senha</div>

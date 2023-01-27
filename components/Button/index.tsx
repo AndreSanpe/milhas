@@ -1,7 +1,7 @@
 import styles from './styles.module.css';
 import React, { useState } from 'react'
 
-type Props = {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   color?: string;
   backgroundColor?: string;
   backgroundColorHover?: string;
@@ -10,12 +10,13 @@ type Props = {
   onClick: () => void;
 }
 
-const Button = ({color, backgroundColor, backgroundColorHover, label, borderRadius, onClick}: Props) => {
+const Button: React.FC<ButtonProps> = ({color, backgroundColor, backgroundColorHover, label, borderRadius, onClick, ...props}) => {
 
   const [btnColor, setBtnColor] = useState(backgroundColor);
 
   return (
-    <button 
+    <button
+      {...props} 
       className={styles.btn}
       onClick={onClick}
       style={{

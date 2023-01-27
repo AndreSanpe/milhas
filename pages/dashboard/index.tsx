@@ -8,34 +8,17 @@ import { useCallback, useEffect, useState } from 'react';
 import { Session, unstable_getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
 import api from '../../libs/api';
-import Input from '../../components/Input';
-
-interface Inputs {
-  name: string;
-  miles: string;
-  cpf: string;
-  cep: string;
-  currency: string;
-}
 
 const Dashboard = (data: Props) => {
  
   const { user, setUser } = useAuthContext();
-  const [ value, setValue ] = useState<Inputs>({} as Inputs)
-
-  const handleChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
-    setValue({
-      ...value,
-      [e.currentTarget.name]: e.currentTarget.value
-    })
-  }, [value])
-
-
+ 
   useEffect(() => {
     if(user === null || user != data.user) {
       setUser(data.user)
     }
-  }, [data.user, setUser, user]);
+  }, [data, user, setUser]);
+
 
   return (<>
     <Head>
@@ -49,48 +32,7 @@ const Dashboard = (data: Props) => {
           <h2 className={styles.data}>Data de expiração: <span>{}</span></h2>
         </div> */}
       {/* <InputField /> */}
-      <Input
-        onSet={handleChange}
-        name='cep'
-        placeholder='Digite seu cep'
-        mask='cep'
-        warning={false}/>
-
-      <Input
-        onSet={handleChange}
-        name='currency'
-        placeholder='R$ 0,00'
-        mask='currency'
-        />
-
-        <Input
-        onSet={handleChange}
-        name='name'
-        placeholder='Digite seu nome'
-        />
-
-        <Input
-        onSet={handleChange}
-        name='miles'
-        placeholder='Qtde de milhas'
-        mask='miles'
-        />
-
-        <Input
-        onSet={handleChange}
-        name='cpf'
-        placeholder='Cpf'
-        mask='cpf'
-        />
-
-        <Input
-        onSet={handleChange}
-        name='date'
-        placeholder='Data de nascimento'
-        mask='date'
-        />
-
-        <button onClick={() => console.log(value)}>Enviar</button>
+      
       </div>
         
     </Layout>

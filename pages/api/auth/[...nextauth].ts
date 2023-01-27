@@ -13,19 +13,15 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'senha', type: 'password' }
       },
       authorize: async (credentials, req) => {
-        if(credentials && credentials.email && credentials.password){
+        if(credentials) {
           const user = await api.getAuthUser(credentials.email, credentials.password);
-          if(user) {
-            return {
-              id: user.id,
-              name: user.name,
-              email: user.email      
-            } as any
-          }
-          }
-          return null;
-        } 
-    })
+          if(!user) {
+            return null as any;    
+          } 
+          return { user };
+        }
+      }
+  })
   ],
   session: {
     maxAge: 60 * 60 * 1,
