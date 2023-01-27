@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import styles from './styles.module.css';
-import Logo from './fitnezz_.png';
-import Image from 'next/image';
-import InputField from '../../components/InputField';
-import Button from '../../components/Button';
+import React, { useCallback, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import Logo from './fitnezz_.png';
+import styles from './styles.module.css';
 
 const Login = () => {
 
@@ -13,6 +13,15 @@ const Login = () => {
   const [ password, setPassword ] = useState('');
   const [ hasError, setHasError ] = useState(false);
   const [ errorFields, setErrorFields ] = useState<string[]>([]);
+
+  const handleChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+    if(e.currentTarget.name === 'email') {
+      setEmail(e.currentTarget.value)
+    }
+    if(e.currentTarget.name === 'password') {
+      setPassword(e.currentTarget.value)
+    }
+  }, [])
 
   const router = useRouter();
 
@@ -41,6 +50,7 @@ const Login = () => {
   const handleSubmit = async () => {
     if(verifyUser()){
       setErrorFields([])
+      
       const request = await signIn('credentials', {
         redirect: false,
         email, password
@@ -62,12 +72,14 @@ const Login = () => {
       <div className={styles.loginArea}>
 
         <div className={styles.logo}>  
-          <Image 
+          {/* <Image 
           src={Logo}
           width={140}
           height={48}
           alt=''
-          />
+          /> */}
+
+          <div style={{fontSize: '24px', fontWeight: '700', color: '#3B0585'}}>LOGO</div>
         </div>
 
         <div className={styles.title}>Identifique-se</div>
@@ -76,24 +88,21 @@ const Login = () => {
         <div className={styles.inputs}>
           <div className={styles.input}>
             <div className={styles.label}>E-MAIL</div>
-            <InputField 
-              placeholder='Digite seu e-mail'
-              borderRadius='5px'
-              value={email}
-              onChange={setEmail}
-              warning={errorFields.includes('email')}
-            />
+              <Input
+                onSet={handleChange}
+                name='email' 
+                placeholder='Digite seu e-mail'
+                warning={errorFields.includes('email')}
+              />
           </div>
           <div className={styles.input}>
             <div className={styles.label}>SENHA</div>
-            <InputField 
-              password
-              placeholder='Digite sua senha'
-              borderRadius='5px'
-              value={password}
-              onChange={setPassword}
-              warning={errorFields.includes('password')}
-            />
+              <Input
+                onSet={handleChange}
+                name='password' 
+                placeholder='Digite sua senha'
+                warning={errorFields.includes('password')}
+              />
             <div className={styles.forget}>Esqueci minha senha</div>
           </div>
         </div>
@@ -110,7 +119,7 @@ const Login = () => {
         </div>
 
         <div className={styles.signup}>
-          Primeira vez na fitnezz?<div className={styles.signupLink} onClick={() => {}}>Criar conta</div>
+          Primeira vez na MILHAS?<div className={styles.signupLink} onClick={() => {}}>Criar conta</div>
         </div>
 
       </div>
