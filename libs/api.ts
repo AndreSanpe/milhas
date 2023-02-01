@@ -1,4 +1,4 @@
-import { COMPILER_NAMES } from 'next/dist/shared/lib/constants';
+import { Account } from '../types/Account';
 import prisma from './prisma';
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -42,5 +42,17 @@ export default {
       date: user?.createdAt.getDate().toString()
     };
   },
+
+  addNewAccount: async (name: string, document: string, livelo: boolean, priceLivelo: string, esfera: boolean, priceEsfera: string, latam: boolean, priceLatam: string, azul: boolean, priceAzul: string, smiles: boolean, priceSmiles: string, userId: number) => {
+
+    const newAccount = await prisma.account.create({
+      data: {
+        name, document,
+        livelo, priceLivelo, esfera, priceEsfera, latam, priceLatam, azul, priceAzul, smiles, priceSmiles, userId
+      }
+    });
+
+    return newAccount;
+  }
 
 }

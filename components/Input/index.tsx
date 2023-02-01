@@ -17,7 +17,8 @@ const Input: React.FC<InputProps> = ({ password, warning, onSet, mask, ...props 
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleIcon = () => setShowPassword(!showPassword);
-   
+  
+  /* onChange from the input triggers this function that handles the masks and passes the value inside the custom onSet function. This function (onSet) receives the event (e) and sets the "e.target.value" to a state. Example usage outside the component: onSet={(e) => {setState(e.target.value)}}. Thus, at each change in the input, onChange activates the masks, returns the value inside the onSet that will be set in a state */
   const handleChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
     switch (mask) {
       case 'cep':

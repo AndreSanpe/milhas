@@ -1,26 +1,27 @@
-import { useState } from 'react';
+import { InputHTMLAttributes } from 'react';
 import styles from './styles.module.css';
 
-type Props = {
+interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   initialValue: boolean;
-  onChange: (newValue: boolean) => void;
+  onSet: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Toggle = ({ initialValue, onChange }: Props) => {
+const Toggle: React.FC<CheckboxProps> = ({ initialValue, onSet, ...props }) => {
 
   return (
     <label className={styles.label}>
       <input className={styles.input} 
+        {...props}
         type='checkbox' 
         checked={initialValue}
-        onChange={e => onChange(e.target.checked)}
+        onChange={(e) => onSet(e)}
       />
       
       <span className={styles.span}/>
       {initialValue && 
-        <strong className={styles.active}>{'ATIVO'}</strong>}
+        <strong className={styles.active}>{'SIM'}</strong>}
       {!initialValue && 
-        <strong className={styles.disable}>{'INATIVO'}</strong>} 
+        <strong className={styles.disable}>{'NÃO'}</strong>} 
     </label>
   )
 }

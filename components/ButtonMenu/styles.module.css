@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  width: 170px;
+  height: 124px;
+  background-color: #EEE1FF;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 24px;
+  color: #3B0585;
+  box-shadow: 1px 1px 2px 0px rgba(35, 0, 82, .15);
+  cursor: pointer;
+}
+
+.container:hover {
+  color: #FAF7FF;
+  background-color: #5E1FB5;
+}

@@ -5,13 +5,18 @@ import { GetServerSideProps } from 'next';
 import { User } from '../../types/User';
 import { useAuthContext } from '../../contexts/auth';
 import { useCallback, useEffect, useState } from 'react';
-import { Session, unstable_getServerSession } from 'next-auth';
+import { AuthOptions, Session, unstable_getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
 import api from '../../libs/api';
+import { calculators, management } from '../../utils/data';
+import ButtonMenu from '../../components/ButtonMenu';
+import { useRouter } from 'next/router';
+
 
 const Dashboard = (data: Props) => {
  
   const { user, setUser } = useAuthContext();
+  const router = useRouter();
  
   useEffect(() => {
     if(user === null || user != data.user) {
@@ -26,14 +31,37 @@ const Dashboard = (data: Props) => {
     </Head>
     <Layout>
       <div className={styles.container}>
-        {/* <div className={styles.header}>
-          <h1 className={styles.title}>Olá, {user?.name}!</h1>
-          <h2 className={styles.subtitle}>Você está logado na conta de: <span>{user?.email}</span></h2>
-          <h2 className={styles.data}>Data de expiração: <span>{}</span></h2>
-        </div> */}
-      {/* <InputField /> */}
+        <div className={styles.title}>Olá, {user?.name}!</div>
+        <span className={styles.subtitle}>Gerenciamento</span>
+
+        <div className={styles.buttons}>
+          {management.map((links, index) => (
+            <ButtonMenu key={index} onClick={() => router.push({...router.query, pathname: links.path})}>
+              <div>
+                <div className={styles.label}>
+                  {links.label}
+                </div>
+              </div>
+            </ButtonMenu>))
+          }
+        </div> {/* Calculators menu */}
+        
+        <span className={styles.subtitle}>Calculadoras</span>
+
+        <div className={styles.buttons}>
+          {calculators.map((links, index) => (
+            <ButtonMenu key={index} onClick={() => router.push({...router,pathname: links.path})}>
+              <div>
+                <div className={styles.label}>
+                  {links.label}
+                </div>
+              </div>
+            </ButtonMenu>))
+          }
+        </div> {/* Calculators menu */}
       
-      </div>
+      {/* Container's menu end */}
+      </div> 
         
     </Layout>
   </>
@@ -51,9 +79,7 @@ type Props = {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
-  const session = await unstable_getServerSession(
-    context.req, context.res, authOptions
-  );
+  const session = await unstable_getServerSession(context.req, context.res, authOptions);
 
   if(!session) return { redirect: { destination: '/login', permanent: true }}; 
 
@@ -73,3 +99,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 }
+
+

@@ -1,13 +1,11 @@
 @media screen and (max-width: 950px) {
   
   .container {
-    background-color: #FAFAFA;
     display: flex;
     flex-direction: column;
   }
   
   .content {
-    background-color: #fafafa;
     display: flex;
     flex: 1;
     align-items: center;
@@ -18,12 +16,33 @@
     max-width: 1200px;
     width: 100%;
     margin:auto;
-    margin-top: 64px;
     border-radius: 5px;
     padding-bottom: 64px;
   }
 
 }
 
+@media screen and (min-width: 951px) {
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .content {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    margin-top: 80px;
+  }
+  
+  .main {
+    max-width: 1200px;
+    width: 100%;
+    margin:auto;
+    border-radius: 5px;
+    padding-bottom: 64px;
+  }
 
+}
 

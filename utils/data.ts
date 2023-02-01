@@ -1,26 +1,16 @@
-import home from '../components/Sidebar-teste/home.svg'
 
-export const navigatorLinks = [
-  { label: 'Página inicial', path: '/dashboard', icon: 'home'},
-  { label: 'Trainees', path: '/trainees', icon: 'person'},
-  { label: 'Criador de planos', path: '/planos', icon: 'plans'},
-  { label: 'Agenda', path: '/agenda', icon: 'calendar'},
-  { label: 'Meus favoritos', path: '/favoritos', icon: 'favorites'},
-  { label: 'Videos', path: '/videos', icon: 'play'},
-  { label: 'Listas personalizadas', path: '/listas', icon: 'list'},
-  { label: 'Material extra', path: '/extra', icon: 'extra'},
-  { label: 'Financeiro', path: '/financeiro', icon: 'finances'},
+export const management = [
+  { label: 'Gerenciar contas e CPF’s administrados', path: '/gerenciamento/contas', icon: ''},
+  { label: 'Extrato de operações: compra e venda', path: '/extratos/compra-venda', icon: ''},
+  { label: 'Extrato de assinaturas dos clubes', path: '/extratos/assinaturas', icon: ''},
+  { label: 'Histórico de compra bonificada', path: '/historicos/compra-bonificada', icon: ''},
 ];
 
-export const actionLinks = [
-  { label: 'Anamnese' , path:'/trainee/[id]/anamnese' , icon: 'anamnese' },
-  { label: 'Avaliação antropométrica', path: '/traine/[id]/avaliacao', icon: 'avaliacao' },
-  { label: 'Planejamento de treinamento' , path:'/trainee/[id]/planejamento' , icon: 'planejamento' },
-  { label: 'Planejamento de metas' , path:'/trainee/[id]/metas' , icon: 'metas' },
-  { label: 'Exames laboratoriais' , path:'/trainee/[id]/exames' , icon: 'exames' },
-  { label: 'Questionários de saúde' , path:'/trainee/[id]/questionarios' , icon: 'questionarios' },
-  { label: 'Orientações em geral' , path:'/trainee/[id]/orientacoes' , icon: 'orientacoes' },
-  { label: 'Feedbacks do trainee' , path:'/trainee/[id]/feedbacks' , icon: 'feedback' },
-  { label: 'Recebimentos e financeiro' , path:'/trainee/[id]/financeiro' , icon: 'financeiro' }
+export const calculators = [
+  { label: 'Calculadora: Custo do milheiro' , path:'/calculadora/custo-milheiro' , icon: '' },
+  { label: 'Calculadora: Compra bonificada', path: '/calculadora/compra-bonificada', icon: '' },
+  { label: 'Calculadora: Compra de pontos e milhas' , path:'/calculadora/compra-pontos' , icon: '' },
+  { label: 'Calculadora: Venda de milhas' , path:'/calculadora/venda' , icon: '' },
+  { label: 'Calculadora: Boomerang' , path:'/calculadora/boomerang' , icon: '' },
 ]
 

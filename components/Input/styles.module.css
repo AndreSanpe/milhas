@@ -15,9 +15,12 @@
   height: 24px;
   border: 0;
   outline: 0;
-  flex: 1;
-  background: transparent;
+  width: 100%;
   color: #292929;
+}
+
+.input:disabled {
+  background-color: transparent;
 }
 
 .input::placeholder {

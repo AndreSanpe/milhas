@@ -1,0 +1,101 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #3B0585;
+}
+
+.alert {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 32px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #8F8F8F;
+}
+
+.link {
+  padding-left: 4px;
+  text-decoration: underline;
+  color: #BF066D;
+  cursor: pointer;
+}
+
+/* CSS modal */
+
+.titleModal {
+  display: flex;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #3B0585;
+}
+
+.inputs {
+  margin: 24px 20px;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.columns {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 100px 82px 110px;
+  gap: 4px;
+}
+
+.label {
+  font-size: 12px;
+  line-height: 24px;
+  font-weight: 600;
+  color: #292929;
+}
+
+.labelAux {
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+  line-height: 24px;
+  font-weight: 600;
+  color: #3B0585;
+}
+
+.checkbox {
+  display: flex;
+}
+
+.status {
+ display: flex;
+ align-items: center;
+}
+
+.btnModal {
+  padding-top: 12px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 40px;
+}
