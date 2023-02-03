@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next';
-import { Session, unstable_getServerSession } from 'next-auth';
-import React, { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react';
+import { unstable_getServerSession } from 'next-auth';
+import React, { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import Layout from '../../../components/Layout';
 import { useAuthContext } from '../../../contexts/auth';
@@ -17,7 +17,7 @@ import Input from '../../../components/Input';
 import Toggle from '../../../components/Toggle';
 import Checkbox from '../../../components/Checkbox';
 
-interface Account {
+type Account = {
   name: string;
   document: string;
   livelo: boolean;
@@ -37,37 +37,35 @@ interface Account {
   priceSmiles: string;
 }
 
-
 const Contas = (data: Props) => {
 
   const { user, setUser } = useAuthContext();
-  const [ noHaveAccount, setNoHaveAccount ] = useState<boolean>(true);
+  const [ noHaveAccount, setNoHaveAccount ] = useState<boolean>(false);
   const [ showModal, setShowModal ] = useState<boolean>(false);
- 
-  const [ nameAccount, setNameAccount ] = useState<string>('');
-  const [ cpfAccount, setCpfAccount ] = useState<string>('');
-  const [ livelo, setLivelo ] = useState<boolean>(false);
-  const [ statusLivelo, setStatusLivelo ] = useState<boolean>(false);
-  const [ priceLivelo, setPriceLivelo ] = useState<string>('');
-  const [ esfera, setEsfera ] = useState<boolean>(false);
-  const [ statusEsfera, setStatusEsfera ] = useState<boolean>(false);
-  const [ priceEsfera, setPriceEsfera ] = useState<string>('');
-  const [ azul, setAzul ] = useState<boolean>(false);
-  const [ statusAzul, setStatusAzul ] = useState<boolean>(false);
-  const [ priceAzul, setPriceAzul ] = useState<string>('');
-  const [ latam, setLatam ] = useState<boolean>(false);
-  const [ statusLatam, setStatusLatam ] = useState<boolean>(false);
-  const [ priceLatam, setPriceLatam ] = useState<string>('');
-  const [ smiles, setSmiles ] = useState<boolean>(false);
-  const [ statusSmiles, setStatusSmiles ] = useState<boolean>(false);
-  const [ priceSmiles, setPriceSmiles ] = useState<string>('');
+  const [ errorFields, setErrorFields ] = useState<string[]>([]);
+
+  /* Sending user data to context */
+  useEffect(() => {
+    if(user === null || user != data.user) {
+      setUser(data.user)
+    }
+  }, [data, user, setUser]);
 
 
-  /* Area de testes */
+ /* Modal actions */
+  const handleClick = () => setShowModal(true);
+  const closeBtn = () => { 
+    setShowModal(false);
+    setValues({ name: '', document: '', livelo: false, statusLivelo: false, priceLivelo: '0', esfera: false, statusEsfera: false, priceEsfera: '0', azul: false, statusAzul: false, priceAzul: '0', latam: false, statusLatam: false, priceLatam: '0', smiles: false, statusSmiles: false, priceSmiles: '0'});
+    setErrorFields([]);
+  }
+
+  /* useState constructs an object with all data received in inputs. */
   const [ values, setValues ] = useState<Account>({
     name: '', document: '', livelo: false, statusLivelo: false, priceLivelo: '0', esfera: false, statusEsfera: false, priceEsfera: '0', azul: false, statusAzul: false, priceAzul: '0', latam: false, statusLatam: false, priceLatam: '0', smiles: false, statusSmiles: false, priceSmiles: '0'
   });
 
+  /* Function that handles string values */
   const handleValuesStrings = useCallback((e: React.FormEvent<HTMLInputElement>) => {
     setValues({
       ...values,
@@ -75,25 +73,68 @@ const Contas = (data: Props) => {
     }) 
   }, [values])
 
+  /* Function that handles booleans values */
   const handleValuesBooleans = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setValues({
       ...values,
       [e.target.name]: e.target.checked
     }) 
   }, [values])
-
-  console.log(values)
-
-  //Modal actions
-  const handleClick = () => setShowModal(true);
-  const closeBtn = () => setShowModal(false);
  
-  useEffect(() => {
-    if(user === null || user != data.user) {
-      setUser(data.user)
-    }
-  }, [data, user, setUser]);
+  /* verify each default entry, if exists errors, push to array */
+  const verifyData = () => {
+    let newErroFields = [];
+    let approved = true;
 
+    if(values.name.length < 2 || values.name === '') {
+      newErroFields.push('name');
+      approved = false;
+    }
+
+    if(values.document === '' || values.document.length !== 14) {
+      newErroFields.push('document');
+      approved=false
+    }
+
+    setErrorFields(newErroFields);
+    return approved;
+  }
+
+  /* Once verified, send to the database */
+  const handleSubmit = async () => {
+    if(verifyData() && user) {
+      let account = {
+        name: values.name,
+        document: values.document,
+        livelo: values.livelo,
+        statusLivelo: values.statusLivelo,
+        priceLivelo: values.priceLivelo,
+        esfera: values.esfera,
+        statusEsfera: values.statusEsfera,
+        priceEsfera: values.priceEsfera,
+        azul: values.azul,
+        statusAzul: values.statusAzul,
+        priceAzul: values.priceAzul,
+        latam: values.latam,
+        statusLatam: values.statusLatam,
+        priceLatam: values.priceLatam,
+        smiles: values.smiles,
+        statusSmiles: values.statusSmiles,
+        priceSmiles: values.priceSmiles,
+        userId: user.id 
+      }
+          
+      const response = await fetch('/api/accounts', {
+        method: 'POST',
+        body: JSON.stringify(account),
+        headers: {
+          'content-Type': 'application/json',
+        },
+      });
+      closeBtn();
+    }
+  }
+ 
   return (<>
     <Head>
       <title>Gerenciamento . TOOLMILHAS</title>
@@ -104,6 +145,79 @@ const Contas = (data: Props) => {
         <ButtonBack />
         <div className={styles.title}>Contas cadastradas</div>
 
+        {data.accounts.map((item, index) => (
+          <Content key={index} ><>
+
+          {/* Conteúdo que ficará visivel */}
+          <div className={styles.row}>
+            <div className={styles.column}>
+              <div className={styles.doubleColumns}>
+                <div className={styles.secundaryTitle}>Nome da conta:</div>
+                <div className={styles.text}>{item.name}</div>
+              </div>
+              <div className={styles.doubleColumns}>
+                <div className={styles.secundaryTitle}>Documento CPF:</div>
+                <div className={styles.text}>{item.document}</div>
+              </div>
+            </div>
+          </div>  
+
+          {/* Conteúdo que ficará escondido */}
+          <div className={styles.dataAccount}>
+            <div className={styles.row}>
+              <div className={styles.column}>
+
+                {/* Content data title */}
+                <div className={styles.tripleColumns}>
+                  <div className={styles.contentTitle}>Clubes</div>
+                  <div className={styles.contentTitle}>Clube ativo</div>
+                  <div className={styles.contentTitle}>Valor mensal</div>
+                </div>
+
+                {/* Data: Livelo */}
+                <div className={styles.tripleColumns}>
+                  <div className={styles.text}>Livelo</div>
+                  <div className={styles.text}>{item.statusLivelo ? 'SIM':'NÃO'}</div>
+                  <div className={styles.text}>{item.priceLivelo}</div>
+                </div>
+
+                {/* Data: Esfera */}
+                <div className={styles.tripleColumns}>
+                  <div className={styles.text}>Esfera</div>
+                  <div className={styles.text}>{item.statusEsfera ? 'SIM':'NÃO'}</div>
+                  <div className={styles.text}>{item.priceEsfera}</div>
+                </div>
+
+                {/* Data: Azul */}
+                <div className={styles.tripleColumns}>
+                  <div className={styles.text}>Tudo Azul</div>
+                  <div className={styles.text}>{item.statusAzul ? 'SIM':'NÃO'}</div>
+                  <div className={styles.text}>{item.priceAzul}</div>
+                </div>
+
+                {/* Data: Latam */}
+                <div className={styles.tripleColumns}>
+                  <div className={styles.text}>Latam Pass</div>
+                  <div className={styles.text}>{item.statusLatam ? 'SIM':'NÃO'}</div>
+                  <div className={styles.text}>{item.priceLatam}</div>
+                </div>
+
+                {/* Data: Smiles */}
+                <div className={styles.tripleColumns}>
+                  <div className={styles.text}>Smiles</div>
+                  <div className={styles.text}>{item.statusSmiles ? 'SIM':'NÃO'}</div>
+                  <div className={styles.text}>{item.priceSmiles}</div>
+                </div>
+
+              </div>
+            </div>  
+          </div>
+
+
+          </></Content>
+        ))} {/* Maps end */}
+
+  
         {/* Message for when there is no registered account yet */}
         {noHaveAccount &&
           <div className={styles.alert}>
@@ -129,6 +243,7 @@ const Contas = (data: Props) => {
                         name='name'
                         onSet={(e)=> handleValuesStrings(e)}
                         placeholder={'Ex.: Antônio Garcia'}
+                        warning={errorFields.includes('name')}
                     />
                   </div>
                 </div>
@@ -141,6 +256,7 @@ const Contas = (data: Props) => {
                         onSet={(e) => handleValuesStrings(e)}
                         placeholder={'Ex.: 123.123.123-12'}
                         mask='cpf'
+                        warning={errorFields.includes('document')}
                       />
                   </div>
                 </div>
@@ -340,6 +456,7 @@ const Contas = (data: Props) => {
                   label='Salvar dados'
                   color='#fff'
                   backgroundColorHover='#6A9000'
+                  onClick={handleSubmit}
                 />
               </div>
             
@@ -357,10 +474,6 @@ const Contas = (data: Props) => {
           />
         </div>
         
-        
-        <Content>
-          <div>...</div>
-        </Content>
       </div>
 
     </></Layout>
@@ -370,7 +483,8 @@ const Contas = (data: Props) => {
 export default Contas;
 
 type Props = {
-  user: User;  
+  user: User;
+  accounts: Account[];  
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -379,17 +493,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if(!session) return { redirect: { destination: '/login', permanent: true }}; 
 
-  // Get tenant
+  /* Get tenant */
   const user = await api.getUser(session.user.id)
   if(!user){
     return {
       redirect: {destination:'/', permanent: false}
     }
   } 
+
+  /* Get accounts */
+  const accounts = await api.getAccounts(session.user.id);
   
   return {
     props: {
       user,
+      accounts
     }
   }
 }

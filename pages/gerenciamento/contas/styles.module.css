@@ -1,3 +1,4 @@
+/* CSS general */
 .container {
   display: flex;
   flex-direction: column;
@@ -9,16 +10,54 @@
   display: flex;
   justify-content: center;
   margin-top: 32px;
+  margin-bottom: 32px;
   font-size: 18px;
   font-weight: 600;
   color: #3B0585;
 }
 
+/* CSS account data */
+
+.doubleColumns {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.tripleColumns {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 130px 90px 100px;
+  gap: 4px;
+}
+
+.secundaryTitle {
+  font-size: 12px;
+  line-height: 24px;
+  font-weight: 600;
+  color: #3B0585;
+}
+
+.contentTitle {
+  font-size: 12px;
+  line-height: 24px;
+  font-weight: 600;
+  color: #3B0585;
+}
+
+.text {
+  font-size: 12px;
+  line-height: 24px;
+  font-weight: 600;
+  color: #292929;
+}
+
+/* CSS alert for when not exist data */
 .alert {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-top: 32px;
   align-items: center;
   justify-content: center;
   text-align: center;

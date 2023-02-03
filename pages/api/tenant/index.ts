@@ -9,9 +9,11 @@ const handlerGet: NextApiHandler = async (req, res) => {
   if(user?.id) {
     res.json({ user });
     return
-  }  
-  res.json({ error: "Usuário não encontrado"});
-}
+  }  else {
+    res.json({ error: "Usuário não encontrado"});
+  }
+
+};
 
 const handler: NextApiHandler = async (req, res) => {
   switch(req.method) {

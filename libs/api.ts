@@ -24,7 +24,7 @@ export default {
   
   },
 
-  //Function for get tenant data
+  //Function for get user data
   getUser: async (id: number) => {
     const user = await prisma.user.findFirst({
       where: {
@@ -43,16 +43,62 @@ export default {
     };
   },
 
-  addNewAccount: async (name: string, document: string, livelo: boolean, priceLivelo: string, esfera: boolean, priceEsfera: string, latam: boolean, priceLatam: string, azul: boolean, priceAzul: string, smiles: boolean, priceSmiles: string, userId: number) => {
+  /* Add new account (cpf) controlled */
+  addNewAccount: async (account: Account) => {
 
-    const newAccount = await prisma.account.create({
+    const { name, document,
+      livelo, statusLivelo, priceLivelo, esfera, statusEsfera, priceEsfera, latam, statusLatam, priceLatam, azul, statusAzul, priceAzul, smiles, statusSmiles, priceSmiles, userId } = account;
+
+    return await prisma.account.create({
       data: {
         name, document,
-        livelo, priceLivelo, esfera, priceEsfera, latam, priceLatam, azul, priceAzul, smiles, priceSmiles, userId
+        livelo, statusLivelo, priceLivelo, esfera, statusEsfera, priceEsfera, latam, statusLatam, priceLatam, azul, statusAzul, priceAzul, smiles, statusSmiles, priceSmiles, userId
       }
     });
 
-    return newAccount;
-  }
+  },
 
-}
+  /* Function for get accounts data */
+  getAccounts:async (userId: number) => {
+    const accounts: Account[] = [];
+    const account = await prisma.account.findMany({
+      where: {
+        userId
+      }
+    });
+
+    account.map((item, index) => (
+      accounts.push({
+        id: item.id,
+        name: item.name,
+        document: item.document,
+        livelo: item.livelo,
+        statusLivelo: item.statusLivelo,
+        priceLivelo: item.priceLivelo,
+        esfera: item.esfera,
+        statusEsfera: item.statusEsfera,
+        priceEsfera: item.priceEsfera,
+        azul: item.azul,
+        statusAzul: item.statusAzul,
+        priceAzul: item.priceAzul,
+        latam: item.latam,
+        statusLatam: item.statusLatam,
+        priceLatam: item.priceLatam,
+        smiles: item.smiles,
+        statusSmiles: item.statusSmiles,
+        priceSmiles: item.priceSmiles,
+        userId: item.userId
+      })
+    ))
+    return accounts;   
+
+  },
+  
+
+  };
+
+
+
+
+
+

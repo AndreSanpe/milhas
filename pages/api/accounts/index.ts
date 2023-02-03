@@ -1,21 +1,32 @@
 import { NextApiHandler } from "next";
-import prisma from "../../../libs/prisma";
 import api from '../../../libs/api';
-import { Account } from "../../../types/Account";
+
 
 const handlerGet: NextApiHandler = async (req, res) => {
-
+  const { userId } = req.body;
+  const accounts = await api.getAccounts(parseInt(userId));
+  if(accounts) {
+    res.status(201).json({ accounts })
+  } else {
+    res.json({ error: "Nenhuma conta encontrada"});
+  }
+    
 }
 
 const handlerPost: NextApiHandler = async (req, res) => {
-  const { name, document, livelo, priceLivelo, esfera, priceEsfera, latam, priceLatam, azul, priceAzul, smiles, priceSmiles, userId }: Account = req.body;
+  const account = req.body;
+  const { name, document,
+      livelo, statusLivelo, priceLivelo, esfera, statusEsfera, priceEsfera, latam, statusLatam, priceLatam, azul, statusAzul, priceAzul, smiles, statusSmiles, priceSmiles, userId } = account;
 
-  const account = await api.addNewAccount( name, document, livelo, priceLivelo, esfera, priceEsfera, latam, priceLatam, azul, priceAzul, smiles, priceSmiles, userId )
+  const newAccount = await api.addNewAccount(account)
 
-  res.status(201).json({status: true});
-  
-}
+  if(account.id) {
+    res.status(201).json({status: true});
+  } else {
+    res.json({ error: "Usuário não encontrado"});
+  }
 
+};
 
 const handler: NextApiHandler = async (req, res) => {
   switch(req.method) {
@@ -26,7 +37,6 @@ const handler: NextApiHandler = async (req, res) => {
       handlerPost(req, res);
     break;
   }
-
-}
+};
 
 export default handler;

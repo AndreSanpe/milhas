@@ -7,7 +7,7 @@ type Props = {
   children?: ReactElement;
 }
 
-const ButtonGrey = ({link, onClick, children}: Props) => {
+const ButtonMenu = ({link, onClick, children}: Props) => {
   return (<>
       <button className={styles.container} onClick={onClick}>
         {children}
@@ -16,4 +16,4 @@ const ButtonGrey = ({link, onClick, children}: Props) => {
   </>)
 }
 
-export default ButtonGrey;
+export default ButtonMenu;
