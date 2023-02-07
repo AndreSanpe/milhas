@@ -50,7 +50,7 @@ const Dashboard = (data: Props) => {
 
         <div className={styles.buttons}>
           {calculators.map((links, index) => (
-            <ButtonMenu key={index} onClick={() => router.push({...router,pathname: links.path})}>
+            <ButtonMenu key={index} onClick={() => router.push({...router.query,pathname: links.path})}>
               <div>
                 <div className={styles.label}>
                   {links.label}

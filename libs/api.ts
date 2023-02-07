@@ -46,13 +46,12 @@ export default {
   /* Add new account (cpf) controlled */
   addNewAccount: async (account: Account) => {
 
-    const { name, document,
-      livelo, statusLivelo, priceLivelo, esfera, statusEsfera, priceEsfera, latam, statusLatam, priceLatam, azul, statusAzul, priceAzul, smiles, statusSmiles, priceSmiles, userId } = account;
+    const { name, document, statusLivelo, priceLivelo, statusEsfera, priceEsfera, statusLatam, priceLatam, statusAzul, priceAzul, statusSmiles, priceSmiles, userId } = account;
 
     return await prisma.account.create({
       data: {
         name, document,
-        livelo, statusLivelo, priceLivelo, esfera, statusEsfera, priceEsfera, latam, statusLatam, priceLatam, azul, statusAzul, priceAzul, smiles, statusSmiles, priceSmiles, userId
+        statusLivelo, priceLivelo, statusEsfera, priceEsfera, statusLatam, priceLatam, statusAzul, priceAzul, statusSmiles, priceSmiles, userId
       }
     });
 
@@ -72,19 +71,14 @@ export default {
         id: item.id,
         name: item.name,
         document: item.document,
-        livelo: item.livelo,
         statusLivelo: item.statusLivelo,
         priceLivelo: item.priceLivelo,
-        esfera: item.esfera,
         statusEsfera: item.statusEsfera,
         priceEsfera: item.priceEsfera,
-        azul: item.azul,
         statusAzul: item.statusAzul,
         priceAzul: item.priceAzul,
-        latam: item.latam,
         statusLatam: item.statusLatam,
         priceLatam: item.priceLatam,
-        smiles: item.smiles,
         statusSmiles: item.statusSmiles,
         priceSmiles: item.priceSmiles,
         userId: item.userId

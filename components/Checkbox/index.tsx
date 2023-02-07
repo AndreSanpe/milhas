@@ -26,3 +26,25 @@ const Checkbox: React.FC<CheckboxProps> = ({ label, initialValue, onSet, ...prop
 }
 
 export default Checkbox;
+
+
+
+/* //////////Use exemple 
+
+<Checkbox 
+  name='azul'
+  label='Tudo Azul'
+  initialValue={values.azul}
+  onSet={(e) => handleValuesBooleans(e)}
+/> 
+
+ ////////Function that handles booleans values
+
+ const handleValuesBooleans = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  setValues({
+    ...values,
+    [e.target.name]: e.target.checked
+  }) 
+}, [values])
+
+*/

@@ -9,30 +9,24 @@ import { User } from '../../../types/User';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
 import ButtonBack from '../../../components/ButtonBack';
-import Content from '../../../components/Content';
+import ContentAccordion from '../../../components/ContentAccordion';
 import AlertIcon from './error_outline.svg';
 import Button from '../../../components/Button';
 import FormModal from '../../../components/FormModal';
 import Input from '../../../components/Input';
 import Toggle from '../../../components/Toggle';
-import Checkbox from '../../../components/Checkbox';
 
 type Account = {
   name: string;
   document: string;
-  livelo: boolean;
   statusLivelo: boolean;
   priceLivelo: string;
-  esfera: boolean;
   statusEsfera: boolean;
   priceEsfera: string;
-  azul: boolean;
   statusAzul: boolean;
   priceAzul: string;
-  latam: boolean;
   statusLatam: boolean;
   priceLatam: string;
-  smiles: boolean;
   statusSmiles: boolean;
   priceSmiles: string;
 }
@@ -43,12 +37,18 @@ const Contas = (data: Props) => {
   const [ noHaveAccount, setNoHaveAccount ] = useState<boolean>(false);
   const [ showModal, setShowModal ] = useState<boolean>(false);
   const [ errorFields, setErrorFields ] = useState<string[]>([]);
+  const [ showMore, setShowMore ] = useState(false);
 
   /* Sending user data to context */
   useEffect(() => {
     if(user === null || user != data.user) {
       setUser(data.user)
     }
+
+    if(data.accounts.length === 0) {
+      setNoHaveAccount(true);
+    }
+
   }, [data, user, setUser]);
 
 
@@ -56,13 +56,13 @@ const Contas = (data: Props) => {
   const handleClick = () => setShowModal(true);
   const closeBtn = () => { 
     setShowModal(false);
-    setValues({ name: '', document: '', livelo: false, statusLivelo: false, priceLivelo: '0', esfera: false, statusEsfera: false, priceEsfera: '0', azul: false, statusAzul: false, priceAzul: '0', latam: false, statusLatam: false, priceLatam: '0', smiles: false, statusSmiles: false, priceSmiles: '0'});
+    setValues({ name: '', document: '', statusLivelo: false, priceLivelo: 'R$ 0,00', statusEsfera: false, priceEsfera: 'R$ 0,00', statusAzul: false, priceAzul: 'R$ 0,00', statusLatam: false, priceLatam: 'R$ 0,00', statusSmiles: false, priceSmiles: 'R$ 0,00'});
     setErrorFields([]);
   }
 
   /* useState constructs an object with all data received in inputs. */
   const [ values, setValues ] = useState<Account>({
-    name: '', document: '', livelo: false, statusLivelo: false, priceLivelo: '0', esfera: false, statusEsfera: false, priceEsfera: '0', azul: false, statusAzul: false, priceAzul: '0', latam: false, statusLatam: false, priceLatam: '0', smiles: false, statusSmiles: false, priceSmiles: '0'
+    name: '', document: '', statusLivelo: false, priceLivelo: 'R$ 0,00', statusEsfera: false, priceEsfera: 'R$ 0,00', statusAzul: false, priceAzul: 'R$ 0,00', statusLatam: false, priceLatam: 'R$ 0,00', statusSmiles: false, priceSmiles: 'R$ 0,00'
   });
 
   /* Function that handles string values */
@@ -106,19 +106,14 @@ const Contas = (data: Props) => {
       let account = {
         name: values.name,
         document: values.document,
-        livelo: values.livelo,
         statusLivelo: values.statusLivelo,
         priceLivelo: values.priceLivelo,
-        esfera: values.esfera,
         statusEsfera: values.statusEsfera,
         priceEsfera: values.priceEsfera,
-        azul: values.azul,
         statusAzul: values.statusAzul,
         priceAzul: values.priceAzul,
-        latam: values.latam,
         statusLatam: values.statusLatam,
         priceLatam: values.priceLatam,
-        smiles: values.smiles,
         statusSmiles: values.statusSmiles,
         priceSmiles: values.priceSmiles,
         userId: user.id 
@@ -132,6 +127,7 @@ const Contas = (data: Props) => {
         },
       });
       closeBtn();
+      document.location.reload();
     }
   }
  
@@ -145,79 +141,11 @@ const Contas = (data: Props) => {
         <ButtonBack />
         <div className={styles.title}>Contas cadastradas</div>
 
-        {data.accounts.map((item, index) => (
-          <Content key={index} ><>
-
-          {/* Conteúdo que ficará visivel */}
-          <div className={styles.row}>
-            <div className={styles.column}>
-              <div className={styles.doubleColumns}>
-                <div className={styles.secundaryTitle}>Nome da conta:</div>
-                <div className={styles.text}>{item.name}</div>
-              </div>
-              <div className={styles.doubleColumns}>
-                <div className={styles.secundaryTitle}>Documento CPF:</div>
-                <div className={styles.text}>{item.document}</div>
-              </div>
-            </div>
-          </div>  
-
-          {/* Conteúdo que ficará escondido */}
-          <div className={styles.dataAccount}>
-            <div className={styles.row}>
-              <div className={styles.column}>
-
-                {/* Content data title */}
-                <div className={styles.tripleColumns}>
-                  <div className={styles.contentTitle}>Clubes</div>
-                  <div className={styles.contentTitle}>Clube ativo</div>
-                  <div className={styles.contentTitle}>Valor mensal</div>
-                </div>
-
-                {/* Data: Livelo */}
-                <div className={styles.tripleColumns}>
-                  <div className={styles.text}>Livelo</div>
-                  <div className={styles.text}>{item.statusLivelo ? 'SIM':'NÃO'}</div>
-                  <div className={styles.text}>{item.priceLivelo}</div>
-                </div>
-
-                {/* Data: Esfera */}
-                <div className={styles.tripleColumns}>
-                  <div className={styles.text}>Esfera</div>
-                  <div className={styles.text}>{item.statusEsfera ? 'SIM':'NÃO'}</div>
-                  <div className={styles.text}>{item.priceEsfera}</div>
-                </div>
-
-                {/* Data: Azul */}
-                <div className={styles.tripleColumns}>
-                  <div className={styles.text}>Tudo Azul</div>
-                  <div className={styles.text}>{item.statusAzul ? 'SIM':'NÃO'}</div>
-                  <div className={styles.text}>{item.priceAzul}</div>
-                </div>
-
-                {/* Data: Latam */}
-                <div className={styles.tripleColumns}>
-                  <div className={styles.text}>Latam Pass</div>
-                  <div className={styles.text}>{item.statusLatam ? 'SIM':'NÃO'}</div>
-                  <div className={styles.text}>{item.priceLatam}</div>
-                </div>
-
-                {/* Data: Smiles */}
-                <div className={styles.tripleColumns}>
-                  <div className={styles.text}>Smiles</div>
-                  <div className={styles.text}>{item.statusSmiles ? 'SIM':'NÃO'}</div>
-                  <div className={styles.text}>{item.priceSmiles}</div>
-                </div>
-
-              </div>
-            </div>  
-          </div>
-
-
-          </></Content>
-        ))} {/* Maps end */}
-
-  
+        {/* Accordion */}
+        {data.accounts.map((item: Account, index: number) => (
+          <ContentAccordion key={index} item={item as Account}/>
+        ))} 
+              
         {/* Message for when there is no registered account yet */}
         {noHaveAccount &&
           <div className={styles.alert}>
@@ -263,7 +191,7 @@ const Contas = (data: Props) => {
 
                 <div className={styles.row}>
                   <div className={styles.column}>
-                    <div className={styles.label}>Selecione os clubes que a conta possui:</div>
+                    <div className={styles.label}>Selecione os clubes ativos que a conta possui:</div>
                   </div>
                 </div>
 
@@ -278,12 +206,13 @@ const Contas = (data: Props) => {
                     <div className={styles.columns}>
                       {/* Column 1 */}
                       <div className={styles.checkbox}>
-                        <Checkbox 
+                       {/*  <Checkbox 
                           name='livelo'
                           label='Livelo'
                           initialValue={values.livelo}
                           onSet={(e) => handleValuesBooleans(e)}
-                        />
+                        /> */}
+                        Livelo
                       </div>
                       {/* Column 2 */}
                       <div className={styles.status}>
@@ -314,12 +243,13 @@ const Contas = (data: Props) => {
                     <div className={styles.columns}>
                       {/* Column 1 */}
                       <div className={styles.checkbox}>
-                        <Checkbox 
+                        {/* <Checkbox 
                           name='esfera'
                           label='Esfera'
                           initialValue={values.esfera}
                           onSet={(e) => handleValuesBooleans(e)}
-                        />
+                        /> */}
+                        Esfera
                       </div>
                       {/* Column 2 */}
                       <div className={styles.status}>
@@ -349,12 +279,13 @@ const Contas = (data: Props) => {
                     <div className={styles.columns}>
                       {/* Column 1 */}
                       <div className={styles.checkbox}>
-                        <Checkbox 
+                        {/* <Checkbox 
                           name='azul'
                           label='Tudo Azul'
                           initialValue={values.azul}
                           onSet={(e) => handleValuesBooleans(e)}
-                        />
+                        /> */}
+                        Tudo Azul
                       </div>
                       {/* Column 2 */}
                       <div className={styles.status}>
@@ -384,12 +315,13 @@ const Contas = (data: Props) => {
                     <div className={styles.columns}>
                       {/* Column 1 */}
                       <div className={styles.checkbox}>
-                        <Checkbox 
+                        {/* <Checkbox 
                           name='latam'
                           label='Latam Pass'
                           initialValue={values.latam}
                           onSet={(e) => handleValuesBooleans(e)}
-                        />
+                        /> */}
+                        Latam Pass
                       </div>
                       {/* Column 2 */}
                       <div className={styles.status}>
@@ -419,12 +351,13 @@ const Contas = (data: Props) => {
                     <div className={styles.columns}>
                       {/* Column 1 */}
                       <div className={styles.checkbox}>
-                        <Checkbox 
+                        {/* <Checkbox 
                           name='smiles'
                           label='Smiles'
                           initialValue={values.smiles}
                           onSet={(e) => handleValuesBooleans(e)}
-                        />
+                        /> */}
+                        Smiles
                       </div>
                       {/* Column 2 */}
                       <div className={styles.status}>
@@ -464,11 +397,11 @@ const Contas = (data: Props) => {
           </FormModal>
         }
         
-        <div style={{margin: '52px'}}>
+        <div style={{margin: '52px', marginTop: '24px'}}>
           <Button 
             label={'Adicionar nova conta'}
-            backgroundColor={'#4C109D'}
-            backgroundColorHover={'#5E1FB5'}
+            backgroundColor={'#86B700'}
+            backgroundColorHover={'#6A9000'}
             color={'#FAF7FF'}
             onClick={handleClick}
           />

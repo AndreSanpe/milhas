@@ -9,11 +9,12 @@
 .title {
   display: flex;
   justify-content: center;
-  margin-top: 32px;
+  /* margin-top: 20px; */
   margin-bottom: 32px;
   font-size: 18px;
   font-weight: 600;
   color: #3B0585;
+  
 }
 
 /* CSS account data */
@@ -47,10 +48,22 @@
 }
 
 .text {
+  display: flex;
+  flex-direction: row-reverse;
   font-size: 12px;
   line-height: 24px;
   font-weight: 600;
   color: #292929;
+}
+
+.showMoreLink {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-top: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #3B0585;
+  cursor: pointer;
 }
 
 /* CSS alert for when not exist data */
@@ -125,6 +138,10 @@
 
 .checkbox {
   display: flex;
+  font-size: 13px;
+  line-height: 24px;
+  font-weight: 600;
+  color: #292929;
 }
 
 .status {

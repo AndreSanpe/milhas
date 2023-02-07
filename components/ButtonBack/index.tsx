@@ -9,7 +9,7 @@ const ButtonBack = () => {
   return (
     <div className={styles.back} onClick={() => router.push('/dashboard')}> 
       <BackIcon />
-      <span style={{paddingLeft: '4px'}}>voltar</span> 
+      {/* <span style={{paddingLeft: '4px'}}>voltar</span>  */}
     </div>
   )
 }

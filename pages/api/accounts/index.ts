@@ -16,7 +16,7 @@ const handlerGet: NextApiHandler = async (req, res) => {
 const handlerPost: NextApiHandler = async (req, res) => {
   const account = req.body;
   const { name, document,
-      livelo, statusLivelo, priceLivelo, esfera, statusEsfera, priceEsfera, latam, statusLatam, priceLatam, azul, statusAzul, priceAzul, smiles, statusSmiles, priceSmiles, userId } = account;
+      statusLivelo, priceLivelo, statusEsfera, priceEsfera, statusLatam, priceLatam, statusAzul, priceAzul, statusSmiles, priceSmiles, userId } = account;
 
   const newAccount = await api.addNewAccount(account)
 

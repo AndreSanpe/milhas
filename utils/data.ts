@@ -7,10 +7,10 @@ export const management = [
 ];
 
 export const calculators = [
-  { label: 'Calculadora: Custo do milheiro' , path:'/calculadora/custo-milheiro' , icon: '' },
-  { label: 'Calculadora: Compra bonificada', path: '/calculadora/compra-bonificada', icon: '' },
-  { label: 'Calculadora: Compra de pontos e milhas' , path:'/calculadora/compra-pontos' , icon: '' },
-  { label: 'Calculadora: Venda de milhas' , path:'/calculadora/venda' , icon: '' },
-  { label: 'Calculadora: Boomerang' , path:'/calculadora/boomerang' , icon: '' },
+  { label: 'Calcular: Custo do milheiro' , path:'/calculadoras/custo-milheiro' , icon: '' },
+  { label: 'Calculadora: Compra bonificada', path: '/calculadoras/compra-bonificada', icon: '' },
+  { label: 'Calculadora: Compra de pontos e milhas' , path:'/calculadoras/compra-pontos' , icon: '' },
+  { label: 'Calculadora: Venda de milhas' , path:'/calculadoras/venda' , icon: '' },
+  { label: 'Calculadora: Boomerang' , path:'/calculadoras/boomerang' , icon: '' },
 ]
 

@@ -1,0 +1,140 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 12px;
+  margin-bottom: 24px;
+  background-color: #fff;
+  border-radius: 5px;
+  border: 1px solid #BA87FF;
+  box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.15);
+  transition: all ease 1s;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  /* margin-top: 4px; */
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.columns {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 100px 82px 110px;
+  gap: 4px;
+}
+
+.doubleColumns {
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+}
+
+.tripleColumns {
+  display: grid;
+  align-items: center;
+  padding-top: 8px;
+  grid-template-columns: 25% 33% 43%;
+  gap: 4px;
+}
+
+.secundaryTitle {
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 500;
+  color: #525252;
+}
+
+.text {
+  display: flex;
+  /* flex-direction: row-reverse; */
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 600;
+  color: #292929;
+}
+
+.clubTitle {
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 500;
+  color: #3B0585;
+}
+
+.statusTitle {
+  display: flex;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 500;
+  color: #3B0585;
+}
+
+.priceTitle {
+  display: flex;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 500;
+  color: #3B0585;
+}
+
+.clubText {
+  display: flex;
+  font-size: 12px;
+  line-height: 24px;
+  font-weight: 600;
+  color: #292929;
+}
+
+.statusText {
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+  line-height: 24px;
+  font-weight: 600;
+  color: #292929;
+}
+
+.priceText {
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+  line-height: 24px;
+  font-weight: 600;
+  color: #292929;
+}
+
+.dataAccount {
+  opacity: 1;
+  animation-name: dataAnimate;
+  animation-duration: 1s;
+}
+
+@keyframes dataAnimate {
+  0% {
+    opacity: 0;
+    max-height: 100px;
+  }
+  100% {
+    opacity: 1;
+    max-height: 100%;
+  }
+}
+
+.showMore {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  margin-top: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6A9000;
+  gap: 4px;
+}
