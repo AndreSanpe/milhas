@@ -3,6 +3,7 @@ import { unstable_getServerSession } from 'next-auth';
 import Head from 'next/head';
 import React, { useCallback, useState } from 'react'
 import ButtonBack from '../../../components/ButtonBack';
+import Dropdown from '../../../components/Dropdown';
 import Input from '../../../components/Input';
 import InputSelect from '../../../components/InputSelect';
 import Layout from '../../../components/Layout';
@@ -17,6 +18,13 @@ const CustoMilheiro = (data: Props) => {
   /* useState constructs an object with all data received in inputs. */
   const [ values, setValues ] = useState({});
 
+  /* Temporary state for dropdown */
+  const [ selected, setSelected ] = useState('');
+
+  const programas = ['livelo', 'esfera', ];
+
+  console.log(selected)
+
   /* Function that handles string values */
   const handleValuesStrings = useCallback((e: React.FormEvent<HTMLInputElement>) => {
     setValues({
@@ -25,7 +33,6 @@ const CustoMilheiro = (data: Props) => {
     }) 
   }, [values])
   
-  console.log(values)
 
   return (<>
 
@@ -78,9 +85,10 @@ const CustoMilheiro = (data: Props) => {
             <div className={styles.label}>
               Programa ou clube da compra:
             </div>
-              <InputSelect 
-                optionOne='Livelo'
-                labelOne='Livelo'
+              <Dropdown 
+                selected={selected}
+                setSelected={setSelected}
+                options={['Livelo', 'Esfera', 'Tudo Azul', 'Latam Pass', 'Smiles']}
               />
           </div>       
         </div>

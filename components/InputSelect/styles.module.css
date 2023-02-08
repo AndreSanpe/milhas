@@ -1,4 +1,4 @@
-.select {
+.container {
   display: flex;
   width: 100%;
   height: 48px;
@@ -7,4 +7,13 @@
   border-radius: 5px;
   padding: 12px;
   padding-right: 20px;
+  overflow: hidden;
+}
+
+.select {
+  appearance: none;
+  border: none;
+  width:100%;
+  font-size: 16px;
+  color: #292929;
 }

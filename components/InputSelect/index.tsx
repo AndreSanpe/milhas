@@ -10,11 +10,17 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const InputSelect: React.FC<InputProps> = ({optionOne, labelOne, ...props}) => {
   return (<>
-    <div>
-      <select className={styles.select}>
+    <div className={styles.container}>
+      <select className={styles.select}
+      defaultValue= 'Escolha uma opção:'
+      >
+        <option className={styles.teste} selected disabled>Escolha uma opção:</option>
+        <option value={optionOne}>{optionOne}</option>
+        <option value={optionOne}>{optionOne}</option>
         <option value={optionOne}>{optionOne}</option>
       </select>
     </div>
+
   
   
   </>)
