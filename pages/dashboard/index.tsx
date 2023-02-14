@@ -11,6 +11,10 @@ import api from '../../libs/api';
 import { calculators, management } from '../../utils/data';
 import ButtonMenu from '../../components/ButtonMenu';
 import { useRouter } from 'next/router';
+import ManageAccountsIcon from './icons/manage.svg';
+import SavingsIcon from './icons/savings.svg';
+import BalanceIcon from './icons/account_balance.svg';
+import ExtractIcon from './icons/extract.svg';
 
 
 const Dashboard = (data: Props) => {
@@ -33,11 +37,18 @@ const Dashboard = (data: Props) => {
       <div className={styles.container}>
         <div className={styles.title}>Olá, {user?.name}!</div>
         <span className={styles.subtitle}>Gerenciamento</span>
+               
 
         <div className={styles.buttons}>
           {management.map((links, index) => (
             <ButtonMenu key={index} onClick={() => router.push({...router.query, pathname: links.path})}>
               <div>
+                <div className={styles.icons}>
+                    {links.icon === 'manage' && <ManageAccountsIcon />}
+                    {links.icon === 'savings' && <SavingsIcon />}
+                    {links.icon === 'balance' && <BalanceIcon />}
+                    {links.icon === 'extract' && <ExtractIcon />}
+                </div>
                 <div className={styles.label}>
                   {links.label}
                 </div>

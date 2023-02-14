@@ -16,7 +16,13 @@ const Header = () => {
       <div className={styles.icon} onClick={() => setMenuOpen(true)}>
         <MenuIcon className={styles.oneIcon} />
       </div>
-      <div className={styles.logo}>LOGO</div> 
+      <div className={styles.logo}>
+        <div className={styles.circle}></div>
+        <div className={styles.circle2}></div>
+        <div className={styles.circle3}></div>
+        <div className={styles.circle4}></div>
+        LOGO
+      </div> 
     </div> {/* Header end */} 
     
  

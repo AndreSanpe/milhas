@@ -51,3 +51,13 @@ export function date(e: React.FormEvent<HTMLInputElement>) {
   e.currentTarget.value = value;
   return e;
 }
+
+
+export function percentage(e: React.FormEvent<HTMLInputElement>) {
+  e.currentTarget.maxLength = 3;
+  let value = e.currentTarget.value;
+  value = value.replace(/(\D)/g, '')
+
+  e.currentTarget.value = value;
+  return e;
+}

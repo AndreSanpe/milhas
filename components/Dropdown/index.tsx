@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
+import React, { HTMLAttributes, InputHTMLAttributes, useState } from 'react';
 import styles from './styles.module.css';
 import ExpandMore from './expand_more.svg';
 
-type DropwdownProps = {
+interface DropwdownProps extends InputHTMLAttributes<HTMLInputElement>  {
+  onSet?: (newValue: any) => void;
   selected: string;
   setSelected: React.Dispatch<React.SetStateAction<string>>;
   options: string[];
 }
 
-const Dropdown = ({selected, setSelected, options}: DropwdownProps) => {
+const Dropdown = ({selected, setSelected, options, onSet, ...props}: DropwdownProps) => {
 
   const [ isActive, setIsActive ] = useState<boolean>(false);
 
   return (
     <div className={styles.dropdown}>
 
-      <div className={styles.dropdownBtn} onClick={e => setIsActive(!isActive)}>
+      <div className={styles.dropdownBtn} style={ isActive ? {borderColor: '#FFAD7D'} : {borderColor: '#DCE7FF'}} onClick={e => setIsActive(!isActive)} {...props}>
         
         {selected ? <span style={{color: '#292929', fontWeight: '400'}}>{selected}</span> : 'Escolha uma opção:'}
         <ExpandMore />
@@ -25,7 +26,7 @@ const Dropdown = ({selected, setSelected, options}: DropwdownProps) => {
         <div className={styles.content}>
           {options.map((item, index) => (
             <div className={styles.item} 
-            onClick={e => {
+              onClick={e => {
               setSelected(item)
               setIsActive(false)
             }} key={index}

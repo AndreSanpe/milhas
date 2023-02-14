@@ -1,11 +1,11 @@
 import React, { InputHTMLAttributes, useCallback, useState } from 'react';
-import { cep, currency, miles, cpf, date } from './mask';
+import { cep, currency, miles, cpf, date, percentage } from './mask';
 import styles from './styles.module.css';
 import IconOn from './visibilityOn.svg';
 import IconOff from './visibilityOff.svg';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  mask?: 'cep' | 'currency' | 'miles' | 'cpf' | 'date';
+  mask?: 'cep' | 'currency' | 'miles' | 'cpf' | 'date' | 'percentage';
   onSet: (newValue: any) => void;
   warning?: boolean;
   password?: boolean;
@@ -36,6 +36,9 @@ const Input: React.FC<InputProps> = ({ password, warning, onSet, mask, ...props 
       case 'date':
         date(e);
         break;
+      case 'percentage':
+        percentage(e);
+        break;
     }
 
     onSet(e)
@@ -46,7 +49,7 @@ const Input: React.FC<InputProps> = ({ password, warning, onSet, mask, ...props 
   return (
     <div className={styles.container} /* Fake input start...Real input be inside */
       style={{
-      border: !warning ? (focused ? '#BA87FF 1px solid' : '#EEE1FF 1px solid') : '#ff0000 1px solid',
+      border: !warning ? (focused ? '#FFAD7D 1px solid' : '#DCE7FF 1px solid') : '#D92B05 1px solid',
     }}>
       
       <input 
