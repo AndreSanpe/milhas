@@ -15,6 +15,11 @@ import ManageAccountsIcon from './icons/manage.svg';
 import SavingsIcon from './icons/savings.svg';
 import BalanceIcon from './icons/account_balance.svg';
 import ExtractIcon from './icons/extract.svg';
+import PaidIcon from './icons/paid.svg';
+import ShoppingIcon from './icons/shopping.svg';
+import SellIcon from './icons/sell.svg';
+import BagIcon from './icons/bag.svg';
+import BoomerangIcon from './icons/boomerang.svg';
 
 
 const Dashboard = (data: Props) => {
@@ -63,6 +68,13 @@ const Dashboard = (data: Props) => {
           {calculators.map((links, index) => (
             <ButtonMenu key={index} onClick={() => router.push({...router.query,pathname: links.path})}>
               <div>
+              <div className={styles.icons}>
+                    {links.icon === 'paid' && <PaidIcon />}
+                    {links.icon === 'shopping' && <ShoppingIcon />}
+                    {links.icon === 'sell' && <SellIcon />}
+                    {links.icon === 'bag' && <BagIcon />}
+                    {links.icon === 'boomerang' && <BoomerangIcon />}
+                </div>
                 <div className={styles.label}>
                   {links.label}
                 </div>

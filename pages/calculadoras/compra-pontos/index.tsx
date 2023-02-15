@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next';
-import { unstable_getServerSession } from 'next-auth';
+import { Account, unstable_getServerSession } from 'next-auth';
 import Head from 'next/head';
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { use, useCallback, useEffect, useState } from 'react'
 import Button from '../../../components/Button';
 import ButtonBack from '../../../components/ButtonBack';
 import ContentAccordion from '../../../components/ContentAccordion';
@@ -12,17 +12,37 @@ import InputSelect from '../../../components/InputSelect';
 import Layout from '../../../components/Layout';
 import Toggle from '../../../components/Toggle';
 import { useAccountsContext } from '../../../contexts/accounts';
+import { ActionType } from '../../../contexts/auth/types';
 import api from '../../../libs/api';
 import { User } from '../../../types/User';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
 
 
-const CustoMilheiro = (data: Props) => {
+const CompraPontos = (data: Props) => {
+  
+  /* ContextApi: accounts  */
+  const { accounts, setAccounts } = useAccountsContext();
+  useEffect(() => {
+    if(accounts === null || accounts as [] !== data.accounts) {
+      setAccounts(data.accounts as any)
+    }
+  }, [data, accounts, setAccounts]);
 
-
+  /* List accounts */
+  const optionsAccounts: string[] = [];
+  if(accounts) {
+    accounts.map((item, index) => {
+      if(item.name) {
+        optionsAccounts.push(item.name)
+      } else {
+        optionsAccounts.push('Não há contas cadastradas')
+      }
+    })  
+  }
+    
   /* useState constructs an object with all data received in inputs. */
-  const [ values, setValues ] = useState({price: 'R$ 0,00', pointsQuantity: '0', program: '', transfer: false, destiny:'', percentage: '0'});
+  const [ values, setValues ] = useState({price: '', pointsQuantity: '0', program: '', transfer: false, destiny:'', percentage: '0', creditCard: ''});
   const [ toggled, setToggled ] = useState(false);
 
   /* Auxiliary states for calculate*/
@@ -30,7 +50,10 @@ const CustoMilheiro = (data: Props) => {
   const [ destiny, setDestiny ] = useState('');
   const [ miles, setMiles ] = useState<number>();
   const [ finalPrice, setFinalPrice ] = useState<number>();
-
+  const [ selectedAccount, setSelectedAccount ] = useState('');
+  const [ parcel, setParcel ] = useState('1');
+  const [ month, setMonth ] = useState('')
+  
   /* States modal */
   const [ showModal, setShowModal ] = useState<boolean>(false);
 
@@ -82,20 +105,21 @@ const CustoMilheiro = (data: Props) => {
 
   }, [miles, values.percentage, values.pointsQuantity, values.price])
 
-
+ 
+  
 
   return (<>
 
   <Head>
-    <title>Calculadora . TOOLMILHAS</title>
+    <title>Compra de Pontos . TOOLMILHAS</title>
   </Head>
   <Layout><>
 
     <div className={styles.container}>
       
       <ButtonBack />
-      <div className={styles.title}>Calcular: 
-        <span style={{color: '#F25C05'}}>custo do milheiro</span>
+      <div className={styles.title}>Gerenciar: 
+        <span style={{color: '#F25C05'}}>compra de pontos e milhas</span>
       </div>
 
       <div className={styles.inputs}>
@@ -107,6 +131,7 @@ const CustoMilheiro = (data: Props) => {
               Valor investido na compra:
             </div>
               <Input 
+                value={ values.price}
                 name='price'
                 onSet={(e)=> handleValuesStrings(e)}
                 placeholder={'R$ 0,00'}
@@ -146,6 +171,77 @@ const CustoMilheiro = (data: Props) => {
         </div>
 
         {/* Input 4 */}
+        <div className={styles.row}>
+          <div className={styles.column}>
+            <div className={styles.label}>
+              Selecione a conta da compra:
+            </div>
+              <Dropdown 
+                style={{zIndex: '999'}}
+                selected={selectedAccount}
+                setSelected={setSelectedAccount}
+                options={optionsAccounts}
+              />
+          </div>       
+        </div>
+
+        {/* Link */}
+        <div className={styles.row}>
+          <div className={styles.column}>
+            <div className={styles.label} style={{color: '#525252'}}>
+              Ainda nao cadastrou uma conta?
+            </div>
+            <div className={styles.linkAux}>
+              Clique aqui e cadastre
+            </div>
+          </div>       
+        </div>
+
+         {/* Input 5 */}
+         <div className={styles.row}>
+          <div className={styles.column}>
+            <div className={styles.label}>
+              Cartão utilizado na compra:
+            </div>
+              <Input 
+                name='creditCard'
+                onSet={(e)=> handleValuesStrings(e)}
+                placeholder={'Ex.: Visa Infinite XP'}
+              />
+          </div>       
+        </div>
+
+        {/* Input 6 */}
+        <div className={styles.row}>
+          <div className={styles.column}>
+            <div className={styles.label}>
+              Número de parcelas do pagamento:
+            </div>
+              <Dropdown 
+                style={{zIndex: '999'}}
+                selected={parcel}
+                setSelected={setParcel}
+                options={['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']}
+              />
+          </div>       
+        </div>
+
+        {/* Input 7 */}
+        <div className={styles.row}>
+          <div className={styles.column}>
+            <div className={styles.label}>
+              Selecione o mês da primeira parcela:
+            </div>
+              <Dropdown 
+                style={{zIndex: '999'}}
+                selected={month}
+                setSelected={setMonth}
+                options={['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']}
+              />
+          </div>       
+        </div>
+
+        {/* Input X */}
         <div className={styles.row} >
           <div className={styles.toggle}>
             <div className={styles.label} style={{fontSize: '14px'}}>
@@ -161,7 +257,7 @@ const CustoMilheiro = (data: Props) => {
 
         {values.transfer && <>
 
-        {/* input 5 */}
+        {/* input X */}
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -175,7 +271,7 @@ const CustoMilheiro = (data: Props) => {
           </div>       
         </div>
 
-        {/* Input 6 */}
+        {/* Input X */}
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -194,8 +290,22 @@ const CustoMilheiro = (data: Props) => {
       {/* Input's end */}
     
       {/* Results */}
-      <div className={styles.titleResults} style={{paddingTop: '32px'}}>Resultado</div>
+      <div className={styles.titleResults} style={{paddingTop: '32px'}}>Resumo da compra</div>
       <div className={styles.results}>
+
+      <div className={styles.contentRow}>
+        <div className={styles.contentColumn}>
+          <div className={styles.titleValues}>Conta utilizada:</div>
+          <div className={styles.values}>{selectedAccount ? selectedAccount : ''}</div>
+        </div>        
+      </div>
+
+      <div className={styles.contentRow}>
+        <div className={styles.contentColumn}>
+          <div className={styles.titleValues}>Documento CPF:</div>
+          <div className={styles.values}>099.247.576-42</div>
+        </div>        
+      </div>
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
@@ -206,21 +316,56 @@ const CustoMilheiro = (data: Props) => {
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
-          <div className={styles.titleValues}>Total de pontos comprados:</div>
+          <div className={styles.titleValues}>Cartão utilizado:</div>
+          <div className={styles.values}>{values.creditCard}</div>
+        </div>        
+      </div>
+
+      <div className={styles.contentRow}>
+        <div className={styles.contentColumn}>
+          <div className={styles.titleValues}>Parcelamento:</div>
+          <div className={styles.values}>{parcel ? parcel + 'x' : ''}</div>
+        </div>        
+      </div>
+
+      <div className={styles.contentRow}>
+        <div className={styles.contentColumn}>
+          <div className={styles.titleValues}>Pontos comprados:</div>
           <div className={styles.values}>{values.pointsQuantity}</div>
         </div>        
       </div>
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
-          <div className={styles.titleValues}>Total após transferência:</div>
-          <div className={styles.values}>{miles ? miles.toLocaleString('pt-BR') : '-'}</div>
+          <div className={styles.titleValues}>Programa da compra:</div>
+          <div className={styles.values}>{program}</div>
         </div>        
       </div>
 
-      <div className={styles.contentRow} style={{borderTop: '1px solid #DCE7FF', paddingTop: '8px', marginTop: '8px'}}>
+      <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
-          <div style={{fontWeight: '600'}}>Valor final do milheiro:</div>
+          <div className={styles.titleValues}>Bônus da transferência:</div>
+          <div className={styles.values}>{values.percentage + '%'}</div>
+        </div>        
+      </div>
+
+      <div className={styles.contentRow}>
+        <div className={styles.contentColumn}>
+          <div className={styles.titleValues}>Transferência para:</div>
+          <div className={styles.values}>{destiny}</div>
+        </div>        
+      </div>
+
+      <div className={styles.contentRow}>
+        <div className={styles.contentColumn}>
+          <div className={styles.titleValues}>Total após transferência:</div>
+          <div className={styles.values}>{miles ? miles.toLocaleString('pt-BR') : ''}</div>
+        </div>        
+      </div>
+
+      <div className={styles.contentRow} >
+        <div className={styles.contentColumn} style={{border: 'none', paddingTop: '12px'}}>
+          <div style={{fontWeight: '600', fontSize:'14px'}}>Valor final do milheiro:</div>
           <div className={styles.values} style={{color: '#6A9000', fontWeight: '600'}}>{finalPrice ? finalPrice.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : 'R$ 0,00'}</div>
         </div>        
       </div>
@@ -231,7 +376,7 @@ const CustoMilheiro = (data: Props) => {
       {/* Button and actions */}
       <div className={styles.btn}>
         <Button 
-          label= 'Salvar como compra'
+          label= 'Salvar compra'
           backgroundColor='#26408C'
           backgroundColorHover='#4D69A6'
           onClick={() => setShowModal(true)}
@@ -266,11 +411,12 @@ const CustoMilheiro = (data: Props) => {
   </>)
 }
 
-export default CustoMilheiro;
+export default CompraPontos;
 
 
 type Props = {
   user: User; 
+  accounts: Account[];
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -287,10 +433,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   } 
 
+  /* Get accounts */
+  const accounts = await api.getAccounts(session.user.id);
+
    
   return {
     props: {
       user,
+      accounts
     }
   }
 }

@@ -1,12 +1,11 @@
 import { reducer } from './reducer';
 import { createContext, useReducer } from 'react';
 import { ContextType, DataType, ProviderType } from './types';
-import { Trainee } from '../../types/Trainee';
 
-export { useTraineesContext } from './hook';
+export { useAccountsContext } from './hook';
 
 const initialState: DataType = {
-  trainees: null
+  accounts: null
 }
 
 export const AppContext = createContext<ContextType>({

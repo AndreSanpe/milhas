@@ -1,8 +1,8 @@
 import { Dispatch, ReactNode } from "react";
-import { Trainee } from "../../types/Trainee";
+import { Account } from "../../types/Account";
 
 export type DataType = {
-  trainees: Trainee[] | null;
+  accounts: Account[] | null;
 }
 
 export type ActionType = {
@@ -20,5 +20,5 @@ export type ProviderType = {
 }
 
 export enum Actions {
-  SET_TRAINEES
+  SET_ACCOUNTS
 }

@@ -2,7 +2,7 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
 import { Provider as AuthContextProvider } from '../contexts/auth';
-import { Provider as TraineesContextProvider } from '../contexts/trainees';
+import { Provider as AccountsContextProvider } from '../contexts/accounts';
 import { Provider as TraineeContextProvider } from '../contexts/trainee';
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
@@ -10,11 +10,11 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
   return (
     <SessionProvider session={session}>
       <AuthContextProvider>
-        <TraineesContextProvider>
-          <TraineeContextProvider>
+        <AccountsContextProvider>
+          
             <Component {...pageProps} />
-          </TraineeContextProvider>
-        </TraineesContextProvider>
+          
+        </AccountsContextProvider>
       </AuthContextProvider>
     </SessionProvider>
   ) 

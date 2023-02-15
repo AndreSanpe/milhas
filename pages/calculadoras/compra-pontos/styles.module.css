@@ -9,12 +9,16 @@
 .title {
   display: flex;
   justify-content: center;
+  text-align: center;
+  margin-top: 12px;
   margin-bottom: 32px;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
   color: #26408C;
   gap: 8px;
 }
+
+/* Css inputs */
 
 .row {
   display: flex;
@@ -42,6 +46,18 @@
   align-items: center;
   padding: 20px 0px;
 }
+
+.linkAux {
+  display: flex;
+  font-size: 14px;
+  color: #F25C05;
+  text-decoration: underline;
+  cursor: pointer;
+  padding-bottom: 12px;
+}
+
+
+/* CSS results */
 
 .titleResults {
   display: flex;
@@ -71,13 +87,16 @@
 
 .contentColumn {
   display: grid;
-  grid-template-columns: 65% 35%;
+  grid-template-columns: 60% 40%;
+  align-items: center;
   width: 100%;
+  border-bottom: 1px solid #DCE7FF;
 }
 
 .titleValues {
   display: flex;
-  font-size: 14px;
+  align-items: center;
+  font-size: 13px;
   line-height: 28px;
   font-weight: 400;
 }
@@ -85,6 +104,8 @@
 .values {
   display: flex;
   justify-content: flex-end;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .btn {
