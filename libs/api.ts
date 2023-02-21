@@ -66,7 +66,7 @@ export default {
       }
     });
 
-    account.map((item, index) => (
+    account.map((item: any, index: number) => (
       accounts.push({
         id: item.id,
         name: item.name,

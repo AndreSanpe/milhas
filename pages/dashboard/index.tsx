@@ -53,6 +53,8 @@ const Dashboard = (data: Props) => {
                     {links.icon === 'savings' && <SavingsIcon />}
                     {links.icon === 'balance' && <BalanceIcon />}
                     {links.icon === 'extract' && <ExtractIcon />}
+                    {links.icon === 'shopping' && <ShoppingIcon />}
+                    {links.icon === 'sell' && <SellIcon />}
                 </div>
                 <div className={styles.label}>
                   {links.label}
@@ -70,8 +72,6 @@ const Dashboard = (data: Props) => {
               <div>
               <div className={styles.icons}>
                     {links.icon === 'paid' && <PaidIcon />}
-                    {links.icon === 'shopping' && <ShoppingIcon />}
-                    {links.icon === 'sell' && <SellIcon />}
                     {links.icon === 'bag' && <BagIcon />}
                     {links.icon === 'boomerang' && <BoomerangIcon />}
                 </div>

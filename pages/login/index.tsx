@@ -77,7 +77,7 @@ const Login = () => {
           alt=''
           /> */}
 
-          <div style={{fontSize: '24px', fontWeight: '700', color: '#3B0585'}}>LOGO</div>
+          <div style={{fontSize: '24px', fontWeight: '700', color: '#26408C'}}>LOGO</div>
         </div>
 
         <div className={styles.title}>Identifique-se</div>
@@ -106,11 +106,16 @@ const Login = () => {
           </div>
         </div>
 
+        
+
         <div className={styles.button}>
-          <Button
-            label='Entrar'
-            onClick={handleSubmit}
-          />
+          
+          <Button 
+          label= 'Entrar'
+          backgroundColor='#26408C'
+          backgroundColorHover='#4D69A6'
+          onClick={handleSubmit}
+        />
         </div>
 
         <div className={styles.errors}>

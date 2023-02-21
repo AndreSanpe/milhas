@@ -1,5 +1,4 @@
-@media screen and (max-width: 950px) {
- 
+
   .container {
     display: flex;
     flex-direction: column;
@@ -39,7 +38,6 @@
     color: #26408C;
   }
 
-} /* Mobile version end */
 
 
 

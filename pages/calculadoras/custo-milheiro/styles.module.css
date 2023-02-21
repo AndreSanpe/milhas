@@ -71,13 +71,16 @@
 
 .contentColumn {
   display: grid;
-  grid-template-columns: 65% 35%;
+  grid-template-columns: 60% 40%;
+  align-items: center;
   width: 100%;
+  border-bottom: 1px solid #DCE7FF;
 }
 
 .titleValues {
   display: flex;
-  font-size: 14px;
+  align-items: center;
+  font-size: 13px;
   line-height: 28px;
   font-weight: 400;
 }
@@ -85,7 +88,10 @@
 .values {
   display: flex;
   justify-content: flex-end;
+  font-size: 14px;
+  font-weight: 600;
 }
+
 
 .btn {
   display: flex;

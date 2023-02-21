@@ -2,10 +2,10 @@ import { reducer } from './reducer';
 import { createContext, useReducer } from 'react';
 import { ContextType, DataType, ProviderType } from './types';
 
-export { useTraineeContext } from './hook';
+export { useInputBuyContext } from './hook';
 
 const initialState: DataType = {
-  trainee: null
+  inputsBuy: {}
 }
 
 export const AppContext = createContext<ContextType>({

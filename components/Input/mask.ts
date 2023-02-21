@@ -13,7 +13,7 @@ export function currency(e: React.FormEvent<HTMLInputElement>) {
   value = value.replace(/\D/g, '');
   value = value.replace(/(\d)(\d{2})$/, '$1,$2');
   value = value.replace(/(?=(\d{3})+(\D))\B/g, '.');
-  value = value.replace(/^/, ('R$ '))
+  value = value.replace(/^(\d)/, ('R$ $1'))
 
   e.currentTarget.value = value;
   return e;

@@ -4,15 +4,12 @@ import Head from 'next/head';
 import React, { use, useCallback, useEffect, useState } from 'react'
 import Button from '../../../components/Button';
 import ButtonBack from '../../../components/ButtonBack';
-import ContentAccordion from '../../../components/ContentAccordion';
 import Dropdown from '../../../components/Dropdown';
 import FormModal from '../../../components/FormModal';
 import Input from '../../../components/Input';
-import InputSelect from '../../../components/InputSelect';
 import Layout from '../../../components/Layout';
 import Toggle from '../../../components/Toggle';
 import { useAccountsContext } from '../../../contexts/accounts';
-import { ActionType } from '../../../contexts/auth/types';
 import api from '../../../libs/api';
 import { User } from '../../../types/User';
 import { authOptions } from '../../api/auth/[...nextauth]';
@@ -29,7 +26,7 @@ const CompraPontos = (data: Props) => {
     }
   }, [data, accounts, setAccounts]);
 
-  /* List accounts */
+   /* List accounts */
   const optionsAccounts: string[] = [];
   if(accounts) {
     accounts.map((item, index) => {
@@ -40,9 +37,9 @@ const CompraPontos = (data: Props) => {
       }
     })  
   }
-    
+
   /* useState constructs an object with all data received in inputs. */
-  const [ values, setValues ] = useState({price: '', pointsQuantity: '0', program: '', transfer: false, destiny:'', percentage: '0', creditCard: ''});
+  const [ values, setValues ] = useState({price: '', pointsQuantity: '0', program: '', transfer: false, destiny:'', percentage: '', creditCard: ''});
   const [ toggled, setToggled ] = useState(false);
 
   /* Auxiliary states for calculate*/
@@ -105,9 +102,8 @@ const CompraPontos = (data: Props) => {
 
   }, [miles, values.percentage, values.pointsQuantity, values.price])
 
- 
   
-
+ 
   return (<>
 
   <Head>
@@ -188,7 +184,7 @@ const CompraPontos = (data: Props) => {
         {/* Link */}
         <div className={styles.row}>
           <div className={styles.column}>
-            <div className={styles.label} style={{color: '#525252'}}>
+            <div className={styles.label} style={{color: '#525252', display: 'flex' ,justifyContent: 'flex-end'}}>
               Ainda nao cadastrou uma conta?
             </div>
             <div className={styles.linkAux}>
@@ -344,15 +340,15 @@ const CompraPontos = (data: Props) => {
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
-          <div className={styles.titleValues}>Bônus da transferência:</div>
-          <div className={styles.values}>{values.percentage + '%'}</div>
+          <div className={styles.titleValues}>Transferência para:</div>
+          <div className={styles.values}>{destiny}</div>
         </div>        
       </div>
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
-          <div className={styles.titleValues}>Transferência para:</div>
-          <div className={styles.values}>{destiny}</div>
+          <div className={styles.titleValues}>Bônus da transferência:</div>
+          <div className={styles.values}>{values.percentage ? values.percentage + '%' : ''}</div>
         </div>        
       </div>
 
@@ -366,7 +362,7 @@ const CompraPontos = (data: Props) => {
       <div className={styles.contentRow} >
         <div className={styles.contentColumn} style={{border: 'none', paddingTop: '12px'}}>
           <div style={{fontWeight: '600', fontSize:'14px'}}>Valor final do milheiro:</div>
-          <div className={styles.values} style={{color: '#6A9000', fontWeight: '600'}}>{finalPrice ? finalPrice.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : 'R$ 0,00'}</div>
+          <div className={styles.values} style={{color: '#6A9000', fontWeight: '600', fontSize: '14px'}}>{finalPrice ? finalPrice.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : 'R$ 0,00'}</div>
         </div>        
       </div>
 

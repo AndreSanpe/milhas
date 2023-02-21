@@ -1,17 +1,17 @@
 import { useContext } from "react"
 import { AppContext } from "."
-import { Trainee } from "../../types/Trainee";
+import { InputBuy } from "../../types/InputBuy";
 import { Actions } from "./types";
 
-export const useTraineeContext = () => {
+export const useInputBuyContext = () => {
   const { state, dispatch } = useContext(AppContext);
 
   return{
     ...state,
-    setTrainee: (trainee: Trainee) => {
+    setInputsBuy: (inputsBuy: InputBuy) => {
       dispatch({
-        type: Actions.SET_TRAINEE,
-        payload: { trainee }
+        type: Actions.SET_INPUTBUY,
+        payload: { inputsBuy }
       });
     }
   }
