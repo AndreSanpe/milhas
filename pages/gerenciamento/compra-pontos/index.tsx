@@ -1,6 +1,7 @@
 import { GetServerSideProps } from 'next';
 import { Account, unstable_getServerSession } from 'next-auth';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import React, { use, useCallback, useEffect, useState } from 'react'
 import Button from '../../../components/Button';
 import ButtonBack from '../../../components/ButtonBack';
@@ -18,6 +19,8 @@ import styles from './styles.module.css';
 
 const CompraPontos = (data: Props) => {
   
+  const router = useRouter(); 
+
   /* ContextApi: accounts  */
   const { accounts, setAccounts } = useAccountsContext();
   useEffect(() => {
@@ -26,84 +29,130 @@ const CompraPontos = (data: Props) => {
     }
   }, [data, accounts, setAccounts]);
 
-   /* List accounts */
-  const optionsAccounts: string[] = [];
-  if(accounts) {
-    accounts.map((item, index) => {
-      if(item.name) {
-        optionsAccounts.push(item.name)
-      } else {
-        optionsAccounts.push('Não há contas cadastradas')
-      }
-    })  
-  }
-
-  /* useState constructs an object with all data received in inputs. */
-  const [ values, setValues ] = useState({price: '', pointsQuantity: '0', program: '', transfer: false, destiny:'', percentage: '', creditCard: ''});
-  const [ toggled, setToggled ] = useState(false);
+ 
+  /* States ///////////////////////////////////////////////////*/
+  const [ price, setPrice ] = useState<number>(0);
+  const [ pointsQuantity, setPointsQuantity ] = useState<number>(0);
+  const [ percentage, setPercentage ] = useState<number>(0);
+  const [ sellPrice, setSellPrice ] = useState<number>(0);
+  const [ transfer, setTransfer ] = useState<boolean>(false);
+  const [ creditCard, setCreditCard ] = useState<string>('')
+  const [ program, setProgram ] = useState<string>('');
+  const [ destiny, setDestiny ] = useState<string>('');
+  const [ selectedAccount, setSelectedAccount ] = useState<string>('');
+  const [ parcel, setParcel ] = useState('');
+  const [ month, setMonth ] = useState<string>('')
+  
+  /* Auxiliary states for accounts data */
+  const [ namesAccounts, setNamesAccounts ] = useState<any[]>([]);
+  const [ documentsAccounts, setDocumentsAccounts ] = useState<any[]>([]);
+  const [ indice, setIndice ] = useState<any>();
+  const [ cpf, setCpf ] = useState<string>('');
 
   /* Auxiliary states for calculate*/
-  const [ program, setProgram ] = useState('');
-  const [ destiny, setDestiny ] = useState('');
   const [ miles, setMiles ] = useState<number>();
   const [ finalPrice, setFinalPrice ] = useState<number>();
-  const [ selectedAccount, setSelectedAccount ] = useState('');
-  const [ parcel, setParcel ] = useState('1');
-  const [ month, setMonth ] = useState('')
-  
-  /* States modal */
-  const [ showModal, setShowModal ] = useState<boolean>(false);
 
-  /* Function that handles string values */
-  const handleValuesStrings = useCallback((e: React.FormEvent<HTMLInputElement>) => {
-    setValues({
-      ...values,
-      [e.currentTarget.name]: e.currentTarget.value
-    }) 
-  }, [values])
+   /* List accounts and cpfs*/
+  useEffect(() => {
+    const optionsAccounts: string[] = [];
+    const documentsAccounts: string[] = [];
+    
+    if(accounts) {
+      accounts.map((item, index) => {
+        if(item.name) {
+          optionsAccounts.push(item.name);
+          documentsAccounts.push(item.document)
+        } else {
+          optionsAccounts.push('Não há contas cadastradas')
+        }
+      })  
+    }
 
-   /* Function that handles booleans values */
-   const handleValuesBooleans = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setValues({
-      ...values,
-      [e.target.name]: e.target.checked
-    }) 
-  }, [values])
+  setNamesAccounts(optionsAccounts);
+  setDocumentsAccounts(documentsAccounts);
+  }, [accounts])
   
-  /* Calculation after transfer */
+  /* Find cpf through index*/
+  useEffect(() => {
+    if(selectedAccount) {
+      setCpf(documentsAccounts[indice])
+    }
+  },[documentsAccounts, indice, selectedAccount])
+
+  /* Functions of handle input values ///////////////////////////////////////////////////*/
+  const handleValues = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+    switch(e.currentTarget.name) {
+      case 'price':
+        const priceInput = parseFloat((e.currentTarget.value).replace('R$ ', '').replace('.', '').replace(',', '.'));
+        setPrice(priceInput);
+        return;
+      case 'pointsQuantity':
+        const pointsInput = parseInt(e.currentTarget.value.replace(/(\.)/g, ''));
+        setPointsQuantity(pointsInput);
+        return;
+      case 'percentage':
+        const percentageInput = parseInt(e.currentTarget.value);
+        setPercentage(percentageInput);
+        return;
+      case 'sellPrice':
+        const sellPriceInput = parseFloat((e.currentTarget.value).replace('R$ ', '').replace('.', '').replace(',', '.'));
+        setSellPrice(sellPriceInput);
+        return;
+      case 'creditCard':
+        setCreditCard(e.currentTarget.value);
+        return;
+    }
+  },[])
+
+  const handleBoolean = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const transfer = e.currentTarget.checked;
+    setTransfer(transfer)
+  },[])
+
+  /* useEffect protecting from results in NaN format /////////////////////////////////////*/
+  useEffect(() => {
+    if(Number.isNaN(price)) {
+      setPrice(0);
+    }
+    if(Number.isNaN(pointsQuantity)) {
+      setPointsQuantity(0);
+    }
+    if(Number.isNaN(percentage)) {
+      setPercentage(0);
+    }
+    if(Number.isNaN(sellPrice)) {
+      setSellPrice(0);
+    }
+  }, [percentage, pointsQuantity, price, sellPrice])
+
+  /* Calculation after transfer ///////////////////////////////////////////////////*/
   useEffect(()=> {
-    if (values.percentage !== '0') {
-      const calcMiles = (((parseInt(values.percentage)) + 100)/100 * parseInt(values.pointsQuantity.replace(/(\.)/g, '')));
+    if (percentage) {
+      const calcMiles = ((percentage + 100)/100 * pointsQuantity);
       setMiles(calcMiles);
     } else {
       setMiles(0);
     }
-  }, [values.percentage, values.pointsQuantity])
+  }, [percentage, pointsQuantity])
 
-   /* Calculation price */
-   useEffect(()=> {
-    const price = parseFloat(values.price.replace('R$ ', '').replace('.', '').replace(',', '.'));
-    const points = parseInt(values.pointsQuantity.replace(/(\.)/g, ''));
-    const percentage = parseInt(values.percentage);
-
-    if(!miles && price && !Number.isNaN(price) && points && !Number.isNaN(points)) {
-      const simpleCalc = ((price) / ((points)/1000));
+   /* Calculation price ///////////////////////////////////////////////////*/
+   useEffect(()=> { 
+    if(!miles && price && pointsQuantity) {
+      const simpleCalc = ((price) / ((pointsQuantity)/1000));
       setFinalPrice(simpleCalc);
-    } 
-
-    else if (miles && !Number.isNaN(miles) && !Number.isNaN(price) && points && !Number.isNaN(points) && percentage && !Number.isNaN(percentage)){
+    }
+    else if(miles && pointsQuantity && percentage && percentage){
       const completeCalc = ((price) / ((miles)/1000));
       setFinalPrice(completeCalc);
-    } 
-
+    }
     else {
       setFinalPrice(0);
     }
 
-  }, [miles, values.percentage, values.pointsQuantity, values.price])
-
+  }, [miles, percentage, pointsQuantity, price])
   
- 
+
   return (<>
 
   <Head>
@@ -127,9 +176,8 @@ const CompraPontos = (data: Props) => {
               Valor investido na compra:
             </div>
               <Input 
-                value={ values.price}
                 name='price'
-                onSet={(e)=> handleValuesStrings(e)}
+                onSet={(e)=> handleValues(e)}
                 placeholder={'R$ 0,00'}
                 mask='currency'
               />
@@ -144,7 +192,7 @@ const CompraPontos = (data: Props) => {
             </div>
               <Input 
                 name='pointsQuantity'
-                onSet={(e)=> handleValuesStrings(e)}
+                onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 1.000'}
                 mask='miles'
               />
@@ -176,7 +224,8 @@ const CompraPontos = (data: Props) => {
                 style={{zIndex: '999'}}
                 selected={selectedAccount}
                 setSelected={setSelectedAccount}
-                options={optionsAccounts}
+                options={namesAccounts}
+                setIndice={setIndice}
               />
           </div>       
         </div>
@@ -185,9 +234,12 @@ const CompraPontos = (data: Props) => {
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label} style={{color: '#525252', display: 'flex' ,justifyContent: 'flex-end'}}>
-              Ainda nao cadastrou uma conta?
+              Ainda não cadastrou as contas 
             </div>
-            <div className={styles.linkAux}>
+            <div className={styles.label} style={{color: '#525252', display: 'flex' ,justifyContent: 'flex-end'}}>
+              que você administra?
+            </div>
+            <div className={styles.linkAux} onClick={() => router.push({...router.query,pathname: '/gerenciamento/contas'}) }>
               Clique aqui e cadastre
             </div>
           </div>       
@@ -201,7 +253,7 @@ const CompraPontos = (data: Props) => {
             </div>
               <Input 
                 name='creditCard'
-                onSet={(e)=> handleValuesStrings(e)}
+                onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: Visa Infinite XP'}
               />
           </div>       
@@ -237,7 +289,7 @@ const CompraPontos = (data: Props) => {
           </div>       
         </div>
 
-        {/* Input X */}
+        {/* Input 8 */}
         <div className={styles.row} >
           <div className={styles.toggle}>
             <div className={styles.label} style={{fontSize: '14px'}}>
@@ -245,15 +297,15 @@ const CompraPontos = (data: Props) => {
             </div>
             <Toggle 
               name='transfer'
-              initialValue={values.transfer}
-              onSet={(e) => {handleValuesBooleans(e)}}
+              initialValue={transfer}
+              onSet={(e) => handleBoolean(e)}
             />
           </div>   
         </div>
 
-        {values.transfer && <>
+        {transfer && <>
 
-        {/* input X */}
+        {/* Input 9 */}
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -267,7 +319,7 @@ const CompraPontos = (data: Props) => {
           </div>       
         </div>
 
-        {/* Input X */}
+        {/* Input 10 */}
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -275,7 +327,7 @@ const CompraPontos = (data: Props) => {
             </div>
               <Input 
                 name='percentage'
-                onSet={(e)=> handleValuesStrings(e)}
+                onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 100%'}
                 mask='percentage'
               />
@@ -299,21 +351,21 @@ const CompraPontos = (data: Props) => {
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
           <div className={styles.titleValues}>Documento CPF:</div>
-          <div className={styles.values}>099.247.576-42</div>
+          <div className={styles.values}>{cpf ? cpf : ''}</div>
         </div>        
       </div>
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
           <div className={styles.titleValues}>Valor investido:</div>
-          <div className={styles.values}>{values.price}</div>
+          <div className={styles.values}>{price ? price.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
         </div>        
       </div>
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
           <div className={styles.titleValues}>Cartão utilizado:</div>
-          <div className={styles.values}>{values.creditCard}</div>
+          <div className={styles.values}>{creditCard}</div>
         </div>        
       </div>
 
@@ -327,7 +379,7 @@ const CompraPontos = (data: Props) => {
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
           <div className={styles.titleValues}>Pontos comprados:</div>
-          <div className={styles.values}>{values.pointsQuantity}</div>
+          <div className={styles.values}>{pointsQuantity ? pointsQuantity.toLocaleString('pt-BR') : ''}</div>
         </div>        
       </div>
 
@@ -348,7 +400,7 @@ const CompraPontos = (data: Props) => {
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
           <div className={styles.titleValues}>Bônus da transferência:</div>
-          <div className={styles.values}>{values.percentage ? values.percentage + '%' : ''}</div>
+          <div className={styles.values}>{percentage ? percentage + '%' : ''}</div>
         </div>        
       </div>
 
@@ -375,7 +427,7 @@ const CompraPontos = (data: Props) => {
           label= 'Salvar compra'
           backgroundColor='#26408C'
           backgroundColorHover='#4D69A6'
-          onClick={() => setShowModal(true)}
+          onClick={() => {}}
         />
       </div>
 
@@ -383,23 +435,6 @@ const CompraPontos = (data: Props) => {
         Limpar e refazer simulação
       </div>
 
-      {/* Modal to register new buy */}
-      {showModal &&
-      <FormModal 
-        maxWidth={'340px'} 
-        maxHeight={'1500px'} 
-        closeButton handleClick={() => setShowModal(false)}
-      >
-
-        <div className={styles.containerModal}>
-          <div className={styles.titleModal}>Informações da Compra</div>
-          ...
-        
-        </div>
-
-      </FormModal>
-      
-      }
 
     </div>
 

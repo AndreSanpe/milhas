@@ -26,6 +26,7 @@ const CustoMilheiro = (data: Props) => {
   const [ miles, setMiles ] = useState<number>(0);
   const [ finalPrice, setFinalPrice ] = useState<number>(0);
   const [ profit, setProfit ] = useState<number>(0);
+  const [ percentageProfit, setPercentageProfit ] = useState<number>(0);
   
   /* Function handle input values ///////////////////////////////////////////////////*/
   const handleValues = useCallback((e: React.FormEvent<HTMLInputElement>) => {
@@ -92,7 +93,7 @@ const CustoMilheiro = (data: Props) => {
 
   }, [miles, percentage, pointsQuantity, price])
   
-  /* Calculate profit ///////////////////////////////////////////////////*/
+  /* Calculation profit ///////////////////////////////////////////////////*/
   useEffect(() => {
     if(finalPrice && miles && sellPrice) {
       const resulttWithTransfer = (sellPrice * (miles/1000)) - (price);
@@ -107,6 +108,17 @@ const CustoMilheiro = (data: Props) => {
     }
 
   }, [finalPrice, miles, pointsQuantity, price, sellPrice])
+
+  /* Calculation percentage ///////////////////////////////////////////////////*/
+  useEffect(()=> {
+    if(price && profit) {
+      const percentageProfit = (profit * 100) / price;
+      setPercentageProfit(percentageProfit)
+    }
+    else if (price == 0 || profit == 0) {
+      setPercentageProfit(0)
+    }
+  }, [price, profit])
 
   
 
@@ -203,7 +215,7 @@ const CustoMilheiro = (data: Props) => {
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
           <div className={styles.titleValues}>Total de pontos comprados:</div>
-          <div className={styles.values}>{pointsQuantity.toLocaleString('pt-BR')}</div>
+          <div className={styles.values}>{pointsQuantity ? pointsQuantity.toLocaleString('pt-BR') : ''}</div>
         </div>        
       </div>
 
@@ -221,43 +233,78 @@ const CustoMilheiro = (data: Props) => {
         </div>        
       </div>
 
-      <div className={styles.contentRow}>
-        <div className={styles.contentColumn}>
-          <div className={styles.titleValues}>Cotação atual do milheiro:</div>
-          <div className={styles.values}>{sellPrice ? sellPrice.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
-        </div>        
-      </div>
-
       <div className={styles.contentRow} >
-        <div className={styles.contentColumn} style={{border: 'none', paddingTop: '12px'}}>
-          <div style={{fontWeight: '600', fontSize:'14px'}}>Valor final do milheiro:</div>
+        <div className={styles.contentColumn} /* style={{border: 'none', paddingTop: '12px'}} */>
+          <div className={styles.titleValues} style={{fontWeight: '600', fontSize: '14px'}}>Valor final do milheiro:</div>
           <div className={styles.values} style={{color: '#6A9000', fontWeight: '600', fontSize: '14px'}}>{finalPrice ? finalPrice.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : 'R$ 0,00'}</div>
         </div>        
       </div>
 
+      <div className={styles.contentRow}>
+        <div className={styles.contentColumn} style={{border: 'none'}}>
+          <div className={styles.titleValues}>Cotação atual de venda:</div>
+          <div className={styles.values}>{sellPrice ? sellPrice.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
+        </div>        
+      </div>
+
       {profit > 0  && 
-        <>
-          <div>
-            Lucro
+        
+          <div className={styles.contentRow}>
+            <div className={styles.contentColumn} style={{borderTop: '1px solid #DCE7FF'}}>
+              <div className={styles.titleValues} style={{color: '#6A9000', fontWeight: 600}}>Lucro estimado:</div>
+              <div className={styles.values} style={{color: '#6A9000', fontWeight: '600', fontSize: '14px'}}>{profit.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</div>
+            </div>        
           </div>
-        </>
+       
       }
 
-      {profit == 0  && 
-        <>
-          <div>
-            Equilibrio
-          </div>
-        </>
+      {profit == 0 ? ( sellPrice ?
+        <div className={styles.contentRow}>
+          <div className={styles.contentColumn} style={{borderTop: '1px solid #DCE7FF'}}>
+            <div className={styles.titleValues} style={{color: '#F29E05', fontWeight: 600}}>Lucro estimado:</div>
+            <div className={styles.values} style={{color: '#F29E05', fontWeight: '600', fontSize: '14px'}}>{profit.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</div>
+          </div>        
+        </div> : ''
+      ) : ''
       }
 
       {profit < 0 && 
-        <>
-          <div>
-            Prejuízo
-          </div>
-        </>
-      }            
+        <div className={styles.contentRow}>
+          <div className={styles.contentColumn} style={{borderTop: '1px solid #DCE7FF'}}>
+            <div className={styles.titleValues} style={{color: '#D92B05', fontWeight: 600}}>Prejuízo estimado:</div>
+            <div className={styles.values} style={{color: '#D92B05', fontWeight: '600', fontSize: '14px'}}>{profit.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</div>
+          </div>        
+        </div>
+      }
+
+      {percentageProfit > 0 ?
+        (<div className={styles.contentRow}>
+          <div className={styles.contentColumn} style={{border: 'none'}}>
+            <div className={styles.titleValues}>Em percentual:</div>
+            <div className={styles.values}>{'+'+percentageProfit.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%'}</div>
+          </div>        
+        </div>) : ''
+      } 
+
+      {percentageProfit == 0 ? 
+        (sellPrice ? 
+        <div className={styles.contentRow}>
+          <div className={styles.contentColumn} style={{border: 'none'}}>
+            <div className={styles.titleValues}>Em percentual:</div>
+            <div className={styles.values}>{percentageProfit.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%'}</div>
+          </div>        
+        </div> : '' ) 
+        : ''
+      } 
+
+      {percentageProfit < 0 ?
+        (<div className={styles.contentRow}>
+          <div className={styles.contentColumn} style={{border: 'none'}}>
+            <div className={styles.titleValues}>Em percentual:</div>
+            <div className={styles.values}>{percentageProfit.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%'}</div>
+          </div>        
+        </div>) : ''
+      }       
 
       </div>
       {/* Results end */}

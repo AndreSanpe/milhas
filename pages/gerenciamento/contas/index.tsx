@@ -199,19 +199,13 @@ const Contas = (data: Props) => {
                 <div className={styles.row}>
                   <div className={styles.column}>
                     <div className={styles.columns}>
-                      <div className={styles.label} style={{color: '#3B0585'}}>Clubes:</div>
-                      <div className={styles.label} style={{color: '#3B0585'}}>Assinatura:</div>
+                      <div className={styles.label} style={{color: '#26408C'}}>Clubes:</div>
+                      <div className={styles.label} style={{color: '#26408C'}}>Assinatura:</div>
                       <div className={styles.labelAux}>Valor:</div>
                     </div>
                     <div className={styles.columns}>
                       {/* Column 1 */}
                       <div className={styles.checkbox}>
-                       {/*  <Checkbox 
-                          name='livelo'
-                          label='Livelo'
-                          initialValue={values.livelo}
-                          onSet={(e) => handleValuesBooleans(e)}
-                        /> */}
                         Livelo
                       </div>
                       {/* Column 2 */}
@@ -243,12 +237,6 @@ const Contas = (data: Props) => {
                     <div className={styles.columns}>
                       {/* Column 1 */}
                       <div className={styles.checkbox}>
-                        {/* <Checkbox 
-                          name='esfera'
-                          label='Esfera'
-                          initialValue={values.esfera}
-                          onSet={(e) => handleValuesBooleans(e)}
-                        /> */}
                         Esfera
                       </div>
                       {/* Column 2 */}

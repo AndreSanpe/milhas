@@ -6,10 +6,11 @@ interface DropwdownProps extends InputHTMLAttributes<HTMLInputElement>  {
   onSet?: (newValue: any) => void;
   selected: string;
   setSelected: React.Dispatch<React.SetStateAction<string>>;
+  setIndice?: React.Dispatch<React.SetStateAction<number>>;
   options: string[];
 }
 
-const Dropdown = ({selected, setSelected, options, onSet, ...props}: DropwdownProps) => {
+const Dropdown = ({selected, setSelected, setIndice, options, onSet, ...props}: DropwdownProps) => {
 
   const [ isActive, setIsActive ] = useState<boolean>(false);
 
@@ -28,6 +29,9 @@ const Dropdown = ({selected, setSelected, options, onSet, ...props}: DropwdownPr
             <div className={styles.item} 
               onClick={e => {
               setSelected(item)
+              if(setIndice) {
+                setIndice(index)
+              }
               setIsActive(false)
             }} key={index}
             >
