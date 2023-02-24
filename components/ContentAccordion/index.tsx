@@ -57,35 +57,35 @@ const ContentAccordion: React.FC<DivProps> = ({item, children, ...props}) => {
             <div className={styles.tripleColumns}>
               <div className={styles.clubText}>Livelo</div>
               <div className={styles.statusText}>{item.statusLivelo ? 'SIM':'NÃO'}</div>
-              <div className={styles.priceText}>{item.priceLivelo}</div>
+              <div className={styles.priceText}>{item.priceLivelo.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</div>
             </div>
 
             {/* Data: Esfera */}
             <div className={styles.tripleColumns}>
               <div className={styles.clubText}>Esfera</div>
               <div className={styles.statusText}>{item.statusEsfera ? 'SIM':'NÃO'}</div>
-              <div className={styles.priceText}>{item.priceEsfera}</div>
+              <div className={styles.priceText}>{item.priceEsfera.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</div>
             </div>
 
             {/* Data: Azul */}
             <div className={styles.tripleColumns}>
               <div className={styles.clubText}>Tudo Azul</div>
               <div className={styles.statusText}>{item.statusAzul ? 'SIM':'NÃO'}</div>
-              <div className={styles.priceText}>{item.priceAzul}</div>
+              <div className={styles.priceText}>{item.priceAzul.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</div>
             </div>
 
             {/* Data: Latam */}
             <div className={styles.tripleColumns}>
               <div className={styles.clubText}>Latam Pass</div>
               <div className={styles.statusText}>{item.statusLatam ? 'SIM':'NÃO'}</div>
-              <div className={styles.priceText}>{item.priceLatam}</div>
+              <div className={styles.priceText}>{item.priceLatam.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</div>
             </div>
 
             {/* Data: Smiles */}
             <div className={styles.tripleColumns}>
               <div className={styles.clubText}>Smiles</div>
               <div className={styles.statusText}>{item.statusSmiles ? 'SIM':'NÃO'}</div>
-              <div className={styles.priceText}>{item.priceSmiles}</div>
+              <div className={styles.priceText}>{item.priceSmiles.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</div>
             </div>
 
           </div>

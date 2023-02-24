@@ -62,7 +62,7 @@
   margin-top: 16px;
   font-size: 12px;
   font-weight: 600;
-  color: #3B0585;
+  color: #26408C;
   cursor: pointer;
 }
 
@@ -94,7 +94,7 @@
   justify-content: center;
   font-size: 18px;
   font-weight: 600;
-  color: #3B0585;
+  color: #26408C;
 }
 
 .inputs {
@@ -124,7 +124,7 @@
   font-size: 12px;
   line-height: 24px;
   font-weight: 600;
-  color: #292929;
+  color: #525252;
 }
 
 .labelAux {
@@ -133,20 +133,21 @@
   font-size: 12px;
   line-height: 24px;
   font-weight: 600;
-  color: #3B0585;
+  color: #26408C;
 }
 
 .checkbox {
   display: flex;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 24px;
   font-weight: 600;
-  color: #292929;
+  color: #525252;
 }
 
 .status {
  display: flex;
  align-items: center;
+ justify-content: center;
 }
 
 .btnModal {

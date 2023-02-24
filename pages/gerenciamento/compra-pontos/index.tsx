@@ -30,7 +30,7 @@ const CompraPontos = (data: Props) => {
   }, [data, accounts, setAccounts]);
 
  
-  /* States ///////////////////////////////////////////////////*/
+  /* General states ///////////////////////////////////////////////////*/
   const [ price, setPrice ] = useState<number>(0);
   const [ pointsQuantity, setPointsQuantity ] = useState<number>(0);
   const [ percentage, setPercentage ] = useState<number>(0);

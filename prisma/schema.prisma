@@ -32,15 +32,15 @@ model Account {
   name         String
   document     String
   statusLivelo Boolean
-  priceLivelo  String
+  priceLivelo  Float
   statusEsfera Boolean
-  priceEsfera  String
+  priceEsfera  Float
   statusLatam  Boolean
-  priceLatam   String
+  priceLatam   Float
   statusAzul   Boolean
-  priceAzul    String
+  priceAzul    Float
   statusSmiles Boolean
-  priceSmiles  String
+  priceSmiles  Float
 
   user   User @relation(fields: [userId], references: [id])
   userId Int

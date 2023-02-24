@@ -20,78 +20,179 @@ type Account = {
   name: string;
   document: string;
   statusLivelo: boolean;
-  priceLivelo: string;
+  priceLivelo: number;
   statusEsfera: boolean;
-  priceEsfera: string;
+  priceEsfera: number;
   statusAzul: boolean;
-  priceAzul: string;
+  priceAzul: number;
   statusLatam: boolean;
-  priceLatam: string;
+  priceLatam: number;
   statusSmiles: boolean;
-  priceSmiles: string;
+  priceSmiles: number;
 }
 
 const Contas = (data: Props) => {
 
+  /* Contexts */
   const { user, setUser } = useAuthContext();
-  const [ noHaveAccount, setNoHaveAccount ] = useState<boolean>(false);
-  const [ showModal, setShowModal ] = useState<boolean>(false);
-  const [ errorFields, setErrorFields ] = useState<string[]>([]);
-  const [ showMore, setShowMore ] = useState(false);
 
   /* Sending user data to context */
   useEffect(() => {
     if(user === null || user != data.user) {
       setUser(data.user)
     }
-
     if(data.accounts.length === 0) {
       setNoHaveAccount(true);
     }
-
   }, [data, user, setUser]);
 
+  /* General states //////////////////////////////////////////////////////////////////*/
+  const [ noHaveAccount, setNoHaveAccount ] = useState<boolean>(false);
+  const [ showModal, setShowModal ] = useState<boolean>(false);
+  const [ errorFields, setErrorFields ] = useState<string[]>([]);
+  
+  /* Input states //////////////////////////////////////////////////////////////////// */
+  const [ name, setName ] = useState<string>('');
+  const [ cpf, setCpf ] = useState<string>('');
+  const [ statusLivelo, setStatusLivelo ] = useState<boolean>(false);
+  const [ priceLivelo, setPriceLivelo ] = useState<number>(0);
+  const [ statusEsfera, setStatusEsfera ] = useState<boolean>(false);
+  const [ priceEsfera, setPriceEsfera ] = useState<number>(0);
+  const [ statusAzul, setStatusAzul ] = useState<boolean>(false);
+  const [ priceAzul, setPriceAzul ] = useState<number>(0);
+  const [ statusLatam, setStatusLatam ] = useState<boolean>(false);
+  const [ priceLatam, setPriceLatam ] = useState<number>(0);
+  const [ statusSmiles, setStatusSmiles ] = useState<boolean>(false);
+  const [ priceSmiles, setPriceSmiles ] = useState<number>(0);
 
- /* Modal actions */
+ /* Modal actions /////////////////////////////////////////////////////////////////////*/
   const handleClick = () => setShowModal(true);
   const closeBtn = () => { 
     setShowModal(false);
-    setValues({ name: '', document: '', statusLivelo: false, priceLivelo: 'R$ 0,00', statusEsfera: false, priceEsfera: 'R$ 0,00', statusAzul: false, priceAzul: 'R$ 0,00', statusLatam: false, priceLatam: 'R$ 0,00', statusSmiles: false, priceSmiles: 'R$ 0,00'});
     setErrorFields([]);
   }
 
-  /* useState constructs an object with all data received in inputs. */
-  const [ values, setValues ] = useState<Account>({
-    name: '', document: '', statusLivelo: false, priceLivelo: 'R$ 0,00', statusEsfera: false, priceEsfera: 'R$ 0,00', statusAzul: false, priceAzul: 'R$ 0,00', statusLatam: false, priceLatam: 'R$ 0,00', statusSmiles: false, priceSmiles: 'R$ 0,00'
-  });
+  /* Functions of handle input values ///////////////////////////////////////////////////*/
+  const handleValues = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+    switch(e.currentTarget.name) {
+      case 'name':
+        setName(e.currentTarget.value);
+        return;
+      case 'document':
+        setCpf(e.currentTarget.value);
+        return;
+      case 'priceLivelo':
+        const priceL = parseFloat((e.currentTarget.value).replace('R$ ', '').replace('.', '').replace(',', '.'));
+        setPriceLivelo(priceL);
+        return;
+      case 'priceEsfera':
+        const priceE = parseFloat((e.currentTarget.value).replace('R$ ', '').replace('.', '').replace(',', '.'));
+        setPriceEsfera(priceE);
+        return;
+      case 'priceAzul':
+        const priceA = parseFloat((e.currentTarget.value).replace('R$ ', '').replace('.', '').replace(',', '.'));
+        setPriceAzul(priceA);
+        return;
+      case 'priceLatam':
+        const priceLP = parseFloat((e.currentTarget.value).replace('R$ ', '').replace('.', '').replace(',', '.'));
+        setPriceLatam(priceLP);
+        return;
+      case 'priceSmiles':
+        const priceS = parseFloat((e.currentTarget.value).replace('R$ ', '').replace('.', '').replace(',', '.'));
+        setPriceSmiles(priceS);
+        return;
+    }
+  },[]);
 
-  /* Function that handles string values */
-  const handleValuesStrings = useCallback((e: React.FormEvent<HTMLInputElement>) => {
-    setValues({
-      ...values,
-      [e.currentTarget.name]: e.currentTarget.value
-    }) 
-  }, [values])
+  const handleBooleans = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    switch(e.currentTarget.name) {
+      case 'statusLivelo':
+        setStatusLivelo(e.currentTarget.checked);
+        return;
+      case 'statusEsfera':
+        setStatusEsfera(e.currentTarget.checked);
+        return;
+      case 'statusAzul':
+        setStatusAzul(e.currentTarget.checked);
+        return;
+      case 'statusLatam':
+        setStatusLatam(e.currentTarget.checked);
+        return;
+      case 'statusSmiles':
+        setStatusSmiles(e.currentTarget.checked);
+        return;
+    }
+  },[]);
 
-  /* Function that handles booleans values */
-  const handleValuesBooleans = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setValues({
-      ...values,
-      [e.target.name]: e.target.checked
-    }) 
-  }, [values])
- 
+   /* useEffect protecting from results in NaN format /////////////////////////////////////*/
+  useEffect(() => {
+    if(Number.isNaN(priceLivelo)) {
+      setPriceLivelo(0);
+    }
+    if(Number.isNaN(priceEsfera)) {
+      setPriceEsfera(0);
+    }
+    if(Number.isNaN(priceAzul)) {
+      setPriceAzul(0);
+    }
+    if(Number.isNaN(priceLatam)) {
+      setPriceLatam(0);
+    }
+    if(Number.isNaN(priceSmiles)) {
+      setPriceSmiles(0);
+    }
+  },[priceAzul, priceEsfera, priceLatam, priceLivelo, priceSmiles]);
+
+  /* useEffect clearing input values that are not active /////////////////////////////////*/
+  useEffect(() => {
+    if(!statusLivelo) {
+      const inputValue = (document.getElementById('priceLivelo') as HTMLInputElement)?.value;
+      if(inputValue) {
+        (document.getElementById('priceLivelo') as HTMLInputElement).value = '';
+        setPriceLivelo(0)
+      }    
+    }
+    if(!statusEsfera) {
+      const inputValue = (document.getElementById('priceEsfera') as HTMLInputElement)?.value;
+      if(inputValue) {
+        (document.getElementById('priceEsfera') as HTMLInputElement).value = '';
+        setPriceEsfera(0)
+      }    
+    }
+    if(!statusAzul) {
+      const inputValue = (document.getElementById('priceAzul') as HTMLInputElement)?.value;
+      if(inputValue) {
+        (document.getElementById('priceAzul') as HTMLInputElement).value = '';
+        setPriceAzul(0)
+      }    
+    }
+    if(!statusLatam) {
+      const inputValue = (document.getElementById('priceLatam') as HTMLInputElement)?.value;
+      if(inputValue) {
+        (document.getElementById('priceLatam') as HTMLInputElement).value = '';
+        setPriceLatam(0)
+      }    
+    }
+    if(!statusSmiles) {
+      const inputValue = (document.getElementById('priceSmiles') as HTMLInputElement)?.value;
+      if(inputValue) {
+        (document.getElementById('priceSmiles') as HTMLInputElement).value = '';
+        setPriceSmiles(0)
+      }    
+    }
+  },[statusAzul, statusEsfera, statusLatam, statusLivelo, statusSmiles])
+
   /* verify each default entry, if exists errors, push to array */
   const verifyData = () => {
     let newErroFields = [];
     let approved = true;
 
-    if(values.name.length < 2 || values.name === '') {
+    if(name.length < 2 || name === '') {
       newErroFields.push('name');
       approved = false;
     }
 
-    if(values.document === '' || values.document.length !== 14) {
+    if(cpf === '' || cpf.length !== 14) {
       newErroFields.push('document');
       approved=false
     }
@@ -104,18 +205,18 @@ const Contas = (data: Props) => {
   const handleSubmit = async () => {
     if(verifyData() && user) {
       let account = {
-        name: values.name,
-        document: values.document,
-        statusLivelo: values.statusLivelo,
-        priceLivelo: values.priceLivelo,
-        statusEsfera: values.statusEsfera,
-        priceEsfera: values.priceEsfera,
-        statusAzul: values.statusAzul,
-        priceAzul: values.priceAzul,
-        statusLatam: values.statusLatam,
-        priceLatam: values.priceLatam,
-        statusSmiles: values.statusSmiles,
-        priceSmiles: values.priceSmiles,
+        name: name,
+        document: cpf,
+        statusLivelo: statusLivelo,
+        priceLivelo: priceLivelo,
+        statusEsfera: statusEsfera,
+        priceEsfera: priceEsfera,
+        statusAzul: statusAzul,
+        priceAzul: priceAzul,
+        statusLatam: statusLatam,
+        priceLatam: priceLatam,
+        statusSmiles: statusSmiles,
+        priceSmiles: priceSmiles,
         userId: user.id 
       }
           
@@ -169,7 +270,7 @@ const Contas = (data: Props) => {
                     <div className={styles.label}>Nome da conta:</div>
                       <Input 
                         name='name'
-                        onSet={(e)=> handleValuesStrings(e)}
+                        onSet={(e)=> handleValues(e)}
                         placeholder={'Ex.: Antônio Garcia'}
                         warning={errorFields.includes('name')}
                     />
@@ -181,7 +282,7 @@ const Contas = (data: Props) => {
                     <div className={styles.label}>Documento CPF:</div>
                       <Input 
                         name='document'
-                        onSet={(e) => handleValuesStrings(e)}
+                        onSet={(e) => handleValues(e)}
                         placeholder={'Ex.: 123.123.123-12'}
                         mask='cpf'
                         warning={errorFields.includes('document')}
@@ -212,19 +313,20 @@ const Contas = (data: Props) => {
                       <div className={styles.status}>
                         <Toggle 
                           name='statusLivelo'
-                          initialValue={values.statusLivelo}
-                          onSet={(e) => handleValuesBooleans(e)}
+                          initialValue={statusLivelo}
+                          onSet={(e) => handleBooleans(e)}
                         />
                       </div>
                       {/* Column 3 */}
                       <div className={styles.price}>
                         <Input
+                          id='priceLivelo'
                           name='priceLivelo' 
                           style={{width: '70px'}}
-                          onSet={(e) => handleValuesStrings(e)}
+                          onSet={(e) => handleValues(e)}
                           placeholder={'R$ 0,00'}
                           mask='currency'
-                          disabled={!values.statusLivelo}
+                          disabled={!statusLivelo}
                         />
                       </div>
                     </div>
@@ -243,16 +345,17 @@ const Contas = (data: Props) => {
                       <div className={styles.status}>
                         <Toggle 
                           name='statusEsfera'
-                          initialValue={values.statusEsfera}
-                          onSet={(e) => handleValuesBooleans(e)}
+                          initialValue={statusEsfera}
+                          onSet={(e) => handleBooleans(e)}
                         />
                       </div>
                       {/* Column 3 */}
                       <div className={styles.price}>
                         <Input
+                          id='priceEsfera'
                           name='priceEsfera' 
                           style={{width: '70px'}}
-                          onSet={(e) => handleValuesStrings(e)}
+                          onSet={(e) => handleValues(e)}
                           placeholder={'R$ 0,00'}
                           mask='currency'
                         />
@@ -267,28 +370,23 @@ const Contas = (data: Props) => {
                     <div className={styles.columns}>
                       {/* Column 1 */}
                       <div className={styles.checkbox}>
-                        {/* <Checkbox 
-                          name='azul'
-                          label='Tudo Azul'
-                          initialValue={values.azul}
-                          onSet={(e) => handleValuesBooleans(e)}
-                        /> */}
                         Tudo Azul
                       </div>
                       {/* Column 2 */}
                       <div className={styles.status}>
                         <Toggle 
                           name='statusAzul'
-                          initialValue={values.statusAzul}
-                          onSet={(e) => handleValuesBooleans(e)}
+                          initialValue={statusAzul}
+                          onSet={(e) => handleBooleans(e)}
                         />
                       </div>
                       {/* Column 3 */}
                       <div className={styles.price}>
                         <Input
+                          id='priceAzul'
                           name='priceAzul' 
                           style={{width: '70px'}}
-                          onSet={(e) => handleValuesStrings(e)}
+                          onSet={(e) => handleValues(e)}
                           placeholder={'R$ 0,00'}
                           mask='currency'
                         />
@@ -303,28 +401,23 @@ const Contas = (data: Props) => {
                     <div className={styles.columns}>
                       {/* Column 1 */}
                       <div className={styles.checkbox}>
-                        {/* <Checkbox 
-                          name='latam'
-                          label='Latam Pass'
-                          initialValue={values.latam}
-                          onSet={(e) => handleValuesBooleans(e)}
-                        /> */}
                         Latam Pass
                       </div>
                       {/* Column 2 */}
                       <div className={styles.status}>
                         <Toggle 
                           name='statusLatam'
-                          initialValue={values.statusLatam}
-                          onSet={(e) => handleValuesBooleans(e)}
+                          initialValue={statusLatam}
+                          onSet={(e) => handleBooleans(e)}
                         />
                       </div>
                       {/* Column 3 */}
                       <div className={styles.price}>
                         <Input
+                          id='priceLatam'
                           name='priceLatam' 
                           style={{width: '70px'}}
-                          onSet={(e) => handleValuesStrings(e)}
+                          onSet={(e) => handleValues(e)}
                           placeholder={'R$ 0,00'}
                           mask='currency'
                         />
@@ -339,28 +432,23 @@ const Contas = (data: Props) => {
                     <div className={styles.columns}>
                       {/* Column 1 */}
                       <div className={styles.checkbox}>
-                        {/* <Checkbox 
-                          name='smiles'
-                          label='Smiles'
-                          initialValue={values.smiles}
-                          onSet={(e) => handleValuesBooleans(e)}
-                        /> */}
                         Smiles
                       </div>
                       {/* Column 2 */}
                       <div className={styles.status}>
                         <Toggle 
                           name='statusSmiles'
-                          initialValue={values.statusSmiles}
-                          onSet={(e) => handleValuesBooleans(e)}
+                          initialValue={statusSmiles}
+                          onSet={(e) => handleBooleans(e)}
                         />
                       </div>
                       {/* Column 3 */}
                       <div className={styles.price}>
                         <Input
+                          id='priceSmiles'
                           name='priceSmiles' 
                           style={{width: '70px'}}
-                          onSet={(e) => handleValuesStrings(e)}
+                          onSet={(e) => handleValues(e)}
                           placeholder={'R$ 0,00'}
                           mask='currency'
                         />
@@ -373,10 +461,10 @@ const Contas = (data: Props) => {
 
               <div className={styles.btnModal}>
                 <Button 
-                  backgroundColor='#86B700'
+                  backgroundColor='#26408C'
                   label='Salvar dados'
                   color='#fff'
-                  backgroundColorHover='#6A9000'
+                  backgroundColorHover='#4D69A6'
                   onClick={handleSubmit}
                 />
               </div>
@@ -388,9 +476,9 @@ const Contas = (data: Props) => {
         <div style={{margin: '52px', marginTop: '24px'}}>
           <Button 
             label={'Adicionar nova conta'}
-            backgroundColor={'#86B700'}
-            backgroundColorHover={'#6A9000'}
-            color={'#FAF7FF'}
+            backgroundColor={'#26408C'}
+            backgroundColorHover={'#4D69A6'}
+            color={'#fff'}
             onClick={handleClick}
           />
         </div>
