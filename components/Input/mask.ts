@@ -52,11 +52,30 @@ export function date(e: React.FormEvent<HTMLInputElement>) {
   return e;
 }
 
-
 export function percentage(e: React.FormEvent<HTMLInputElement>) {
   e.currentTarget.maxLength = 3;
   let value = e.currentTarget.value;
   value = value.replace(/(\D)/g, '')
+
+  e.currentTarget.value = value;
+  return e;
+}
+
+export function decimal(e: React.FormEvent<HTMLInputElement>) {
+  e.currentTarget.maxLength = 3;
+  let value = e.currentTarget.value;
+  value = value.replace(/(\D)/g, '')
+  value = value.replace(/(\d{1})(\d{1})/, '$1,$2')
+
+  e.currentTarget.value = value;
+  return e;
+}
+
+export function twoDigits(e: React.FormEvent<HTMLInputElement>) {
+  e.currentTarget.maxLength = 2;
+  let value = e.currentTarget.value;
+  value = value.replace(/(\D)/g, '')
+  value = value.replace(/(\d{2})/, '$1')
 
   e.currentTarget.value = value;
   return e;
