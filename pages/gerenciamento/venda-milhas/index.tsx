@@ -2,14 +2,12 @@ import { GetServerSideProps } from 'next';
 import { Account, unstable_getServerSession } from 'next-auth';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { use, useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Button from '../../../components/Button';
 import ButtonBack from '../../../components/ButtonBack';
 import Dropdown from '../../../components/Dropdown';
-import FormModal from '../../../components/FormModal';
 import Input from '../../../components/Input';
 import Layout from '../../../components/Layout';
-import Toggle from '../../../components/Toggle';
 import { useAccountsContext } from '../../../contexts/accounts';
 import api from '../../../libs/api';
 import { User } from '../../../types/User';
@@ -17,7 +15,7 @@ import { authOptions } from '../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
 
 
-const CompraPontos = (data: Props) => {
+const VendaMilhas = (data: Props) => {
   
   const router = useRouter(); 
 
@@ -28,20 +26,18 @@ const CompraPontos = (data: Props) => {
       setAccounts(data.accounts as any)
     }
   }, [data, accounts, setAccounts]);
-
+ 
  
   /* General states ///////////////////////////////////////////////////*/
-  const [ price, setPrice ] = useState<number>(0);
   const [ pointsQuantity, setPointsQuantity ] = useState<number>(0);
-  const [ percentage, setPercentage ] = useState<number>(0);
-  const [ sellPrice, setSellPrice ] = useState<number>(0);
-  const [ transfer, setTransfer ] = useState<boolean>(false);
-  const [ creditCard, setCreditCard ] = useState<string>('')
+  const [ priceBuy, setPriceBuy ] = useState<number>(0)
+  const [ priceSell, setPriceSell ] = useState<number>(0);
   const [ program, setProgram ] = useState<string>('');
-  const [ destiny, setDestiny ] = useState<string>('');
+  const [ programBuyer, setProgramBuyer ] = useState<string>('');
   const [ selectedAccount, setSelectedAccount ] = useState<string>('');
-  const [ parcel, setParcel ] = useState('');
-  const [ month, setMonth ] = useState<string>('')
+  const [ receipt, setReceipt ] = useState<number>(0);
+  const [ dateSell, setDateSell ] = useState<string>('');
+  const [ dateReceipt, setDateReceipt ] = useState<string>('');
   
   /* Auxiliary states for accounts data */
   const [ namesAccounts, setNamesAccounts ] = useState<any[]>([]);
@@ -50,8 +46,8 @@ const CompraPontos = (data: Props) => {
   const [ cpf, setCpf ] = useState<string>('');
 
   /* Auxiliary states for calculate*/
-  const [ miles, setMiles ] = useState<number>();
-  const [ finalPrice, setFinalPrice ] = useState<number>();
+  const [ profit, setProfit ] = useState<number>(0);
+  const [ percentageProfit, setPercentageProfit ] = useState<number>(0);
 
   /* Auxiliary states for errors */
   const [ errorFields, setErrorFields ] = useState<string[]>([]);
@@ -70,7 +66,7 @@ const CompraPontos = (data: Props) => {
           optionsAccounts.push('Não há contas cadastradas')
         }
       })  
-    }
+    };
 
   setNamesAccounts(optionsAccounts);
   setDocumentsAccounts(documentsAccounts);
@@ -81,95 +77,99 @@ const CompraPontos = (data: Props) => {
     if(selectedAccount) {
       setCpf(documentsAccounts[indice])
     }
-  },[documentsAccounts, indice, selectedAccount])
+  },[documentsAccounts, indice, selectedAccount]);
 
   /* Functions of handle input values ///////////////////////////////////////////////////*/
   const handleValues = useCallback((e: React.FormEvent<HTMLInputElement>) => {
     switch(e.currentTarget.name) {
-      case 'price':
-        const priceInput = parseFloat((e.currentTarget.value).replace('R$ ', '').replace('.', '').replace(',', '.'));
-        setPrice(priceInput);
-        return;
       case 'pointsQuantity':
         const pointsInput = parseInt(e.currentTarget.value.replace(/(\.)/g, ''));
         setPointsQuantity(pointsInput);
         return;
-      case 'percentage':
-        const percentageInput = parseInt(e.currentTarget.value);
-        setPercentage(percentageInput);
+      case 'priceBuy':
+        const priceInput = parseFloat((e.currentTarget.value).replace('R$ ', '').replace('.', '').replace(',', '.'));
+        setPriceBuy(priceInput);
         return;
-      case 'sellPrice':
+      case 'priceSell':
         const sellPriceInput = parseFloat((e.currentTarget.value).replace('R$ ', '').replace('.', '').replace(',', '.'));
-        setSellPrice(sellPriceInput);
+        setPriceSell(sellPriceInput);
         return;
-      case 'creditCard':
-        setCreditCard(e.currentTarget.value);
+      case 'dateSell': 
+         setDateSell(e.currentTarget.value);
+         return;
+      case 'receipt':
+        const receipt = parseInt(e.currentTarget.value.replace(/(\.)/g, ''));
+        setReceipt(receipt);
+        return;
+      case 'dateReceipt':
+        setDateReceipt(e.currentTarget.value);
         return;
     }
-  },[])
-
-  const handleBoolean = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const transfer = e.currentTarget.checked;
-    setTransfer(transfer)
-  },[])
+  },[]);
 
   /* useEffect protecting from results in NaN format /////////////////////////////////////*/
   useEffect(() => {
-    if(Number.isNaN(price)) {
-      setPrice(0);
-    }
     if(Number.isNaN(pointsQuantity)) {
       setPointsQuantity(0);
     }
-    if(Number.isNaN(percentage)) {
-      setPercentage(0);
+    if(Number.isNaN(priceBuy)) {
+      setPriceBuy(0);
     }
-    if(Number.isNaN(sellPrice)) {
-      setSellPrice(0);
+    if(Number.isNaN(priceSell)) {
+      setPriceSell(0);
     }
-  }, [percentage, pointsQuantity, price, sellPrice])
+    if(Number.isNaN(profit)){
+      setProfit(0);
+    }
+    if(Number.isNaN(percentageProfit)) {
+      setPercentageProfit(0);
+    }
+  }, [percentageProfit, pointsQuantity, priceBuy, priceSell, profit]);
 
-  /* Calculation after transfer ///////////////////////////////////////////////////*/
-  useEffect(()=> {
-    if (percentage) {
-      const calcMiles = ((percentage + 100)/100 * pointsQuantity);
-      setMiles(calcMiles);
+  /* Calculation profit ///////////////////////////////////////////////////*/
+  useEffect(()=> { 
+    if(priceBuy && priceSell) {
+      const calcProfit = priceSell - priceBuy;
+      setProfit(calcProfit);
     } else {
-      setMiles(0);
+      setProfit(0);
     }
-  }, [percentage, pointsQuantity])
+   },[priceBuy, priceSell]);
 
-   /* Calculation price ///////////////////////////////////////////////////*/
-   useEffect(()=> { 
-    if(!miles && price && pointsQuantity) {
-      const simpleCalc = ((price) / ((pointsQuantity)/1000));
-      setFinalPrice(simpleCalc);
+   /* Calculation percentage ///////////////////////////////////////////////////*/
+  useEffect(()=> {
+    if(priceBuy && profit) {
+      const percentageProfit = (profit * 100) / priceBuy;
+      setPercentageProfit(percentageProfit)
     }
-    else if(miles && pointsQuantity && percentage && percentage){
-      const completeCalc = ((price) / ((miles)/1000));
-      setFinalPrice(completeCalc);
+    else if (priceBuy == 0 || profit == 0) {
+      setPercentageProfit(0)
     }
-    else {
-      setFinalPrice(0);
-    }
+  }, [priceBuy, profit]);
 
-  }, [miles, percentage, pointsQuantity, price]);
-
-  /* verify each default entry, if exists errors, push to array */
-  const verifyData = () => {
+   /* verify each default entry, if exists errors, push to array */
+   const verifyData = () => {
     let newErroFields = [];
     let approved = true;
 
-    if(!price) {
-      newErroFields.push('price');
-      approved = false;
-    }
     if(!pointsQuantity) {
       newErroFields.push('pointsQuantity');
       approved = false;
     }
+    if(!priceBuy) {
+      newErroFields.push('priceBuy');
+      approved = false;
+    }
+    if(!priceSell) {
+      newErroFields.push('priceSell');
+      approved = false;
+    }
     if(!program){
       newErroFields.push('program');
+      approved = false;
+    }
+    if(!programBuyer){
+      newErroFields.push('programBuyer');
       approved = false;
     }
     if(!selectedAccount) {
@@ -181,7 +181,7 @@ const CompraPontos = (data: Props) => {
     return approved;
   };
   
-
+  
   return (<>
 
   <Head>
@@ -193,32 +193,16 @@ const CompraPontos = (data: Props) => {
       
       <ButtonBack />
       <div className={styles.title}>Gerenciar: 
-        <span style={{color: '#F25C05'}}>compra de pontos e milhas</span>
+        <span style={{color: '#F25C05'}}>venda de milhas</span>
       </div>
-
+      
       <div className={styles.inputs}>
-        
+
         {/* Input 1 */}
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
-              Valor investido na compra:
-            </div>
-              <Input 
-                name='price'
-                onSet={(e)=> handleValues(e)}
-                placeholder={'R$ 0,00'}
-                mask='currency'
-                warning={errorFields.includes('price')}
-              />
-          </div>       
-        </div>
-
-        {/* Input 2 */}
-        <div className={styles.row}>
-          <div className={styles.column}>
-            <div className={styles.label}>
-              Quantidade de pontos/milhas comprados:
+              Quantidade de milhas vendidas:
             </div>
               <Input 
                 name='pointsQuantity'
@@ -229,18 +213,50 @@ const CompraPontos = (data: Props) => {
               />
           </div>       
         </div>
+        
+        {/* Input 2 */}
+        <div className={styles.row}>
+          <div className={styles.column}>
+            <div className={styles.label}>
+              Valor investido na compra das milhas:
+            </div>
+              <Input 
+                name='priceBuy'
+                onSet={(e)=> handleValues(e)}
+                placeholder={'R$ 0,00'}
+                mask='currency'
+                warning={errorFields.includes('priceBuy')}
+              />
+          </div>       
+        </div>
 
         {/* Input 3 */}
+        <div className={styles.row}>
+          <div className={styles.column}>
+            <div className={styles.label}>
+              Valor recebido pela venda:
+            </div>
+              <Input 
+                name='priceSell'
+                onSet={(e)=> handleValues(e)}
+                placeholder={'R$ 0,00'}
+                mask='currency'
+                warning={errorFields.includes('priceSell')}
+              />
+          </div>       
+        </div>
+
+        {/* Input 4 */}
          <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
-              Programa ou clube da compra:
+              Programa da venda:
             </div>
               <Dropdown 
                 style={{zIndex: '999'}}
                 selected={program}
                 setSelected={setProgram}
-                options={['Livelo', 'Esfera', 'Tudo Azul', 'Latam Pass', 'Smiles']}
+                options={['Tudo Azul', 'Latam Pass', 'Smiles']}
                 warning={errorFields.includes('program')}
               />
           </div>       
@@ -250,7 +266,23 @@ const CompraPontos = (data: Props) => {
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
-              Selecione a conta da compra:
+              Programa comprador das milhas:
+            </div>
+              <Dropdown 
+                style={{zIndex: '999'}}
+                selected={programBuyer}
+                setSelected={setProgramBuyer}
+                options={['Hotmilhas', 'Max Milhas', 'Outros']}
+                warning={errorFields.includes('programBuyer')}
+              />
+          </div>       
+        </div>
+
+        {/* Input 5 */}
+        <div className={styles.row}>
+          <div className={styles.column}>
+            <div className={styles.label}>
+              Selecione a conta da venda:
             </div>
               <Dropdown 
                 style={{zIndex: '999'}}
@@ -278,16 +310,32 @@ const CompraPontos = (data: Props) => {
           </div>       
         </div>
 
+        {/* Input 6 */}
+        <div className={styles.row}>
+          <div className={styles.column}>
+            <div className={styles.label}>
+              Data da venda:
+            </div>
+              <Input 
+                name='dateSell'
+                onSet={(e)=> handleValues(e)}
+                placeholder={'Ex.: 01/01/2023'}
+                mask='date'
+              />
+          </div>       
+        </div>
+
          {/* Input 5 */}
          <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
-              Cartão utilizado na compra:
+              Prazo de recebimento (em dias):
             </div>
               <Input 
-                name='creditCard'
+                name='receipt'
                 onSet={(e)=> handleValues(e)}
-                placeholder={'Ex.: Visa Infinite XP'}
+                placeholder={'Ex.: 150 dias'}
+                mask='miles'
               />
           </div>       
         </div>
@@ -296,82 +344,23 @@ const CompraPontos = (data: Props) => {
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
-              Número de parcelas do pagamento:
-            </div>
-              <Dropdown 
-                style={{zIndex: '999'}}
-                selected={parcel}
-                setSelected={setParcel}
-                options={['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']}
-              />
-          </div>       
-        </div>
-
-        {/* Input 7 */}
-        <div className={styles.row}>
-          <div className={styles.column}>
-            <div className={styles.label}>
-              Selecione o mês da primeira parcela:
-            </div>
-              <Dropdown 
-                style={{zIndex: '999'}}
-                selected={month}
-                setSelected={setMonth}
-                options={['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']}
-              />
-          </div>       
-        </div>
-
-        {/* Input 8 */}
-        <div className={styles.row} >
-          <div className={styles.toggle}>
-            <div className={styles.label} style={{fontSize: '14px'}}>
-              Haverá transferência de pontos?
-            </div>
-            <Toggle 
-              name='transfer'
-              initialValue={transfer}
-              onSet={(e) => handleBoolean(e)}
-            />
-          </div>   
-        </div>
-
-        {transfer && <>
-
-        {/* Input 9 */}
-        <div className={styles.row}>
-          <div className={styles.column}>
-            <div className={styles.label}>
-              Programa destino da transferência:
-            </div>
-              <Dropdown 
-                selected={destiny}
-                setSelected={setDestiny}
-                options={['Livelo', 'Esfera', 'Tudo Azul', 'Latam Pass', 'Smiles']}
-              />
-          </div>       
-        </div>
-
-        {/* Input 10 */}
-        <div className={styles.row}>
-          <div className={styles.column}>
-            <div className={styles.label}>
-              Bônus da transferência em %:
+              Data do recebimento:
             </div>
               <Input 
-                name='percentage'
+                name='dateReceipt'
                 onSet={(e)=> handleValues(e)}
-                placeholder={'Ex.: 100%'}
-                mask='percentage'
+                placeholder={'Ex.: 20/05/2023'}
+                mask='date'
               />
           </div>       
-        </div> </>
-        }
+        </div>
+        
+
       </div> 
       {/* Input's end */}
     
       {/* Results */}
-      <div className={styles.titleResults} style={{paddingTop: '32px'}}>Resumo da compra</div>
+      <div className={styles.titleResults} style={{paddingTop: '32px'}}>Resumo da venda</div>
       <div className={styles.results}>
 
       <div className={styles.contentRow}>
@@ -391,73 +380,117 @@ const CompraPontos = (data: Props) => {
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
           <div className={styles.titleValues}>Valor investido:</div>
-          <div className={styles.values}>{price ? price.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
+          <div className={styles.values}>{priceBuy ? priceBuy.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
         </div>        
       </div>
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
-          <div className={styles.titleValues}>Cartão utilizado:</div>
-          <div className={styles.values}>{creditCard}</div>
+          <div className={styles.titleValues}>Valor recebido pela venda:</div>
+          <div className={styles.values}>{priceSell ? priceSell.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
         </div>        
       </div>
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
-          <div className={styles.titleValues}>Parcelamento:</div>
-          <div className={styles.values}>{parcel ? parcel + 'x' : ''}</div>
+          <div className={styles.titleValues}>Programa da venda:</div>
+          <div className={styles.values}>{program ? program : ''}</div>
         </div>        
       </div>
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
-          <div className={styles.titleValues}>Pontos comprados:</div>
-          <div className={styles.values}>{pointsQuantity ? pointsQuantity.toLocaleString('pt-BR') : ''}</div>
+          <div className={styles.titleValues}>Vendido para:</div>
+          <div className={styles.values}>{programBuyer ? programBuyer : ''}</div>
         </div>        
       </div>
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
-          <div className={styles.titleValues}>Programa da compra:</div>
-          <div className={styles.values}>{program}</div>
+          <div className={styles.titleValues}>Data da venda:</div>
+          <div className={styles.values}>{dateSell ? dateSell : ''}</div>
         </div>        
       </div>
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
-          <div className={styles.titleValues}>Transferência para:</div>
-          <div className={styles.values}>{destiny}</div>
+          <div className={styles.titleValues}>Prazo de recebimento:</div>
+          <div className={styles.values}>{receipt ? receipt+' dias' : ''}</div>
         </div>        
       </div>
 
       <div className={styles.contentRow}>
-        <div className={styles.contentColumn}>
-          <div className={styles.titleValues}>Bônus da transferência:</div>
-          <div className={styles.values}>{percentage ? percentage + '%' : ''}</div>
+        <div className={styles.contentColumn} style={{border: 'none'}}>
+          <div className={styles.titleValues}>Data do recebimento:</div>
+          <div className={styles.values}>{dateReceipt ? dateReceipt : ''}</div>
         </div>        
       </div>
 
-      <div className={styles.contentRow}>
-        <div className={styles.contentColumn}>
-          <div className={styles.titleValues}>Total após transferência:</div>
-          <div className={styles.values}>{miles ? miles.toLocaleString('pt-BR') : ''}</div>
-        </div>        
-      </div>
+      {profit > 0  && 
+        
+        <div className={styles.contentRow}>
+          <div className={styles.contentColumn} style={{border: 'none', borderTop: '1px solid #DCE7FF'}}>
+            <div className={styles.titleValues} style={{color: '#6A9000', fontWeight: 600}}>Lucro estimado:</div>
+            <div className={styles.values} style={{color: '#6A9000', fontWeight: '600', fontSize: '14px'}}>{profit.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</div>
+          </div>        
+        </div>
+      }
 
-      <div className={styles.contentRow} >
-        <div className={styles.contentColumn} style={{border: 'none', paddingTop: '12px'}}>
-          <div style={{fontWeight: '600', fontSize:'14px'}}>Valor final do milheiro:</div>
-          <div className={styles.values} style={{color: '#6A9000', fontWeight: '600', fontSize: '14px'}}>{finalPrice ? finalPrice.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : 'R$ 0,00'}</div>
-        </div>        
-      </div>
+      {profit == 0 ? 
+        <div className={styles.contentRow}>
+          <div className={styles.contentColumn} style={{border: 'none', borderTop: '1px solid #DCE7FF'}}>
+            <div className={styles.titleValues} style={{color: '#F29E05', fontWeight: 600}}>Lucro estimado:</div>
+            <div className={styles.values} style={{color: '#F29E05', fontWeight: '600', fontSize: '14px'}}>{profit.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</div>
+          </div>        
+        </div> 
+      : ''
+      }
 
+      {profit < 0 &&
+        <div className={styles.contentRow}>
+          <div className={styles.contentColumn} style={{border: 'none', borderTop: '1px solid #DCE7FF'}}>
+            <div className={styles.titleValues} style={{color: '#D92B05', fontWeight: 600}}>Prejuízo estimado:</div>
+            <div className={styles.values} style={{color: '#D92B05', fontWeight: '600', fontSize: '14px'}}>{profit.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</div>
+          </div>        
+        </div>
+      }
+
+      {percentageProfit > 0 ?
+        (<div className={styles.contentRow}>
+          <div className={styles.contentColumn} style={{border: 'none', borderTop: '1px solid #DCE7FF'}}>
+            <div className={styles.titleValues}>Em percentual:</div>
+            <div className={styles.values}>{'+'+percentageProfit.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%'}</div>
+          </div>        
+        </div>) : ''
+      } 
+
+      {percentageProfit == 0 ? 
+        (priceSell ? 
+        <div className={styles.contentRow}>
+          <div className={styles.contentColumn} style={{border: 'none', borderTop: '1px solid #DCE7FF'}}>
+            <div className={styles.titleValues}>Em percentual:</div>
+            <div className={styles.values}>{percentageProfit.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%'}</div>
+          </div>        
+        </div> : '' ) 
+        : ''
+      } 
+
+      {percentageProfit < 0 ?
+        (<div className={styles.contentRow}>
+          <div className={styles.contentColumn}style={{border: 'none', borderTop: '1px solid #DCE7FF'}}>
+            <div className={styles.titleValues}>Em percentual:</div>
+            <div className={styles.values}>{percentageProfit.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%'}</div>
+          </div>        
+        </div>) : ''
+      }       
+      
       </div>
       {/* Results end */}
       
       {/* Button and actions */}
       <div className={styles.btn}>
         <Button 
-          label= 'Salvar compra'
+          label= 'Salvar venda'
           backgroundColor='#26408C'
           backgroundColorHover='#4D69A6'
           onClick={verifyData}
@@ -475,7 +508,7 @@ const CompraPontos = (data: Props) => {
   </>)
 }
 
-export default CompraPontos;
+export default VendaMilhas;
 
 
 type Props = {

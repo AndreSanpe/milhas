@@ -1,6 +1,7 @@
 .dropdown {
   width: 100%;
   position: relative;
+  border-radius: 5px;
 }
 
 .dropdownBtn {
@@ -9,7 +10,7 @@
   justify-content: space-between;
   height: 48px;
   background-color: #fff;
-  border: solid 1px #DCE7FF;
+  /* border: solid 1px #DCE7FF; */
   border-radius: 5px;
   padding: 12px 20px;
   font-size: 16px;

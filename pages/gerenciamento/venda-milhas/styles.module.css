@@ -1,0 +1,124 @@
+/* CSS general */
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin-top: 12px;
+  margin-bottom: 32px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #26408C;
+  gap: 8px;
+}
+
+/* Css inputs */
+
+.row {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.label {
+  font-size: 12px;
+  line-height: 24px;
+  font-weight: 600;
+  color: #26408C;
+}
+
+.toggle {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0px;
+}
+
+.linkAux {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 14px;
+  color: #F25C05;
+  text-decoration: underline;
+  cursor: pointer;
+  padding-bottom: 12px;
+}
+
+
+/* CSS results */
+
+.titleResults {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #26408C;
+  gap: 8px;
+}
+
+.results {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 5px;
+  border: 1px solid #DCE7FF;
+  color: #525252;
+  padding: 12px 12px;
+}
+
+.contentRow {
+  display: flex;
+  /* padding-top: 12px;
+  padding-left: 12px;
+  padding-right: 12px; */
+}
+
+.contentColumn {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  align-items: center;
+  width: 100%;
+  border-bottom: 1px solid #DCE7FF;
+}
+
+.titleValues {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  line-height: 28px;
+  font-weight: 400;
+}
+
+.values {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.btn {
+  display: flex;
+  margin-top: 40px;
+}
+
+.linkClean {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+}

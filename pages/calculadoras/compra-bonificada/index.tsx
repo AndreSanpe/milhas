@@ -58,6 +58,9 @@ const CompraBonificada = (data: Props) => {
   const [ priceMiles, setPriceMiles ] = useState<number>(0);
   const [ percentageProfit, setPercentageProfit ] = useState<number>(0);
   const [ finalPrice, setFinalPrice ] = useState<number>(0);
+
+  /* Auxiliary states for errors */
+  const [ errorFields, setErrorFields ] = useState<string[]>([]);
  
   /* Functions of handle input values ///////////////////////////////////////////////////*/
   const handleValues = useCallback((e: React.FormEvent<HTMLInputElement>) => {
@@ -266,7 +269,35 @@ const CompraBonificada = (data: Props) => {
     }
   }, [percentage, pointsCard, pointsCardQuantity, pointsForReal, pointsQuantity, price, secureValue, sellPrice])
      
+  /* verify each default entry, if exists errors, push to array */
+  const verifyData = () => {
+    let newErroFields = [];
+    let approved = true;
+
+    if(!product) {
+      newErroFields.push('product');
+      approved = false;
+    }
+    if(!price) {
+      newErroFields.push('price');
+      approved = false;
+    }
+    if(!pointsForReal) {
+      newErroFields.push('pointsForReal');
+      approved = false;
+    }
+    if(!program){
+      newErroFields.push('program');
+      approved = false;
+    }
+    if(!sellPrice){
+      newErroFields.push('sellPrice');
+      approved = false;
+    }
   
+    setErrorFields(newErroFields);
+    return approved;
+  };
 
   return (<>
 
@@ -294,6 +325,7 @@ const CompraBonificada = (data: Props) => {
                 name='product'
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: Iphone 14'}
+                warning={errorFields.includes('product')}
               />
           </div>       
         </div>
@@ -309,6 +341,7 @@ const CompraBonificada = (data: Props) => {
                 onSet={(e)=> handleValues(e)}
                 placeholder={'R$ 0,00'}
                 mask='currency'
+                warning={errorFields.includes('price')}
               />
           </div>       
         </div>
@@ -324,6 +357,7 @@ const CompraBonificada = (data: Props) => {
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 10'}
                 mask='twoDigits'
+                warning={errorFields.includes('pointsForReal')}
               />
           </div>       
         </div>
@@ -339,6 +373,7 @@ const CompraBonificada = (data: Props) => {
                 selected={program}
                 setSelected={setProgram}
                 options={['Livelo', 'Esfera', 'Tudo Azul', 'Latam Pass', 'Smiles']}
+                warning={errorFields.includes('program')}
               />
           </div>       
         </div>
@@ -485,6 +520,7 @@ const CompraBonificada = (data: Props) => {
                 onSet={(e)=> handleValues(e)}
                 placeholder={'R$ 0,00'}
                 mask='currency'
+                warning={errorFields.includes('sellPrice')}
               />
           </div>       
         </div>
@@ -577,7 +613,7 @@ const CompraBonificada = (data: Props) => {
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
-          <div className={styles.titleValues}>Valor recuperado nas milhas:</div>
+          <div className={styles.titleValues}>Valor recuperado na venda das milhas:</div>
           <div className={styles.values} style={{color: '#F25C05'}}>{priceMiles ? priceMiles.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
         </div>        
       </div>
@@ -618,7 +654,7 @@ const CompraBonificada = (data: Props) => {
           label= 'Salvar compra'
           backgroundColor='#26408C'
           backgroundColorHover='#4D69A6'
-          onClick={() => {}}
+          onClick={verifyData}
         />
       </div>
 
