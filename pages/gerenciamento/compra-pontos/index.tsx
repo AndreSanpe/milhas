@@ -2,15 +2,15 @@ import { GetServerSideProps } from 'next';
 import { Account, unstable_getServerSession } from 'next-auth';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { use, useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Button from '../../../components/Button';
 import ButtonBack from '../../../components/ButtonBack';
 import Dropdown from '../../../components/Dropdown';
-import FormModal from '../../../components/FormModal';
 import Input from '../../../components/Input';
 import Layout from '../../../components/Layout';
 import Toggle from '../../../components/Toggle';
 import { useAccountsContext } from '../../../contexts/accounts';
+import { useAuthContext } from '../../../contexts/auth';
 import api from '../../../libs/api';
 import { User } from '../../../types/User';
 import { authOptions } from '../../api/auth/[...nextauth]';
@@ -29,6 +29,13 @@ const CompraPontos = (data: Props) => {
     }
   }, [data, accounts, setAccounts]);
 
+  /* ContextApi: user  */
+  const { user, setUser } = useAuthContext();
+  useEffect(() => {
+    if(user === null || user != data.user) {
+      setUser(data.user)
+    }
+  }, [data, user, setUser]);
  
   /* General states ///////////////////////////////////////////////////*/
   const [ price, setPrice ] = useState<number>(0);
@@ -181,6 +188,32 @@ const CompraPontos = (data: Props) => {
     return approved;
   };
   
+  const handleSubmit = async () => {
+    if(verifyData() && user) {
+      let buymiles = {
+        price, 
+        pointsQuantity, 
+        program, 
+        selectedAccount, 
+        cpf, 
+        destiny, 
+        percentage, 
+        creditCard, 
+        parcel, 
+        month, 
+        miles, 
+        finalPrice, 
+        userId: user.id
+      }
+      const response = await fetch('/api/buymiles', {
+        method: 'POST',
+        body: JSON.stringify(buymiles),
+        headers: {
+          'content-Type': 'application/json',
+        },
+      });
+    }
+  }
 
   return (<>
 
@@ -460,7 +493,7 @@ const CompraPontos = (data: Props) => {
           label= 'Salvar compra'
           backgroundColor='#26408C'
           backgroundColorHover='#4D69A6'
-          onClick={verifyData}
+          onClick={handleSubmit}
         />
       </div>
 

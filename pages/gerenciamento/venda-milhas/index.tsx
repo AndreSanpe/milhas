@@ -9,6 +9,7 @@ import Dropdown from '../../../components/Dropdown';
 import Input from '../../../components/Input';
 import Layout from '../../../components/Layout';
 import { useAccountsContext } from '../../../contexts/accounts';
+import { useAuthContext } from '../../../contexts/auth';
 import api from '../../../libs/api';
 import { User } from '../../../types/User';
 import { authOptions } from '../../api/auth/[...nextauth]';
@@ -27,6 +28,13 @@ const VendaMilhas = (data: Props) => {
     }
   }, [data, accounts, setAccounts]);
  
+ /* ContextApi: user  */
+ const { user, setUser } = useAuthContext();
+ useEffect(() => {
+   if(user === null || user != data.user) {
+     setUser(data.user)
+   }
+ }, [data, user, setUser]);
  
   /* General states ///////////////////////////////////////////////////*/
   const [ pointsQuantity, setPointsQuantity ] = useState<number>(0);
@@ -147,7 +155,7 @@ const VendaMilhas = (data: Props) => {
     }
   }, [priceBuy, profit]);
 
-   /* verify each default entry, if exists errors, push to array */
+  /* verify each default entry, if exists errors, push to array */
    const verifyData = () => {
     let newErroFields = [];
     let approved = true;
@@ -181,6 +189,32 @@ const VendaMilhas = (data: Props) => {
     return approved;
   };
   
+  const handleSubmit = async () => {
+    if(verifyData() && user) {
+      let sellmiles = {
+        pointsQuantity, 
+        priceBuy, 
+        priceSell, 
+        program, 
+        programBuyer, 
+        selectedAccount, 
+        receipt, 
+        dateSell, 
+        dateReceipt, 
+        profit, 
+        percentageProfit, 
+        userId: user.id
+      }
+
+      const response = await fetch('/api/sellmiles', {
+        method: 'POST',
+        body: JSON.stringify(sellmiles),
+        headers: {
+          'content-Type': 'application/json',
+        },
+      });
+    }
+  }
   
   return (<>
 
@@ -493,7 +527,7 @@ const VendaMilhas = (data: Props) => {
           label= 'Salvar venda'
           backgroundColor='#26408C'
           backgroundColorHover='#4D69A6'
-          onClick={verifyData}
+          onClick={handleSubmit}
         />
       </div>
 

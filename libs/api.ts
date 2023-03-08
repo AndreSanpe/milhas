@@ -1,4 +1,7 @@
 import { Account } from '../types/Account';
+import { BuyBonus } from '../types/BuyBonus';
+import { BuyMiles } from '../types/BuyMiles';
+import { SellMiles } from '../types/SellMiles';
 import prisma from './prisma';
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -88,6 +91,49 @@ export default {
 
   },
   
+  /* Function for Add new miles buyed data */
+  addNewMilesBuyed: async ({price, pointsQuantity, program, selectedAccount, cpf, destiny, percentage, creditCard, parcel, month, miles, finalPrice, userId}: BuyMiles) => {
+
+    return await prisma.buyMiles.create({
+      data: {
+        price, pointsQuantity, program, selectedAccount, cpf, destiny, percentage, creditCard, parcel, month, miles, finalPrice, userId
+      }
+    });
+  },
+
+  /* Function for get miles buyed data */
+  getMilesBuyed: async () => {
+
+  },
+
+  /* Function for Add new miles selled data */
+  addNewMilesSelled: async ({pointsQuantity, priceBuy, priceSell, program, programBuyer, selectedAccount, receipt, dateSell, dateReceipt, profit, percentageProfit, userId}: SellMiles) => {
+
+    return await prisma.sellMiles.create({
+      data: {
+        pointsQuantity, priceBuy, priceSell, program, programBuyer, selectedAccount, receipt, dateSell, dateReceipt, profit, percentageProfit, userId
+      }
+    });
+  },
+
+  /* Function for get miles selled data */
+  getMilesSelled: async () => {
+
+  },
+
+  addNewBuyBonus: async ({product,price,pointsForReal,program,pointsQuantity,pointsCardQuantity, totalpoints,destiny,percentage,miles,secureValue,sellPrice,priceMiles,percentageProfit,finalPrice,userId}: BuyBonus) => {
+
+    return await prisma.buyBonus.create({
+      data : {
+        product, price, pointsForReal, program, pointsQuantity, pointsCardQuantity, totalpoints, destiny ,percentage, miles, secureValue, sellPrice, priceMiles, percentageProfit, finalPrice,userId
+      }
+    });
+  },
+
+  getBuyBonus: async () => {
+    
+  },
+
 
   };
 
