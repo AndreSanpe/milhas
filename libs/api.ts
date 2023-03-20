@@ -130,8 +130,14 @@ export default {
     });
   },
 
-  getBuyBonus: async () => {
-    
+  /* Function for get buy bonus data */
+  getBuyBonus: async (userId: number) => {
+      const buy = await prisma.buyBonus.findMany({
+        where: {
+          userId
+        }
+      });
+      return buy;
   },
 
 

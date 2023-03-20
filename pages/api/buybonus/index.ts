@@ -3,6 +3,13 @@ import api from "../../../libs/api";
 import { BuyBonus } from "../../../types/BuyBonus";
 
 const handlerGet: NextApiHandler = async (req, res) => {
+  const { userId } = req.body;
+  const buys = await api.getBuyBonus(parseInt(userId));
+  if(buys) {
+    res.status(201).json({ buys })
+  } else {
+    res.json({ error: "Nenhuma compra bonificada encontrada"});
+  }
 };
 
 const handlerPost: NextApiHandler = async (req, res) => {

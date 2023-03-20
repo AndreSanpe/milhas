@@ -3,6 +3,8 @@ import api from "../../../libs/api";
 import { BuyMiles } from "../../../types/BuyMiles";
 
 const handlerGet: NextApiHandler = async (req, res) => {
+  const { userId } = req.body;
+  
 };
 
 const handlerPost: NextApiHandler = async (req, res) => {

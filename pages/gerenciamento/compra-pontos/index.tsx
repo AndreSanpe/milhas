@@ -37,7 +37,7 @@ const CompraPontos = (data: Props) => {
     }
   }, [data, user, setUser]);
  
-  /* General states ///////////////////////////////////////////////////*/
+  /* General states ///////////////////////////////////////////////////////////////////////*/
   const [ price, setPrice ] = useState<number>(0);
   const [ pointsQuantity, setPointsQuantity ] = useState<number>(0);
   const [ percentage, setPercentage ] = useState<number>(0);
@@ -50,20 +50,20 @@ const CompraPontos = (data: Props) => {
   const [ parcel, setParcel ] = useState('');
   const [ month, setMonth ] = useState<string>('')
   
-  /* Auxiliary states for accounts data */
+  /* Auxiliary states for accounts data ////////////////////////////////////////////////////*/
   const [ namesAccounts, setNamesAccounts ] = useState<any[]>([]);
   const [ documentsAccounts, setDocumentsAccounts ] = useState<any[]>([]);
   const [ indice, setIndice ] = useState<any>();
   const [ cpf, setCpf ] = useState<string>('');
 
-  /* Auxiliary states for calculate*/
+  /* Auxiliary states for calculate/////////////////////////////////////////////////////////*/
   const [ miles, setMiles ] = useState<number>();
   const [ finalPrice, setFinalPrice ] = useState<number>();
 
   /* Auxiliary states for errors */
   const [ errorFields, setErrorFields ] = useState<string[]>([]);
 
-   /* List accounts and cpfs*/
+   /* List accounts and cpfs////////////////////////////////////////////////////////////////*/
   useEffect(() => {
     const optionsAccounts: string[] = [];
     const documentsAccounts: string[] = [];
