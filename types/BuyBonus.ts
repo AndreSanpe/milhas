@@ -15,4 +15,5 @@ export type BuyBonus = {
   percentageProfit: number;
   finalPrice: number;
   userId: number;
+  createdAt: Date;
 }

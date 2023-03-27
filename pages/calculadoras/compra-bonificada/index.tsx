@@ -6,6 +6,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import Button from '../../../components/Button';
 import ButtonBack from '../../../components/ButtonBack';
 import Dropdown from '../../../components/Dropdown';
+import FormModal from '../../../components/FormModal';
 import Input from '../../../components/Input';
 import Layout from '../../../components/Layout';
 import Toggle from '../../../components/Toggle';
@@ -36,6 +37,9 @@ const CompraBonificada = (data: Props) => {
         setUser(data.user)
       }
     }, [data, user, setUser]);
+
+  /* State modal//////////////////////////////////////////////////////////////// */
+  const [ showModal, setShowModal ] = useState<boolean>(false);
  
   /* States part 1 (4 inputs) ///////////////////////////////////////////////////*/
   const [ product, setProduct ] = useState<string>('');
@@ -70,6 +74,11 @@ const CompraBonificada = (data: Props) => {
 
   /* Auxiliary states for errors */
   const [ errorFields, setErrorFields ] = useState<string[]>([]);
+
+  /* Modal actions ///////////////////////////////////////////////////////////////////// */
+  const closeBtn = () => { 
+    setShowModal(false);
+  }
  
   /* Functions of handle input values ///////////////////////////////////////////////////*/
   const handleValues = useCallback((e: React.FormEvent<HTMLInputElement>) => {
@@ -335,6 +344,8 @@ const CompraBonificada = (data: Props) => {
           'content-Type': 'application/json',
         },
       });
+
+      setShowModal(true);
     }
   };
 
@@ -353,6 +364,22 @@ const CompraBonificada = (data: Props) => {
       </div>
 
       <div className={styles.inputs}>
+
+        {/* Confirmation modal*/}
+        {showModal &&
+          <FormModal maxWidth={'340px'} maxHeight={'1500px'}>
+            <div className={styles.modalContainer}>
+              <div className={styles.modalTitle}>Compra bonificada salva com sucesso!</div>
+              <div className={styles.modalSubtitle}>O que deseja fazer agora?</div>
+              <div className={styles.modalLink} onClick={() => router.push('/dashboard')} >Voltar ao início</div>
+              <div className={styles.modalLink} 
+                  onClick={() => {
+                  {router.push('/calculadoras/compra-bonificada')}
+                  document.location.reload()}}>Cadastrar nova compra</div>
+              <div className={styles.modalLink} onClick={() => router.push('/extratos/compra-bonificada')}>Ver histórico de compras</div>
+            </div>
+          </FormModal>
+        }
 
         {/* Input 1 */}
         <div className={styles.row}>

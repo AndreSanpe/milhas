@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react'
 import ButtonBack from '../../../components/ButtonBack';
 import ContentAccordionBuyBonus from '../../../components/ContentAccordionBuyBonus';
 import Layout from '../../../components/Layout';
-import { useAccountsContext } from '../../../contexts/accounts';
 import { useAuthContext } from '../../../contexts/auth';
 import api from '../../../libs/api';
 import { Account } from '../../../types/Account';
@@ -46,7 +45,6 @@ const ExtratoCompraBonificada = (data: Props) => {
   /* General states //////////////////////////////////////////////////////////////////*/
   const [ noHaveAccount, setNoHaveAccount ] = useState<boolean>(false);
  
-  console.log(data.buybonus)
 
   return (
     <>
@@ -70,7 +68,7 @@ const ExtratoCompraBonificada = (data: Props) => {
         {noHaveAccount &&
           <div className={styles.alert}>
             <AlertIcon />
-            <div>Você ainda não cadastrou nenhuma conta. Gostaria de fazer isso agora? 
+            <div>Você ainda não cadastrou nenhuma compra bonificada. Gostaria de fazer isso agora? 
             {/* <span className={styles.link} onClick={()=> {}}>Clique aqui</span> */}
             </div>
           </div>

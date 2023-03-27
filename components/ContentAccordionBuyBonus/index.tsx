@@ -16,6 +16,9 @@ const ContentAccordion: React.FC<DivProps> = ({item, children, ...props}) => {
     setIsOpen((state) => !state)
   },[setIsOpen])
 
+  const date = item.createdAt.toString();
+  const validDate = new Date(date);
+
   return (<>
     
     {item.product &&
@@ -24,6 +27,10 @@ const ContentAccordion: React.FC<DivProps> = ({item, children, ...props}) => {
       {/* Visible content */}
       <div className={styles.row}>
         <div className={styles.column}>
+          <div className={styles.doubleColumns}>
+            <div className={styles.secundaryTitle}>Data da compra:</div>
+            <div className={styles.values}>{validDate.toLocaleDateString('pt-BR')}</div>
+          </div>
           <div className={styles.doubleColumns}>
             <div className={styles.secundaryTitle}>Produto:</div>
             <div className={styles.values}>{item.product}</div>
@@ -88,24 +95,24 @@ const ContentAccordion: React.FC<DivProps> = ({item, children, ...props}) => {
             {/* Fixed items////////////////////////////////////////////////////////// */}
             <div className={styles.doubleColumns}>
               <div className={styles.secundaryTitle}>Valor recuperado na venda das milhas:</div>
-              <div className={styles.values}>{item.priceMiles ? item.priceMiles.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
+              <div className={styles.values} style={{color: '#F25C05'}}>{item.priceMiles ? item.priceMiles.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
             </div>
 
             {item.secureValue ? <>
               <div className={styles.doubleColumns}>
                 <div className={styles.secundaryTitle}>Seguro proteção de preço:</div>
-                <div className={styles.values}>{item.secureValue ? item.secureValue.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
+                <div className={styles.values} style={{color: '#F25C05'}}>{item.secureValue ? item.secureValue.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
               </div>
             </> : ''
             }
 
             <div className={styles.doubleColumns}>
               <div className={styles.secundaryTitle}>Percentual de desconto:</div>
-              <div className={styles.values}>{item.percentageProfit ? item.percentageProfit.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%' : ''}</div>
+              <div className={styles.values} style={{color: '#F25C05'}}>{item.percentageProfit ? item.percentageProfit.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%' : ''}</div>
             </div>
             <div className={styles.doubleColumns}>
-              <div className={styles.secundaryTitle}>Preço final do produto:</div>
-              <div className={styles.values}>{item.finalPrice ? item.finalPrice.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
+              <div className={styles.secundaryTitle} style={{fontWeight: '600', fontSize:'14px'}}>Preço final do produto:</div>
+              <div className={styles.values} style={{color: '#6A9000', fontWeight: '600', fontSize: '14px'}}>{item.finalPrice ? item.finalPrice.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
             </div>
           </div> 
         </div>
