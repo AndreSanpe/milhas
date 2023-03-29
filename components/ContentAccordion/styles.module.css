@@ -1,3 +1,4 @@
+/* CSS general ///////////////////////////////////////////////////////////////////////////// */
 .container {
   display: flex;
   flex-direction: column;
@@ -42,9 +43,11 @@
   padding-top: 8px;
   grid-template-columns: 25% 33% 43%;
   gap: 4px;
+  border-bottom: solid 1px #DCE7FF;
 }
 
 .secundaryTitle {
+  display: flex;
   font-size: 14px;
   line-height: 24px;
   font-weight: 500;
@@ -138,3 +141,47 @@
   color: #F25C05;
   gap: 4px;
 }
+
+/* CSS edit area /////////////////////////////////////////////////////////////////////////////*/
+.edit {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.iconEdit {
+  display: flex;
+  padding-left: 10px;
+  color: #525252;
+}
+
+.popup {
+  right: 52px;
+  position: absolute;
+  background-color: #fff;
+  border: solid 1px #DCE7FF;
+  box-shadow: 0px 6px 8px 3px rgba(22, 29 , 29, .3);
+  z-index: 9999;
+}
+
+.popupRow {
+  display: flex;
+  flex-direction: column;
+}
+
+.popupColumn:hover {
+  display: flex;
+  padding: 10px 20px;
+  background-color: #FFAD7D;
+}
+
+.popupColumn {
+  display: flex;
+  padding: 10px 20px;
+  color: #3d3d3d;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 500;
+  gap: 12px;
+}
+
+/* CSS edit area ends */

@@ -358,7 +358,7 @@ const CompraBonificada = (data: Props) => {
 
     <div className={styles.container}>
       
-      <ButtonBack />
+      <ButtonBack route='/dashboard'/>
       <div className={styles.title}>Calcular: 
         <span style={{color: '#F25C05'}}>compra bonificada</span>
       </div>

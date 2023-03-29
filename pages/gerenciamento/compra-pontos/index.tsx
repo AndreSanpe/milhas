@@ -224,7 +224,7 @@ const CompraPontos = (data: Props) => {
 
     <div className={styles.container}>
       
-      <ButtonBack />
+      <ButtonBack route='/dashboard'/>
       <div className={styles.title}>Gerenciar: 
         <span style={{color: '#F25C05'}}>compra de pontos e milhas</span>
       </div>

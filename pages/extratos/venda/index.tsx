@@ -99,7 +99,7 @@ const ExtratoVenda = (data: Props) => {
     <Layout><>
       
       <div className={styles.container}>      
-        <ButtonBack />
+        <ButtonBack route='/dashboard'/>
         <div className={styles.title} style={{marginBottom: '0px'}}>Extrato de Venda</div>
         <div className={styles.title} style={{marginTop: '0px'}}>de pontos</div>
 

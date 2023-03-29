@@ -1,13 +1,21 @@
 import React, { ReactElement, useCallback, useState } from 'react'
 import styles from './styles.module.css';
 import ExpandIcon from './expand_more.svg';
+import DotsIcon from './more_vert.svg';
+import EditIcon from './edit.svg';
+import DeleteIcon from './delete.svg';
+import { Account } from '../../types/Account';
 
 interface DivProps extends React.ButtonHTMLAttributes<HTMLDivElement> {
   children?: ReactElement;
-  item: any
+  item: Account;
+  menuOpened: number;
+  setMenuOpened: (id: number) => void;
+  onEdit: (id: number) => void;
+  onDelete: (id: number) => void;
 }
 
-const ContentAccordion: React.FC<DivProps> = ({item, children, ...props}) => {
+const ContentAccordion: React.FC<DivProps> = ({item, children, menuOpened, setMenuOpened, onEdit, onDelete,  ...props}) => {
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -23,6 +31,34 @@ const ContentAccordion: React.FC<DivProps> = ({item, children, ...props}) => {
       {/* Visible content */}
       <div className={styles.row}>
         <div className={styles.column}>
+          
+          {/* Edit account area */}
+          <div className={styles.edit}>
+            <div className={styles.iconEdit}>
+              <DotsIcon onClick={() => setMenuOpened(item.id as number)}/>
+            </div>
+
+            {menuOpened === item.id &&
+              <div className={styles.popup}>
+                <div className={styles.popupContent}>
+                  <div className={styles.popupRow}>
+                    <div className={styles.popupColumn} onClick={() => onEdit(item.id as number)}>
+                      <EditIcon />
+                      <div>Editar</div>
+                    </div>
+                    <div className={styles.popupColumn} onClick={() => onDelete(item.id as number)}>
+                      <DeleteIcon />
+                      <div>Deletar</div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            }
+            
+          </div> 
+          {/* Edit area end's */}
+          
           <div className={styles.doubleColumns}>
             <div className={styles.secundaryTitle}>Nome da conta:</div>
             <div className={styles.text}>{item.name}</div>
@@ -47,7 +83,7 @@ const ContentAccordion: React.FC<DivProps> = ({item, children, ...props}) => {
           <div className={styles.column}>
 
             {/* Content data title */}
-            <div className={styles.tripleColumns} style={{borderBottom: '1px solid #E0E0E0'}}>
+            <div className={styles.tripleColumns}>
               <div className={styles.clubTitle}>Clubes:</div>
               <div className={styles.statusTitle}>Clube ativo:</div>
               <div className={styles.priceTitle}>Valor mensal:</div>

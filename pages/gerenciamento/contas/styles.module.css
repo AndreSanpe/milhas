@@ -29,7 +29,9 @@
 .tripleColumns {
   display: grid;
   align-items: center;
+  justify-content: center;
   grid-template-columns: 130px 90px 100px;
+  line-height: 24px;
   gap: 4px;
 }
 

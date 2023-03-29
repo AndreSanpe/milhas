@@ -15,7 +15,6 @@ import Button from '../../../components/Button';
 import FormModal from '../../../components/FormModal';
 import Input from '../../../components/Input';
 import Toggle from '../../../components/Toggle';
-import { useRouter } from 'next/router';
 
 type Account = {
   name: string;
@@ -30,18 +29,14 @@ type Account = {
   priceLatam: number;
   statusSmiles: boolean;
   priceSmiles: number;
-  userId: number;
 }
 
 const Contas = (data: Props) => {
 
-  /* Router ///////////////////////////////////////////////////////////////////////////////*/
-  const router = useRouter();
-
-  /* Contexts /////////////////////////////////////////////////////////////////////////////*/
+  /* Contexts */
   const { user, setUser } = useAuthContext();
 
-  /* Sending user data to context /////////////////////////////////////////////////////////*/
+  /* Sending user data to context */
   useEffect(() => {
     if(user === null || user != data.user) {
       setUser(data.user)
@@ -70,31 +65,8 @@ const Contas = (data: Props) => {
   const [ statusSmiles, setStatusSmiles ] = useState<boolean>(false);
   const [ priceSmiles, setPriceSmiles ] = useState<number>(0);
 
-  /* Menu edit states //////////////////////////////////////////////////////////////// */
-  const [ menuOpened, setMenuOpened ] = useState<number>(0);
-  
-  /* Menu edit events //////////////////////////////////////////////////////////////// */
-  const handleMenuEvent = (event: MouseEvent) => {
-    const tagName = (event.target as Element).tagName;
-    if(!['path', 'svg'].includes(tagName)) {
-      setMenuOpened(0);
-    }
-  }
-  const handleAccountEdit = (id: number) => {
-    console.log(`Editando o ${id}`)
-  }
-  const handleAccountDelete = (id: number) => {
-    console.log(`Deletando o ${id}`)
-  }
-
-  useEffect(() => {
-    window.removeEventListener('click', handleMenuEvent);
-    window.addEventListener('click', handleMenuEvent);
-    return () => window.removeEventListener('click', handleMenuEvent);
-  }, [menuOpened])
-
  /* Modal actions /////////////////////////////////////////////////////////////////////*/
-  const handleClick = () => router.push('/gerenciamento/contas/nova-conta');
+  const handleClick = () => setShowModal(true);
   const closeBtn = () => { 
     setShowModal(false);
     setErrorFields([]);
@@ -267,38 +239,11 @@ const Contas = (data: Props) => {
     <Layout><>
 
       <div className={styles.container}>      
-        <ButtonBack route='/dashboard'/>
-        <div className={styles.title}>Contas cadastradas</div>
+        <ButtonBack  route='/gerenciamento/contas'/>
+        <div className={styles.title}>Editar conta</div>
 
-        {/* Accordion */}
-        {data.accounts.map((item: Account, index: number) => (
-          <ContentAccordion 
-            key={index} 
-            item={item}
-            menuOpened={menuOpened}
-            setMenuOpened={setMenuOpened}
-            onEdit={handleAccountEdit}
-            onDelete={handleAccountDelete}
-          />
-        ))} 
-              
-        {/* Message for when there is no registered account yet */}
-        {noHaveAccount &&
-          <div className={styles.alert}>
-            <AlertIcon />
-            <div>Você ainda não cadastrou nenhuma conta. Gostaria de fazer isso agora? 
-            {/* <span className={styles.link} onClick={()=> {}}>Clique aqui</span> */}
-            </div>
-          </div>
-        }
-
-        {/* Modal to register new account */}
-        {showModal &&
-          <FormModal maxWidth={'340px'} maxHeight={'1500px'} closeButton handleClick={closeBtn}>
-            <div className={styles.containerModal}>
-              <div className={styles.titleModal}>Cadastrar nova conta</div>
-              
-              <div className={styles.inputs}>
+        {/* Edit account */}
+        <div className={styles.inputs}>
               
                 <div className={styles.row}>
                   <div className={styles.column}>
@@ -492,25 +437,17 @@ const Contas = (data: Props) => {
                   </div>  
                 </div>
           
-              </div> {/* Inputs end */}
+              </div> {/* Inputs end */}  
+              
+              
 
-              <div className={styles.btnModal}>
-                <Button 
-                  backgroundColor='#26408C'
-                  label='Salvar dados'
-                  color='#fff'
-                  backgroundColorHover='#4D69A6'
-                  onClick={handleSubmit}
-                />
-              </div>
-            
-            </div>
-          </FormModal>
-        }
+             
+              
+        
         
         <div style={{margin: '52px', marginTop: '24px'}}>
           <Button 
-            label={'Adicionar nova conta'}
+            label={'Atualizar'}
             backgroundColor={'#26408C'}
             backgroundColorHover={'#4D69A6'}
             color={'#fff'}

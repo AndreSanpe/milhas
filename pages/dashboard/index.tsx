@@ -20,6 +20,7 @@ import ShoppingIcon from './icons/shopping.svg';
 import SellIcon from './icons/sell.svg';
 import BagIcon from './icons/bag.svg';
 import BoomerangIcon from './icons/boomerang.svg';
+import BonusIcon from './icons/percent.svg';
 
 
 const Dashboard = (data: Props) => {
@@ -74,6 +75,7 @@ const Dashboard = (data: Props) => {
                     {links.icon === 'paid' && <PaidIcon />}
                     {links.icon === 'bag' && <BagIcon />}
                     {links.icon === 'boomerang' && <BoomerangIcon />}
+                    {links.icon === 'percent' && <BonusIcon />}
                 </div>
                 <div className={styles.label}>
                   {links.label}
@@ -107,6 +109,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if(!session) return { redirect: { destination: '/login', permanent: true }}; 
 
   // Get tenant
+  console.log(session)
   const user = await api.getUser(session.user.id)
   if(!user){
     return {

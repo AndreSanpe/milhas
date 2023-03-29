@@ -22,7 +22,11 @@ export default {
     }
 
     if (user && email === user.email && password === user.password ){
-      return user;
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email
+      };
     }
   
   },
@@ -34,15 +38,21 @@ export default {
         id
       }     
     });
-    
-    return {
-      id: user?.id,
-      name: user?.name,
-      email: user?.email,
-      birthDate: user?.birthdate,
-      cellphone: user?.cellphone,
-      status: user?.status,
-      date: user?.createdAt.getDate().toString()
+
+    if(!id) {
+      return null;
+    };
+
+    if(id){
+      return {
+        id: user?.id,
+        name: user?.name,
+        email: user?.email,
+        birthDate: user?.birthdate,
+        cellphone: user?.cellphone,
+        status: user?.status,
+        date: user?.createdAt.getDate().toString()
+      };
     };
   },
 
@@ -69,26 +79,31 @@ export default {
       }
     });
 
-    account.map((item: any, index: number) => (
-      accounts.push({
-        id: item.id,
-        name: item.name,
-        document: item.document,
-        statusLivelo: item.statusLivelo,
-        priceLivelo: item.priceLivelo,
-        statusEsfera: item.statusEsfera,
-        priceEsfera: item.priceEsfera,
-        statusAzul: item.statusAzul,
-        priceAzul: item.priceAzul,
-        statusLatam: item.statusLatam,
-        priceLatam: item.priceLatam,
-        statusSmiles: item.statusSmiles,
-        priceSmiles: item.priceSmiles,
-        userId: item.userId
-      })
-    ))
-    return accounts;   
+    if(!userId) {
+      return null;
+    }
 
+    if(userId && account) {
+      account.map((item: any, index: number) => (
+        accounts.push({
+          id: item.id,
+          name: item.name,
+          document: item.document,
+          statusLivelo: item.statusLivelo,
+          priceLivelo: item.priceLivelo,
+          statusEsfera: item.statusEsfera,
+          priceEsfera: item.priceEsfera,
+          statusAzul: item.statusAzul,
+          priceAzul: item.priceAzul,
+          statusLatam: item.statusLatam,
+          priceLatam: item.priceLatam,
+          statusSmiles: item.statusSmiles,
+          priceSmiles: item.priceSmiles,
+          userId: item.userId
+        })
+      ))
+      return accounts;   
+    }
   },
   
   /* Function for Add new miles buyed data */

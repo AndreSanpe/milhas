@@ -2,19 +2,17 @@ import { GetServerSideProps } from 'next';
 import { unstable_getServerSession } from 'next-auth';
 import React, { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
-import Layout from '../../../components/Layout';
-import { useAuthContext } from '../../../contexts/auth';
-import api from '../../../libs/api';
-import { User } from '../../../types/User';
-import { authOptions } from '../../api/auth/[...nextauth]';
+import Layout from '../../../../components/Layout';
+import { useAuthContext } from '../../../../contexts/auth';
+import api from '../../../../libs/api';
+import { User } from '../../../../types/User';
+import { authOptions } from '../../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
-import ButtonBack from '../../../components/ButtonBack';
-import ContentAccordion from '../../../components/ContentAccordion';
-import AlertIcon from './error_outline.svg';
-import Button from '../../../components/Button';
-import FormModal from '../../../components/FormModal';
-import Input from '../../../components/Input';
-import Toggle from '../../../components/Toggle';
+import ButtonBack from '../../../../components/ButtonBack';
+import Button from '../../../../components/Button';
+import FormModal from '../../../../components/FormModal';
+import Input from '../../../../components/Input';
+import Toggle from '../../../../components/Toggle';
 import { useRouter } from 'next/router';
 
 type Account = {
@@ -30,7 +28,6 @@ type Account = {
   priceLatam: number;
   statusSmiles: boolean;
   priceSmiles: number;
-  userId: number;
 }
 
 const Contas = (data: Props) => {
@@ -38,22 +35,7 @@ const Contas = (data: Props) => {
   /* Router ///////////////////////////////////////////////////////////////////////////////*/
   const router = useRouter();
 
-  /* Contexts /////////////////////////////////////////////////////////////////////////////*/
-  const { user, setUser } = useAuthContext();
-
-  /* Sending user data to context /////////////////////////////////////////////////////////*/
-  useEffect(() => {
-    if(user === null || user != data.user) {
-      setUser(data.user)
-    }
-    if(data.accounts.length === 0) {
-      setNoHaveAccount(true);
-    }
-  }, [data, user, setUser]);
-
   /* General states //////////////////////////////////////////////////////////////////*/
-  const [ noHaveAccount, setNoHaveAccount ] = useState<boolean>(false);
-  const [ showModal, setShowModal ] = useState<boolean>(false);
   const [ errorFields, setErrorFields ] = useState<string[]>([]);
   
   /* Input states //////////////////////////////////////////////////////////////////// */
@@ -69,36 +51,6 @@ const Contas = (data: Props) => {
   const [ priceLatam, setPriceLatam ] = useState<number>(0);
   const [ statusSmiles, setStatusSmiles ] = useState<boolean>(false);
   const [ priceSmiles, setPriceSmiles ] = useState<number>(0);
-
-  /* Menu edit states //////////////////////////////////////////////////////////////// */
-  const [ menuOpened, setMenuOpened ] = useState<number>(0);
-  
-  /* Menu edit events //////////////////////////////////////////////////////////////// */
-  const handleMenuEvent = (event: MouseEvent) => {
-    const tagName = (event.target as Element).tagName;
-    if(!['path', 'svg'].includes(tagName)) {
-      setMenuOpened(0);
-    }
-  }
-  const handleAccountEdit = (id: number) => {
-    console.log(`Editando o ${id}`)
-  }
-  const handleAccountDelete = (id: number) => {
-    console.log(`Deletando o ${id}`)
-  }
-
-  useEffect(() => {
-    window.removeEventListener('click', handleMenuEvent);
-    window.addEventListener('click', handleMenuEvent);
-    return () => window.removeEventListener('click', handleMenuEvent);
-  }, [menuOpened])
-
- /* Modal actions /////////////////////////////////////////////////////////////////////*/
-  const handleClick = () => router.push('/gerenciamento/contas/nova-conta');
-  const closeBtn = () => { 
-    setShowModal(false);
-    setErrorFields([]);
-  }
 
   /* Functions of handle input values ///////////////////////////////////////////////////*/
   const handleValues = useCallback((e: React.FormEvent<HTMLInputElement>) => {
@@ -231,7 +183,7 @@ const Contas = (data: Props) => {
 
   /* Once verified, send to the database */
   const handleSubmit = async () => {
-    if(verifyData() && user) {
+    if(verifyData() && data.user) {
       let account = {
         name: name,
         document: cpf,
@@ -245,7 +197,7 @@ const Contas = (data: Props) => {
         priceLatam: priceLatam,
         statusSmiles: statusSmiles,
         priceSmiles: priceSmiles,
-        userId: user.id 
+        userId: data.user.id 
       }
           
       const response = await fetch('/api/accounts', {
@@ -255,8 +207,8 @@ const Contas = (data: Props) => {
           'content-Type': 'application/json',
         },
       });
-      closeBtn();
-      document.location.reload();
+      setErrorFields([]);
+      router.push('/gerenciamento/contas')
     }
   }
  
@@ -267,38 +219,11 @@ const Contas = (data: Props) => {
     <Layout><>
 
       <div className={styles.container}>      
-        <ButtonBack route='/dashboard'/>
-        <div className={styles.title}>Contas cadastradas</div>
+        <ButtonBack route='/gerenciamento/contas'/>
+        <div className={styles.title}>Adicionar nova conta</div>
 
-        {/* Accordion */}
-        {data.accounts.map((item: Account, index: number) => (
-          <ContentAccordion 
-            key={index} 
-            item={item}
-            menuOpened={menuOpened}
-            setMenuOpened={setMenuOpened}
-            onEdit={handleAccountEdit}
-            onDelete={handleAccountDelete}
-          />
-        ))} 
-              
-        {/* Message for when there is no registered account yet */}
-        {noHaveAccount &&
-          <div className={styles.alert}>
-            <AlertIcon />
-            <div>Você ainda não cadastrou nenhuma conta. Gostaria de fazer isso agora? 
-            {/* <span className={styles.link} onClick={()=> {}}>Clique aqui</span> */}
-            </div>
-          </div>
-        }
-
-        {/* Modal to register new account */}
-        {showModal &&
-          <FormModal maxWidth={'340px'} maxHeight={'1500px'} closeButton handleClick={closeBtn}>
-            <div className={styles.containerModal}>
-              <div className={styles.titleModal}>Cadastrar nova conta</div>
-              
-              <div className={styles.inputs}>
+        {/* Edit account */}
+        <div className={styles.inputs}>
               
                 <div className={styles.row}>
                   <div className={styles.column}>
@@ -492,29 +417,15 @@ const Contas = (data: Props) => {
                   </div>  
                 </div>
           
-              </div> {/* Inputs end */}
-
-              <div className={styles.btnModal}>
-                <Button 
-                  backgroundColor='#26408C'
-                  label='Salvar dados'
-                  color='#fff'
-                  backgroundColorHover='#4D69A6'
-                  onClick={handleSubmit}
-                />
-              </div>
-            
-            </div>
-          </FormModal>
-        }
+              </div> {/* Inputs end */}         
         
         <div style={{margin: '52px', marginTop: '24px'}}>
           <Button 
-            label={'Adicionar nova conta'}
+            label={'Salvar dados'}
             backgroundColor={'#26408C'}
             backgroundColorHover={'#4D69A6'}
             color={'#fff'}
-            onClick={handleClick}
+            onClick={handleSubmit}
           />
         </div>
         

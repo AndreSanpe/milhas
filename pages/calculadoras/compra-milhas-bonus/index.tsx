@@ -12,7 +12,7 @@ import { authOptions } from '../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
 
 
-const CustoMilheiro = (data: Props) => {
+const CompraMilhasBonus = (data: Props) => {
 
   const router = useRouter(); 
 
@@ -133,7 +133,7 @@ const CustoMilheiro = (data: Props) => {
       
       <ButtonBack route='/dashboard'/>
       <div className={styles.title}>Calcular: 
-        <span style={{color: '#F25C05'}}>custo do milheiro</span>
+        <span style={{color: '#F25C05'}}>compra de milhas<br></br>com bônus</span>
       </div>
 
       <div className={styles.inputs}>
@@ -157,7 +157,7 @@ const CustoMilheiro = (data: Props) => {
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
-              Quantidade de pontos/milhas comprados:
+              Quantidade de milhas compradas:
             </div>
               <Input 
                 name='pointsQuantity'
@@ -172,7 +172,7 @@ const CustoMilheiro = (data: Props) => {
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
-              Se houver, % de bônus da transferência:
+              Bônus adicional oferecido pelo clube em %:
             </div>
               <Input 
                 name='percentage'
@@ -214,21 +214,21 @@ const CustoMilheiro = (data: Props) => {
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
-          <div className={styles.titleValues}>Total de pontos comprados:</div>
+          <div className={styles.titleValues}>Total de milhas compradas:</div>
           <div className={styles.values}>{pointsQuantity ? pointsQuantity.toLocaleString('pt-BR') : ''}</div>
         </div>        
       </div>
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
-          <div className={styles.titleValues}>Bônus da transferência:</div>
+          <div className={styles.titleValues}>Bônus adicional:</div>
           <div className={styles.values}>{percentage ? percentage + '%' : ''}</div>
         </div>        
       </div>
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
-          <div className={styles.titleValues}>Total após transferência:</div>
+          <div className={styles.titleValues}>Total de milhas + bônus:</div>
           <div className={styles.values}>{miles ? miles.toLocaleString('pt-BR') : ''}</div>
         </div>        
       </div>
@@ -320,7 +320,7 @@ const CustoMilheiro = (data: Props) => {
   </>)
 }
 
-export default CustoMilheiro;
+export default CompraMilhasBonus;
 
 
 type Props = {
