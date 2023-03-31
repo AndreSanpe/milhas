@@ -2,21 +2,21 @@ import { GetServerSideProps } from 'next';
 import { unstable_getServerSession } from 'next-auth';
 import React, { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
-import Layout from '../../../components/Layout';
-import { useAuthContext } from '../../../contexts/auth';
-import api from '../../../libs/api';
-import { User } from '../../../types/User';
-import { authOptions } from '../../api/auth/[...nextauth]';
+import Layout from '../../../../components/Layout';
+import { useAuthContext } from '../../../../contexts/auth';
+import api from '../../../../libs/api';
+import { User } from '../../../../types/User';
+import { authOptions } from '../../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
-import ButtonBack from '../../../components/ButtonBack';
-import ContentAccordion from '../../../components/ContentAccordion';
-import AlertIcon from './error_outline.svg';
-import Button from '../../../components/Button';
-import FormModal from '../../../components/FormModal';
-import Input from '../../../components/Input';
-import Toggle from '../../../components/Toggle';
+import ButtonBack from '../../../../components/ButtonBack';
+import Button from '../../../../components/Button';
+import FormModal from '../../../../components/FormModal';
+import Input from '../../../../components/Input';
+import Toggle from '../../../../components/Toggle';
+import { useRouter } from 'next/router';
+import { Account } from '../../../../types/Account';
 
-type Account = {
+/* type Account = {
   name: string;
   document: string;
   statusLivelo: boolean;
@@ -29,48 +29,29 @@ type Account = {
   priceLatam: number;
   statusSmiles: boolean;
   priceSmiles: number;
-}
+} */
 
-const Contas = (data: Props) => {
+const EditarConta = (data: Props) => {
 
-  /* Contexts */
-  const { user, setUser } = useAuthContext();
-
-  /* Sending user data to context */
-  useEffect(() => {
-    if(user === null || user != data.user) {
-      setUser(data.user)
-    }
-    if(data.accounts.length === 0) {
-      setNoHaveAccount(true);
-    }
-  }, [data, user, setUser]);
+  /* Router ///////////////////////////////////////////////////////////////////////////////*/
+  const router = useRouter();
 
   /* General states //////////////////////////////////////////////////////////////////*/
-  const [ noHaveAccount, setNoHaveAccount ] = useState<boolean>(false);
-  const [ showModal, setShowModal ] = useState<boolean>(false);
   const [ errorFields, setErrorFields ] = useState<string[]>([]);
   
   /* Input states //////////////////////////////////////////////////////////////////// */
-  const [ name, setName ] = useState<string>('');
-  const [ cpf, setCpf ] = useState<string>('');
-  const [ statusLivelo, setStatusLivelo ] = useState<boolean>(false);
-  const [ priceLivelo, setPriceLivelo ] = useState<number>(0);
-  const [ statusEsfera, setStatusEsfera ] = useState<boolean>(false);
-  const [ priceEsfera, setPriceEsfera ] = useState<number>(0);
-  const [ statusAzul, setStatusAzul ] = useState<boolean>(false);
-  const [ priceAzul, setPriceAzul ] = useState<number>(0);
-  const [ statusLatam, setStatusLatam ] = useState<boolean>(false);
-  const [ priceLatam, setPriceLatam ] = useState<number>(0);
-  const [ statusSmiles, setStatusSmiles ] = useState<boolean>(false);
-  const [ priceSmiles, setPriceSmiles ] = useState<number>(0);
-
- /* Modal actions /////////////////////////////////////////////////////////////////////*/
-  const handleClick = () => setShowModal(true);
-  const closeBtn = () => { 
-    setShowModal(false);
-    setErrorFields([]);
-  }
+  const [ name, setName ] = useState<string>(data.account.name);
+  const [ cpf, setCpf ] = useState<string>(data.account.document);
+  const [ statusLivelo, setStatusLivelo ] = useState<boolean>(data.account.statusLivelo);
+  const [ priceLivelo, setPriceLivelo ] = useState<number>(data.account.priceLivelo);
+  const [ statusEsfera, setStatusEsfera ] = useState<boolean>(data.account.statusEsfera);
+  const [ priceEsfera, setPriceEsfera ] = useState<number>(data.account.priceEsfera);
+  const [ statusAzul, setStatusAzul ] = useState<boolean>(data.account.statusAzul);
+  const [ priceAzul, setPriceAzul ] = useState<number>(data.account.priceAzul);
+  const [ statusLatam, setStatusLatam ] = useState<boolean>(data.account.statusLatam);
+  const [ priceLatam, setPriceLatam ] = useState<number>(data.account.priceLatam);
+  const [ statusSmiles, setStatusSmiles ] = useState<boolean>(data.account.statusSmiles);
+  const [ priceSmiles, setPriceSmiles ] = useState<number>(data.account.priceSmiles);
 
   /* Functions of handle input values ///////////////////////////////////////////////////*/
   const handleValues = useCallback((e: React.FormEvent<HTMLInputElement>) => {
@@ -203,8 +184,9 @@ const Contas = (data: Props) => {
 
   /* Once verified, send to the database */
   const handleSubmit = async () => {
-    if(verifyData() && user) {
+    if(verifyData() && data.user) {
       let account = {
+        id: data.account.id,
         name: name,
         document: cpf,
         statusLivelo: statusLivelo,
@@ -217,20 +199,21 @@ const Contas = (data: Props) => {
         priceLatam: priceLatam,
         statusSmiles: statusSmiles,
         priceSmiles: priceSmiles,
-        userId: user.id 
+        userId: data.user.id 
       }
           
       const response = await fetch('/api/accounts', {
-        method: 'POST',
+        method: 'PUT',
         body: JSON.stringify(account),
         headers: {
           'content-Type': 'application/json',
         },
       });
-      closeBtn();
-      document.location.reload();
+      setErrorFields([]);
+      router.push('/gerenciamento/contas')
     }
   }
+
  
   return (<>
     <Head>
@@ -239,8 +222,8 @@ const Contas = (data: Props) => {
     <Layout><>
 
       <div className={styles.container}>      
-        <ButtonBack  route='/gerenciamento/contas'/>
-        <div className={styles.title}>Editar conta</div>
+        <ButtonBack route='/gerenciamento/contas'/>
+        <div className={styles.title}>Editar dados da conta</div>
 
         {/* Edit account */}
         <div className={styles.inputs}>
@@ -250,6 +233,7 @@ const Contas = (data: Props) => {
                     <div className={styles.label}>Nome da conta:</div>
                       <Input 
                         name='name'
+                        value={name}
                         onSet={(e)=> handleValues(e)}
                         placeholder={'Ex.: Antônio Garcia'}
                         warning={errorFields.includes('name')}
@@ -262,6 +246,7 @@ const Contas = (data: Props) => {
                     <div className={styles.label}>Documento CPF:</div>
                       <Input 
                         name='document'
+                        value={cpf}
                         onSet={(e) => handleValues(e)}
                         placeholder={'Ex.: 123.123.123-12'}
                         mask='cpf'
@@ -301,7 +286,8 @@ const Contas = (data: Props) => {
                       <div className={styles.price}>
                         <Input
                           id='priceLivelo'
-                          name='priceLivelo' 
+                          name='priceLivelo'
+                          defaultValue={priceLivelo ? priceLivelo.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : 'R$ 0,00'}
                           style={{width: '70px'}}
                           onSet={(e) => handleValues(e)}
                           placeholder={'R$ 0,00'}
@@ -334,6 +320,7 @@ const Contas = (data: Props) => {
                         <Input
                           id='priceEsfera'
                           name='priceEsfera' 
+                          defaultValue={priceEsfera ? priceEsfera.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : 'R$ 0,00'}
                           style={{width: '70px'}}
                           onSet={(e) => handleValues(e)}
                           placeholder={'R$ 0,00'}
@@ -365,6 +352,7 @@ const Contas = (data: Props) => {
                         <Input
                           id='priceAzul'
                           name='priceAzul' 
+                          defaultValue={priceAzul ? priceAzul.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : 'R$ 0,00'}
                           style={{width: '70px'}}
                           onSet={(e) => handleValues(e)}
                           placeholder={'R$ 0,00'}
@@ -395,7 +383,8 @@ const Contas = (data: Props) => {
                       <div className={styles.price}>
                         <Input
                           id='priceLatam'
-                          name='priceLatam' 
+                          name='priceLatam'
+                          defaultValue={priceLatam ? priceLatam.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : 'R$ 0,00'} 
                           style={{width: '70px'}}
                           onSet={(e) => handleValues(e)}
                           placeholder={'R$ 0,00'}
@@ -427,6 +416,7 @@ const Contas = (data: Props) => {
                         <Input
                           id='priceSmiles'
                           name='priceSmiles' 
+                          defaultValue={priceSmiles ? priceSmiles.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : 'R$ 0,00'}
                           style={{width: '70px'}}
                           onSet={(e) => handleValues(e)}
                           placeholder={'R$ 0,00'}
@@ -437,21 +427,15 @@ const Contas = (data: Props) => {
                   </div>  
                 </div>
           
-              </div> {/* Inputs end */}  
-              
-              
-
-             
-              
-        
+              </div> {/* Inputs end */}         
         
         <div style={{margin: '52px', marginTop: '24px'}}>
           <Button 
-            label={'Atualizar'}
+            label={'Atualizar dados'}
             backgroundColor={'#26408C'}
             backgroundColorHover={'#4D69A6'}
             color={'#fff'}
-            onClick={handleClick}
+            onClick={handleSubmit}
           />
         </div>
         
@@ -461,16 +445,17 @@ const Contas = (data: Props) => {
     </>)
 }
 
-export default Contas;
+export default EditarConta;
 
 type Props = {
   user: User;
-  accounts: Account[];  
+  account: Account;  
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const session = await unstable_getServerSession(context.req, context.res, authOptions);
+  const { editaccountid } = context.query;
 
   if(!session) return { redirect: { destination: '/login', permanent: true }}; 
 
@@ -482,13 +467,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   } 
 
-  /* Get accounts */
-  const accounts = await api.getAccounts(session.user.id);
+  /* Get account */
+  const account = await api.getAccount(session.user.id, parseInt(editaccountid as string));
+  console.log(account)
   
   return {
     props: {
       user,
-      accounts
+      account: JSON.parse(JSON.stringify(account))
     }
   }
 }

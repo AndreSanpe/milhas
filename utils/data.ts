@@ -5,7 +5,8 @@ export const management = [
   { label: 'Compra de pontos e milhas' , path:'/gerenciamento/compra-pontos' , icon: 'shopping' },
   { label: 'Venda de milhas' , path:'/gerenciamento/venda-milhas' , icon: 'sell' },
   { label: 'Extrato de compra de pontos', path: '/extratos/compra', icon: 'balance'},
-  { label: 'Extrato de venda de milhas', path: '/extratos/venda', icon: 'balance'},
+  { label: 'Extrato de venda de milhas', path: '/extratos/venda', icon: 'trending'},
+  { label: 'Balanço de pontos e milhas', path: '/extratos/balanco', icon: 'analytics'},
   { label: 'Histórico de compra bonificada', path: '/extratos/compra-bonificada', icon: 'savings'},
 ];
 

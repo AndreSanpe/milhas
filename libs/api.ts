@@ -7,7 +7,7 @@ import prisma from './prisma';
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
 
-  //Function for authentication
+  /* Function for authentication ///////////////////////////////////////////////////////////////*/
   getAuthUser: async (email: string, password: string) => {
     const user = await prisma.user.findFirst({
       where: { email, status: true }
@@ -31,7 +31,9 @@ export default {
   
   },
 
-  //Function for get user data
+
+  /* User-related functions//////////////////////////////////////////////////////////////////// */
+  /*Functions related to managed users */
   getUser: async (id: number) => {
     const user = await prisma.user.findFirst({
       where: {
@@ -56,6 +58,8 @@ export default {
     };
   },
 
+
+   /* Functions related to managed accounts ////////////////////////////////////////////////////*/
   /* Add new account (cpf) controlled */
   addNewAccount: async (account: Account) => {
 
@@ -70,7 +74,7 @@ export default {
 
   },
 
-  /* Function for get accounts data */
+  /* Function to get accounts data */
   getAccounts:async (userId: number) => {
     const accounts: Account[] = [];
     const account = await prisma.account.findMany({
@@ -105,8 +109,59 @@ export default {
       return accounts;   
     }
   },
+
+  /* Function to get one account for edit */
+  getAccount: async (userId: number, id: number) => {
+    const account = await prisma.account.findFirst({
+      where: {
+          userId,
+          id
+      }
+    });
+
+    if(!userId || !id) {
+      return null;
+    }
+
+    return account;
+  },
+
+  /* Function to update an account */
+  updateAccount: async (account: Account) => {
+    const updAccount = await prisma.account.update({
+      where: {
+        id: account.id        
+      },
+      data: {
+        name: account.name,
+        document: account.document,
+        statusLivelo: account.statusLivelo,
+        priceLivelo: account.priceLivelo,
+        statusEsfera: account.statusEsfera,
+        priceEsfera: account.priceEsfera,
+        statusAzul: account.statusAzul,
+        priceAzul: account.priceAzul,
+        statusLatam: account.statusLatam,
+        priceLatam: account.priceLatam,
+        statusSmiles: account.statusSmiles,
+        priceSmiles: account.priceSmiles,
+      }
+    });
+    return updAccount;
+  },
+
+  /* Function to delete an account */
+  deleteAccount: async (id: number) => {
+    const deleteId = await prisma.account.delete({
+      where: {
+        id
+      }
+    });
+  },
   
-  /* Function for Add new miles buyed data */
+
+  /* Functions related to the purchase of miles///////////////////////////////////////////////// */
+  /* Function to Add new miles buyed data */
   addNewMilesBuyed: async ({price, pointsQuantity, program, selectedAccount, cpf, destiny, percentage, creditCard, parcel, month, miles, finalPrice, userId}: BuyMiles) => {
 
     return await prisma.buyMiles.create({
@@ -116,12 +171,12 @@ export default {
     });
   },
 
-  /* Function for get miles buyed data */
+  /* Function to get miles buyed data */
   getMilesBuyed: async () => {
 
   },
 
-  /* Function for Add new miles selled data */
+  /* Function to Add new miles selled data */
   addNewMilesSelled: async ({pointsQuantity, priceBuy, priceSell, program, programBuyer, selectedAccount, receipt, dateSell, dateReceipt, profit, percentageProfit, userId}: SellMiles) => {
 
     return await prisma.sellMiles.create({

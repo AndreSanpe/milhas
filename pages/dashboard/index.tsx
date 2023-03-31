@@ -4,8 +4,8 @@ import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { User } from '../../types/User';
 import { useAuthContext } from '../../contexts/auth';
-import { useCallback, useEffect, useState } from 'react';
-import { AuthOptions, Session, unstable_getServerSession } from 'next-auth';
+import {  useEffect, useState } from 'react';
+import {  Session, unstable_getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
 import api from '../../libs/api';
 import { calculators, management } from '../../utils/data';
@@ -21,6 +21,8 @@ import SellIcon from './icons/sell.svg';
 import BagIcon from './icons/bag.svg';
 import BoomerangIcon from './icons/boomerang.svg';
 import BonusIcon from './icons/percent.svg';
+import TrendingIcon from './icons/trending.svg';
+import AnalyticsIcon from './icons/analytics.svg';
 
 
 const Dashboard = (data: Props) => {
@@ -56,6 +58,8 @@ const Dashboard = (data: Props) => {
                     {links.icon === 'extract' && <ExtractIcon />}
                     {links.icon === 'shopping' && <ShoppingIcon />}
                     {links.icon === 'sell' && <SellIcon />}
+                    {links.icon === 'trending' && <TrendingIcon />}
+                    {links.icon === 'analytics' && <AnalyticsIcon />}
                 </div>
                 <div className={styles.label}>
                   {links.label}

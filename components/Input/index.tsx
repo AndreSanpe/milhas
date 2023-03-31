@@ -6,7 +6,7 @@ import IconOff from './visibilityOff.svg';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   mask?: 'cep' | 'currency' | 'miles' | 'cpf' | 'date' | 'percentage' | 'decimal' | 'twoDigits';
-  onSet: (newValue: any) => void;
+  onSet: (inputValue: React.FormEvent<HTMLInputElement>) => void;
   warning?: boolean;
   password?: boolean;
 }
