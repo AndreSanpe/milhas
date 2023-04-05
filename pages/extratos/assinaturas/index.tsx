@@ -110,15 +110,17 @@ const AssinaturaClubes = (data: Props) => {
   return (
     <>
     <Head>
-      <title>Extrato de assinaturas. TOOLMILHAS</title>
+      <title>Extrato de assinaturas . PlanMilhas</title>
     </Head>
     
     <Layout><>
       
-      <div className={styles.container}>      
-        <ButtonBack route='/dashboard'/>
-        <div className={styles.title} style={{marginBottom: '0px'}}>Extrato de assinaturas</div>
-        <div className={styles.title} style={{marginTop: '0px'}}>de clubes</div>
+      <div className={styles.container}> 
+
+        <div className={styles.header}>
+          <ButtonBack route='/dashboard'/>
+          <div className={styles.title}>Extrato de assinaturas de clubes</div>
+        </div>      
 
         {/* Results */}
         <div className={styles.results}>

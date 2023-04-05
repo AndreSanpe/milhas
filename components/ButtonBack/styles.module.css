@@ -3,11 +3,10 @@
   width: fit-content;
   align-items: center;
   font-size: 14px;
-  margin-top: 24px;
   color: #3D3D3D;
   cursor: pointer;
 }
 
 .back:hover {
-  color: #3B0585;
+  color: #F25C05;
 }

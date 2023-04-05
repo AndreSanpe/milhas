@@ -89,13 +89,17 @@ const Contas = (data: Props) => {
  
   return (<>
     <Head>
-      <title>Gerenciamento . TOOLMILHAS</title>
+      <title>Contas cadastradas . PlanMilhas</title>
     </Head>
     <Layout><>
 
-      <div className={styles.container}>      
-        <ButtonBack route='/dashboard'/>
-        <div className={styles.title}>Contas cadastradas</div>
+      <div className={styles.container}> 
+        
+        <div className={styles.header}>
+          <ButtonBack route='/dashboard'/>
+          <div className={styles.title}>Contas administradas</div>
+        </div>     
+        
 
         {/* Accordion */}
         {data.accounts.map((item: Account, index: number) => (
@@ -112,8 +116,8 @@ const Contas = (data: Props) => {
         {/* Message for when there is no registered account yet */}
         {noHaveAccount &&
           <div className={styles.alert}>
-            <AlertIcon />
-            <div>Você ainda não cadastrou nenhuma conta. Gostaria de fazer isso agora? 
+            <AlertIcon style={{color: '#F25C05'}}/>
+            <div>Você ainda não cadastrou nenhuma conta. Gostaria de fazer isso agora? Clique no botão abaixo. 
             {/* <span className={styles.link} onClick={()=> {}}>Clique aqui</span> */}
             </div>
           </div>

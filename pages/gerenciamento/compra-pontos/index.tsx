@@ -218,16 +218,16 @@ const CompraPontos = (data: Props) => {
   return (<>
 
   <Head>
-    <title>Compra de Pontos . TOOLMILHAS</title>
+    <title>Compra de Pontos . PlanMilhas</title>
   </Head>
   <Layout><>
 
     <div className={styles.container}>
-      
-      <ButtonBack route='/dashboard'/>
-      <div className={styles.title}>Gerenciar: 
-        <span style={{color: '#F25C05'}}>compra de pontos e milhas</span>
-      </div>
+
+      <div className={styles.header}>
+        <ButtonBack route='/dashboard'/>
+        <div className={styles.title}>Calculadora de compra de pontos e milhas</div>
+      </div>     
 
       <div className={styles.inputs}>
         

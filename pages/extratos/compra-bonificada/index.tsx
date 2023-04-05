@@ -13,8 +13,12 @@ import { User } from '../../../types/User';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
 import AlertIcon from './error_outline.svg';
+import { useRouter } from 'next/router';
 
 const ExtratoCompraBonificada = (data: Props) => {
+
+  /* Router ///////////////////////////////////////////////////////////////////////////////*/
+  const router = useRouter();
 
   /* Contexts */
   const { user, setUser } = useAuthContext();
@@ -29,59 +33,83 @@ const ExtratoCompraBonificada = (data: Props) => {
   /* Setting message for not have a buy bonus//////////////////////////////////////////// */
   useEffect(() => {
     if(data.buybonus.length === 0) {
-      setNoHaveAccount(true)
+      setNoHaveBuyBonus(true)
     }
   }, [data.buybonus]);
 
-   /* ContextApi: accounts  ///////////////////////////////////////////////////////////////*/
-   /* const { accounts, setAccounts } = useAccountsContext();
-   useEffect(() => {
-     if(accounts === null || accounts as [] !== data.accounts) {
-       setAccounts(data.accounts as any)
-     }
-   }, [data, accounts, setAccounts]);
- */
-
   /* General states //////////////////////////////////////////////////////////////////*/
-  const [ noHaveAccount, setNoHaveAccount ] = useState<boolean>(false);
+  const [ noHaveBuyBonus, setNoHaveBuyBonus ] = useState<boolean>(false);
  
+  /* Menu edit states //////////////////////////////////////////////////////////////// */
+  const [ menuOpened, setMenuOpened ] = useState<number>(0);
+  
+  /* Menu edit events //////////////////////////////////////////////////////////////// */
+  const handleMenuEvent = (event: MouseEvent) => {
+    const tagName = (event.target as Element).tagName;
+    if(!['path', 'svg'].includes(tagName)) {
+      setMenuOpened(0);
+    }
+  }
+  
+  const handleBuyBonusEdit = (id: number) => {
+    router.push(`/calculadoras/compra-bonificada/${id}`);
+  }
+
+  const handleBuyBonusDelete = async (id: number) => {
+    const response = await fetch('/api/buybonus', {
+      method: 'DELETE',
+      body: JSON.stringify(id),
+      headers: {
+        'content-Type': 'application/json',
+      },
+    });
+    router.push('/extratos/compra-bonificada')
+  }
+
+  useEffect(() => {
+    window.removeEventListener('click', handleMenuEvent);
+    window.addEventListener('click', handleMenuEvent);
+    return () => window.removeEventListener('click', handleMenuEvent);
+  }, [menuOpened])
 
   return (
     <>
     <Head>
-      <title>Extrato de compra bonificada . TOOLMILHAS</title>
+      <title>Histórico de compra bonificada . PlanMilhas</title>
     </Head>
     
     <Layout><>
       
       <div className={styles.container}>      
-        <ButtonBack route='/dashboard'/>
-        <div className={styles.title} style={{marginBottom: '0px'}}>Histórico de compra</div>
-        <div className={styles.title} style={{marginTop: '0px'}}>bonificada</div>
+
+        <div className={styles.header}>
+          <ButtonBack route='/dashboard'/>
+          <div className={styles.title}>Histórico de compra bonificada</div>
+        </div> 
 
         {/* Accordion */}
         {data.buybonus.map((item: BuyBonus, index: number) => (
-          <ContentAccordionBuyBonus key={index} item={item as BuyBonus}/> 
+          <ContentAccordionBuyBonus 
+            key={index} 
+            item={item}
+            menuOpened={menuOpened}
+            setMenuOpened={setMenuOpened}
+            onEdit={handleBuyBonusEdit}
+            onDelete={handleBuyBonusDelete}
+            /> 
         ))} 
               
-        {/* Message for when there is no registered account yet */}
-        {noHaveAccount &&
+        {/* Message for when there is no registered buy bonus yet */}
+        {noHaveBuyBonus &&
           <div className={styles.alert}>
-            <AlertIcon />
+            <AlertIcon style={{color: '#F25C05'}}/>
             <div>Você ainda não cadastrou nenhuma compra bonificada. Gostaria de fazer isso agora? 
-            {/* <span className={styles.link} onClick={()=> {}}>Clique aqui</span> */}
+            <div className={styles.link} onClick={()=> {router.push('/calculadoras/compra-bonificada')}}>Clique aqui</div>
             </div>
           </div>
         }
 
-        
-
-
-      
       </div>{/* Div container end */}
-    
-    
-    
     </></Layout>
     
     </>

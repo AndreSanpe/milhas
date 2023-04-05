@@ -125,16 +125,16 @@ const CompraMilhasBonus = (data: Props) => {
   return (<>
 
   <Head>
-    <title>Calculadora . TOOLMILHAS</title>
+    <title>Calculadora de compra com bônus . PlanMilhas</title>
   </Head>
   <Layout><>
 
     <div className={styles.container}>
-      
-      <ButtonBack route='/dashboard'/>
-      <div className={styles.title}>Calcular: 
-        <span style={{color: '#F25C05'}}>compra de milhas<br></br>com bônus</span>
-      </div>
+
+      <div className={styles.header}>
+          <ButtonBack route='/dashboard'/>
+          <div className={styles.title}>Calculadora de compra de milhas com bônus</div>
+        </div> 
 
       <div className={styles.inputs}>
         

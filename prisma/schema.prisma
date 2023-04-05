@@ -113,6 +113,8 @@ model BuyBonus {
   program        String
   pointsQuantity Int
 
+  currencyOption     String?
+  pointsCard         Float?
   pointsCardQuantity Int?
   totalpoints        Int?
   destiny            String?
@@ -124,6 +126,10 @@ model BuyBonus {
   priceMiles       Float
   percentageProfit Float
   finalPrice       Float
+
+  score           Boolean
+  priceProtection Boolean
+  transfer        Boolean
 
   user   User @relation(fields: [userId], references: [id])
   userId Int

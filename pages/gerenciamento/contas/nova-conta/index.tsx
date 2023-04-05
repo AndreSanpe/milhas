@@ -3,32 +3,17 @@ import { unstable_getServerSession } from 'next-auth';
 import React, { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import Layout from '../../../../components/Layout';
-import { useAuthContext } from '../../../../contexts/auth';
 import api from '../../../../libs/api';
 import { User } from '../../../../types/User';
 import { authOptions } from '../../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
 import ButtonBack from '../../../../components/ButtonBack';
 import Button from '../../../../components/Button';
-import FormModal from '../../../../components/FormModal';
 import Input from '../../../../components/Input';
 import Toggle from '../../../../components/Toggle';
 import { useRouter } from 'next/router';
+import { Account } from '../../../../types/Account';
 
-type Account = {
-  name: string;
-  document: string;
-  statusLivelo: boolean;
-  priceLivelo: number;
-  statusEsfera: boolean;
-  priceEsfera: number;
-  statusAzul: boolean;
-  priceAzul: number;
-  statusLatam: boolean;
-  priceLatam: number;
-  statusSmiles: boolean;
-  priceSmiles: number;
-}
 
 const Contas = (data: Props) => {
 
@@ -214,13 +199,19 @@ const Contas = (data: Props) => {
  
   return (<>
     <Head>
-      <title>Gerenciamento . TOOLMILHAS</title>
+      <title>Adicionando conta . PlanMilhas</title>
     </Head>
     <Layout><>
 
-      <div className={styles.container}>      
-        <ButtonBack route='/gerenciamento/contas'/>
-        <div className={styles.title}>Adicionar nova conta</div>
+      <div className={styles.container}>     
+
+        <div className={styles.header}>
+          <ButtonBack route='/gerenciamento/contas'/>
+          <div className={styles.title}>Adicionar nova conta</div>
+        </div>     
+
+        {/* <ButtonBack route='/gerenciamento/contas'/>
+        <div className={styles.title}>Adicionar nova conta</div> */}
 
         {/* Edit account */}
         <div className={styles.inputs}>

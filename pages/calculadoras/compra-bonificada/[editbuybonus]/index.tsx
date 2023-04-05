@@ -3,71 +3,63 @@ import { Account, unstable_getServerSession } from 'next-auth';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react'
-import Button from '../../../components/Button';
-import ButtonBack from '../../../components/ButtonBack';
-import Dropdown from '../../../components/Dropdown';
-import FormModal from '../../../components/FormModal';
-import Input from '../../../components/Input';
-import Layout from '../../../components/Layout';
-import Toggle from '../../../components/Toggle';
-import { useAccountsContext } from '../../../contexts/accounts';
-import { useAuthContext } from '../../../contexts/auth';
-import api from '../../../libs/api';
-import { User } from '../../../types/User';
-import { authOptions } from '../../api/auth/[...nextauth]';
+import Button from '../../../../components/Button';
+import ButtonBack from '../../../../components/ButtonBack';
+import Dropdown from '../../../../components/Dropdown';
+import FormModal from '../../../../components/FormModal';
+import Input from '../../../../components/Input';
+import Layout from '../../../../components/Layout';
+import Toggle from '../../../../components/Toggle';
+import { useAuthContext } from '../../../../contexts/auth';
+import api from '../../../../libs/api';
+import { User } from '../../../../types/User';
+import { authOptions } from '../../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
+import { BuyBonus } from '../../../../types/BuyBonus';
 
 
-const CompraBonificada = (data: Props) => {
-  
+const EditarCompraBonificada = (data: Props) => {
+ 
   const router = useRouter(); 
 
-  /* ContextApi: accounts  */
-  const { accounts, setAccounts } = useAccountsContext();
+  /* ContextApi: user  */
+  const { user, setUser } = useAuthContext();
   useEffect(() => {
-    if(accounts === null || accounts as [] !== data.accounts) {
-      setAccounts(data.accounts as any)
+    if(user === null || user != data.user) {
+      setUser(data.user)
     }
-  }, [data, accounts, setAccounts]);
-
-    /* ContextApi: user  */
-    const { user, setUser } = useAuthContext();
-    useEffect(() => {
-      if(user === null || user != data.user) {
-        setUser(data.user)
-      }
-    }, [data, user, setUser]);
+  }, [data, user, setUser]);
 
   /* State modal//////////////////////////////////////////////////////////////// */
   const [ showModal, setShowModal ] = useState<boolean>(false);
  
   /* States part 1 (4 inputs) ///////////////////////////////////////////////////*/
-  const [ product, setProduct ] = useState<string>('');
-  const [ price, setPrice ] = useState<number>(0);
-  const [ pointsForReal, setPointsForReal ] = useState<number>(0);
-  const [ program, setProgram ] = useState<string>('');
+  const [ product, setProduct ] = useState<string>(data.buyBonus.product);
+  const [ price, setPrice ] = useState<number>(data.buyBonus.price);
+  const [ pointsForReal, setPointsForReal ] = useState<number>(data.buyBonus.pointsForReal);
+  const [ program, setProgram ] = useState<string>(data.buyBonus.program);
 
   /* States part 2 (Score) ///////////////////////////////////////////////////*/
-  const [ score, setScore ] = useState<boolean>(false);
-  const [ currencyOption, setCurrencyOption ] = useState<string>('');
-  const [ pointsCard, setPointsCard ] = useState<number>(0);
+  const [ score, setScore ] = useState<boolean>(data.buyBonus.score as boolean);
+  const [ currencyOption, setCurrencyOption ] = useState<string>(data.buyBonus.currencyOption);
+  const [ pointsCard, setPointsCard ] = useState<number>(data.buyBonus.pointsCard);
   const [ currency, setCurrency ] = useState<number>(0);
 
   /* States part 3 (Price protection) ///////////////////////////////////////*/
-  const [ priceProtection, setPriceProtection ] = useState<boolean>(false);
-  const [ secureValue, setSecureValue ] = useState<number>(0);
+  const [ priceProtection, setPriceProtection ] = useState<boolean>(data.buyBonus.priceProtection);
+  const [ secureValue, setSecureValue ] = useState<number>(data.buyBonus.secureValue as number);
 
   /* States part 4 (Transfer) //////////////////////////////////////////////*/
-  const [ transfer, setTransfer ] = useState<boolean>(false);
-  const [ destiny, setDestiny ] = useState<string>('');
-  const [ percentage, setPercentage ] = useState<number>(0);
+  const [ transfer, setTransfer ] = useState<boolean>(data.buyBonus.transfer);
+  const [ destiny, setDestiny ] = useState<string>(data.buyBonus.destiny as string);
+  const [ percentage, setPercentage ] = useState<number>(data.buyBonus.percentage as number);
   
   /* States auxiliary for calculate ///////////////////////////////////////*/
   const [ pointsQuantity, setPointsQuantity ] = useState<number>(0);
   const [ pointsCardQuantity, setPointsCardQuantity ] = useState<number>(0);
   const [ totalpoints, setTotalPoints ] = useState<number>(0);
   const [ miles, setMiles ] = useState<number>(0);
-  const [ sellPrice, setSellPrice ] = useState<number>(0);
+  const [ sellPrice, setSellPrice ] = useState<number>(data.buyBonus.sellPrice);
   const [ priceMiles, setPriceMiles ] = useState<number>(0);
   const [ percentageProfit, setPercentageProfit ] = useState<number>(0);
   const [ finalPrice, setFinalPrice ] = useState<number>(0);
@@ -75,11 +67,7 @@ const CompraBonificada = (data: Props) => {
   /* Auxiliary states for errors */
   const [ errorFields, setErrorFields ] = useState<string[]>([]);
 
-  /* Modal actions ///////////////////////////////////////////////////////////////////// */
-  const closeBtn = () => { 
-    setShowModal(false);
-  }
- 
+  
   /* Functions of handle input values ///////////////////////////////////////////////////*/
   const handleValues = useCallback((e: React.FormEvent<HTMLInputElement>) => {
     switch(e.currentTarget.name) {
@@ -286,6 +274,7 @@ const CompraBonificada = (data: Props) => {
       return;
     }
   }, [percentage, pointsCard, pointsCardQuantity, pointsForReal, pointsQuantity, price, secureValue, sellPrice])
+
      
   /* verify each default entry, if exists errors, push to array */
   const verifyData = () => {
@@ -337,36 +326,38 @@ const CompraBonificada = (data: Props) => {
         finalPrice,
         score, 
         priceProtection,
-        transfer,
+        transfer, 
         currencyOption,
         pointsCard,
-        userId: user.id
+        userId: user.id,
+        id: data.buyBonus.id
       }
       const response = await fetch('/api/buybonus', {
-        method: 'POST',
+        method: 'PUT',
         body: JSON.stringify(buybonus),
         headers: {
           'content-Type': 'application/json',
         },
       });
+      setErrorFields([]);
+      router.push('/extratos/compra-bonificada')
 
-      setShowModal(true);
     }
   };
 
   return (<>
 
   <Head>
-    <title>Calculadora de compra bonificada . PlanMilhas</title>
+    <title>Editar compra bonificada . PlanMilhas</title>
   </Head>
   <Layout><>
 
     <div className={styles.container}>
 
       <div className={styles.header}>
-          <ButtonBack route='/dashboard'/>
-          <div className={styles.title}>Calculadora de compra bonificada</div>
-      </div>   
+        <ButtonBack route='/extratos/compra-bonificada'/>
+        <div className={styles.title}>Editar compra bonificada</div>
+      </div> 
 
       <div className={styles.inputs}>
 
@@ -394,6 +385,7 @@ const CompraBonificada = (data: Props) => {
             </div>
               <Input 
                 name='product'
+                value={product}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: Iphone 14'}
                 warning={errorFields.includes('product')}
@@ -409,6 +401,7 @@ const CompraBonificada = (data: Props) => {
             </div>
               <Input 
                 name='price'
+                defaultValue={price ? price.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'R$ 0,00'}
                 mask='currency'
@@ -425,6 +418,7 @@ const CompraBonificada = (data: Props) => {
             </div>
               <Input 
                 name='pointsForReal'
+                defaultValue={pointsForReal ? pointsForReal : ''}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 10'}
                 mask='twoDigits'
@@ -489,6 +483,7 @@ const CompraBonificada = (data: Props) => {
             </div>
               <Input 
                 name='pointsCard'
+                defaultValue={pointsCard ? pointsCard : ''}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 2,2'}
                 mask='decimal'
@@ -523,6 +518,7 @@ const CompraBonificada = (data: Props) => {
             </div>
               <Input 
                 name='secureValue'
+                defaultValue={secureValue ? secureValue.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'R$ 0,00'}
                 mask='currency'
@@ -571,6 +567,7 @@ const CompraBonificada = (data: Props) => {
             </div>
               <Input 
                 name='percentage'
+                defaultValue={percentage ? percentage : ''}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 100%'}
                 mask='percentage'
@@ -588,6 +585,7 @@ const CompraBonificada = (data: Props) => {
             </div>
               <Input 
                 name='sellPrice'
+                defaultValue={sellPrice ? sellPrice.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'R$ 0,00'}
                 mask='currency'
@@ -720,7 +718,7 @@ const CompraBonificada = (data: Props) => {
       {/* Button and actions */}
       <div className={styles.btn}>
         <Button 
-          label= 'Salvar compra'
+          label= 'Atualizar compra'
           backgroundColor='#26408C'
           backgroundColorHover='#4D69A6'
           onClick={handleSubmit}
@@ -738,17 +736,18 @@ const CompraBonificada = (data: Props) => {
   </>)
 }
 
-export default CompraBonificada;
+export default EditarCompraBonificada;
 
 
 type Props = {
   user: User; 
-  accounts: Account[];
+  buyBonus: BuyBonus;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const session = await unstable_getServerSession(context.req, context.res, authOptions);
+  const { editbuybonus } = context.query;
 
   if(!session) return { redirect: { destination: '/login', permanent: true }}; 
 
@@ -760,14 +759,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   } 
 
-  /* Get accounts */
-  const accounts = await api.getAccounts(session.user.id);
-
+  /* Get one buy bonus */
+  const buyBonus = await api.getOneBuyBonus(parseInt(editbuybonus as string));
    
   return {
     props: {
       user,
-      accounts
+      buyBonus: JSON.parse(JSON.stringify(buyBonus))
     }
   }
 }

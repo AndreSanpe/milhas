@@ -39,7 +39,7 @@ const Dashboard = (data: Props) => {
 
   return (<>
     <Head>
-      <title>Página inicial . milhas</title>
+      <title>Página inicial . PlanMilhas</title>
     </Head>
     <Layout>
       <div className={styles.container}>

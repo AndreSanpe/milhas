@@ -125,16 +125,16 @@ const CustoMilheiro = (data: Props) => {
   return (<>
 
   <Head>
-    <title>Calculadora . TOOLMILHAS</title>
+    <title>Calculadora de custo de milheiro . PlanMilhas</title>
   </Head>
   <Layout><>
 
     <div className={styles.container}>
-      
-      <ButtonBack route='/dashboard'/>
-      <div className={styles.title}>Calcular: 
-        <span style={{color: '#F25C05'}}>custo do milheiro</span>
-      </div>
+
+      <div className={styles.header}>
+        <ButtonBack route='/dashboard'/>
+        <div className={styles.title}>Calculadora de custo do milheiro</div>
+      </div> 
 
       <div className={styles.inputs}>
         

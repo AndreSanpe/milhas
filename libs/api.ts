@@ -187,27 +187,102 @@ export default {
   },
 
   /* Function for get miles selled data */
-  getMilesSelled: async () => {
+  getMilesSelled: async (userId: number) => {
+    const selledMiles = await prisma.sellMiles.findMany({
+      where: {
+        userId
+      }
+    });
 
+    if(!selledMiles) {
+      return null;
+    }
+
+    return selledMiles;
   },
 
-  addNewBuyBonus: async ({product,price,pointsForReal,program,pointsQuantity,pointsCardQuantity, totalpoints,destiny,percentage,miles,secureValue,sellPrice,priceMiles,percentageProfit,finalPrice,userId}: BuyBonus) => {
+
+  /* Functions related to the buy bonus///////////////////////////////////////////////// */
+  addNewBuyBonus: async ({product,price,pointsForReal,program,pointsQuantity,pointsCardQuantity, totalpoints,destiny,percentage,miles,secureValue,sellPrice,priceMiles,percentageProfit,finalPrice,score,priceProtection, transfer, currencyOption,
+    pointsCard, userId}: BuyBonus) => {
 
     return await prisma.buyBonus.create({
       data : {
-        product, price, pointsForReal, program, pointsQuantity, pointsCardQuantity, totalpoints, destiny ,percentage, miles, secureValue, sellPrice, priceMiles, percentageProfit, finalPrice,userId
+        product, price, pointsForReal, program, pointsQuantity, pointsCardQuantity, totalpoints, destiny ,percentage, miles, secureValue, sellPrice, priceMiles, percentageProfit, finalPrice, score, priceProtection, transfer, currencyOption,
+        pointsCard, userId
       }
     });
   },
 
   /* Function for get buy bonus data */
   getBuyBonus: async (userId: number) => {
-      const buy = await prisma.buyBonus.findMany({
-        where: {
-          userId
-        }
-      });
-      return buy;
+    const buys = await prisma.buyBonus.findMany({
+      where: {
+        userId
+      }
+    });
+
+    if(!buys) {
+      return null;
+    }
+
+    return buys;
+  },
+
+  /* Function for get one buy bonus data */
+  getOneBuyBonus: async (id: number) => {
+    const buy = await prisma.buyBonus.findFirst({
+      where: {
+        id
+      }
+    });
+
+    if(!id) {
+      return null;
+    }
+
+    return buy;
+  },
+
+  /* Function to update an account */
+  updateBuyBonus: async (buybonus: BuyBonus) => {
+    const updBuyBonus = await prisma.buyBonus.update({
+      where: {
+        id: buybonus.id        
+      },
+      data: {
+        product: buybonus.product,
+        price: buybonus.price,
+        pointsForReal: buybonus.pointsForReal,
+        program: buybonus.program,
+        pointsQuantity: buybonus.pointsQuantity,
+        pointsCardQuantity: buybonus.pointsCardQuantity,
+        totalpoints: buybonus.totalpoints,
+        destiny: buybonus.destiny,
+        percentage: buybonus.percentage,
+        miles: buybonus.miles,
+        secureValue: buybonus.secureValue,
+        sellPrice: buybonus.sellPrice,
+        priceMiles: buybonus.priceMiles,
+        percentageProfit: buybonus.percentageProfit,
+        finalPrice: buybonus.finalPrice,
+        score: buybonus.score, 
+        priceProtection: buybonus.priceProtection,
+        currencyOption: buybonus.currencyOption,
+        pointsCard: buybonus.pointsCard,
+        transfer: buybonus.transfer
+      }
+    });
+    return updBuyBonus;
+  },
+
+  /* Function to delete an buy bonus */
+  deleteBuyBonus: async (id: number) => {
+    const deleteId = await prisma.buyBonus.delete({
+      where: {
+        id
+      }
+    });
   },
 
 

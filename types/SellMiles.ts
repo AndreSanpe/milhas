@@ -1,4 +1,5 @@
 export type SellMiles = {
+  id: number;
   pointsQuantity: number;
   priceBuy: number;
   priceSell: number;
@@ -11,4 +12,5 @@ export type SellMiles = {
   profit: number;
   percentageProfit: number;
   userId: number;
+  createdAt: Date;
 };

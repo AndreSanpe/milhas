@@ -19,9 +19,9 @@ const Header = () => {
       <div className={styles.logo}>
         <div className={styles.circle}></div>
         <div className={styles.circle2}></div>
+        PlanMilhas
         <div className={styles.circle3}></div>
         <div className={styles.circle4}></div>
-        LOGO
       </div> 
     </div> {/* Header end */} 
     

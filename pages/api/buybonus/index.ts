@@ -23,6 +23,24 @@ const handlerPost: NextApiHandler = async (req, res) => {
   }
 };
 
+const handlerPut: NextApiHandler = async (req, res) => {
+  const buyBonus: BuyBonus = req.body;
+  const updBuyBonus = await api.updateBuyBonus(buyBonus);
+
+  if(updBuyBonus) {
+    res.json({ status: true});
+    return;
+  }
+  res.json({ error: 'Não foi possível alterar esta conta.'});
+};
+
+const handlerDelete: NextApiHandler = async (req, res) => {
+  const id: number = req.body;
+  await api.deleteBuyBonus(id);
+
+  res.json({ status: true });
+};
+
 const handler: NextApiHandler = async (req, res) => {
   switch(req.method) {
     case 'GET':
@@ -30,6 +48,12 @@ const handler: NextApiHandler = async (req, res) => {
     break;
     case 'POST':
       handlerPost(req, res);
+    break;
+    case 'PUT':
+      handlerPut(req, res);
+    break;
+    case 'DELETE':
+      handlerDelete(req, res);
     break;
   }
 };

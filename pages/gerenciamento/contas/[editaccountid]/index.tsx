@@ -16,20 +16,6 @@ import Toggle from '../../../../components/Toggle';
 import { useRouter } from 'next/router';
 import { Account } from '../../../../types/Account';
 
-/* type Account = {
-  name: string;
-  document: string;
-  statusLivelo: boolean;
-  priceLivelo: number;
-  statusEsfera: boolean;
-  priceEsfera: number;
-  statusAzul: boolean;
-  priceAzul: number;
-  statusLatam: boolean;
-  priceLatam: number;
-  statusSmiles: boolean;
-  priceSmiles: number;
-} */
 
 const EditarConta = (data: Props) => {
 
@@ -217,13 +203,16 @@ const EditarConta = (data: Props) => {
  
   return (<>
     <Head>
-      <title>Gerenciamento . TOOLMILHAS</title>
+      <title>Editando conta . PlanMilhas</title>
     </Head>
     <Layout><>
 
-      <div className={styles.container}>      
-        <ButtonBack route='/gerenciamento/contas'/>
-        <div className={styles.title}>Editar dados da conta</div>
+      <div className={styles.container}>    
+
+        <div className={styles.header}>
+          <ButtonBack route='/gerenciamento/contas'/>
+          <div className={styles.title}>Editar dados da conta</div>
+        </div>     
 
         {/* Edit account */}
         <div className={styles.inputs}>
@@ -467,9 +456,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   } 
 
-  /* Get account */
+  /* Get one account */
   const account = await api.getAccount(session.user.id, parseInt(editaccountid as string));
-  console.log(account)
   
   return {
     props: {
