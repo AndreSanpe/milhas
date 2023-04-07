@@ -11,8 +11,9 @@ import { authOptions } from '../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
 import AlertIcon from './error_outline.svg';
 import { useRouter } from 'next/router';
-import { SellMiles } from '../../../types/SellMiles';
-import ContentAccordionBuyMiles from '../../../components/ContentAccordionSellMiles';
+import ContentAccordionBuyMiles from '../../../components/ContentAccordionBuyMiles';
+import { BuyMiles } from '../../../types/BuyMiles';
+import Title from '../../../components/Title';
 
 const ExtratoCompra = (data: Props) => {
 
@@ -24,10 +25,10 @@ const ExtratoCompra = (data: Props) => {
 
   /* Setting message for not have a buy bonus//////////////////////////////////////////// */
   useEffect(() => {
-    if(data.selledMiles.length === 0) {
+    if(data.buyedMiles.length === 0) {
       setNoHaveBuyMiles(true)
     }
-  }, [data.selledMiles]);
+  }, [data.buyedMiles]);
 
   /* General states //////////////////////////////////////////////////////////////////*/
   const [ noHaveBuyMiles, setNoHaveBuyMiles ] = useState<boolean>(false);
@@ -44,7 +45,7 @@ const ExtratoCompra = (data: Props) => {
   }
   
   const handleBuyMilesEdit = (id: number) => {
-    router.push(`/gerenciamento/venda-milhas/${id}`);
+    router.push(`/calculadoras/compra-pontos/${id}`);
   }
 
   const handleBuyMilesDelete = async (id: number) => {
@@ -55,7 +56,7 @@ const ExtratoCompra = (data: Props) => {
         'content-Type': 'application/json',
       },
     });
-    router.push('/extratos/venda')
+    router.push('/extratos/compra')
   }
 
   useEffect(() => {
@@ -68,27 +69,58 @@ const ExtratoCompra = (data: Props) => {
   return (
     <>
     <Head>
-      <title>Extrato de venda de milhas . PlanMilhas</title>
+      <title>Extrato de compra de milhas . PlanMilhas</title>
     </Head>
     
     <Layout><>
       
-      <div className={styles.container}>      
+      <div className={styles.container}>    
 
-        <div className={styles.header}>
-          <ButtonBack route='/dashboard'/>
-          <div className={styles.title}>Extrato de venda de milhas</div>
-        </div> 
+        <Title route='/dashboard'>Extrato de compra de milhas</Title>  
+
+        {/* RESULTS RESUME */}
+        <div className={styles.results}>
+
+        <div className={styles.row}>
+          <div className={styles.column}>
+
+            <div className={styles.doubleColumns}>
+              <div className={styles.secundaryTitle}>Total de milhas compradas:</div>
+              <div className={styles.values}>{/* miles ? miles.toLocaleString('pt-BR') : '' */}</div>
+            </div>
+
+            <div className={styles.doubleColumns}>
+              <div className={styles.secundaryTitle}>Total de compras:</div>
+              <div className={styles.values}>{/* sellQuantity ? sellQuantity : '' */}</div>
+            </div>
+
+            <div className={styles.doubleColumns}>
+              <div className={styles.secundaryTitle}>Total investido:</div>
+              <div className={styles.values}>{/* investiment ? investiment.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : '' */}</div>
+            </div>
+
+            <div className={styles.doubleColumns} style={{border: 'none'}}>
+              <div className={styles.secundaryTitle}>Valor médio do milheiro:</div>
+              <div className={styles.values}>{/* investiment ? investiment.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : '' */}</div>
+            </div>
+            
+          </div>
+        </div>
+
+        </div>
+        {/* RESULTS RESUME END'S */}
+
+        <div className={styles.title}>Compras cadastradas</div>
 
         {/* Accordion */}
-        {data.selledMiles.map((item: SellMiles, index: number) => (
+        {data.buyedMiles.map((item: BuyMiles, index: number) => (
           <ContentAccordionBuyMiles
             key={index} 
             item={item}
             menuOpened={menuOpened}
             setMenuOpened={setMenuOpened}
-            onEdit={handleSellMilesEdit}
-            onDelete={handleSellMilesDelete}
+            onEdit={handleBuyMilesEdit}
+            onDelete={handleBuyMilesDelete}
             /> 
         ))} 
 
@@ -98,7 +130,7 @@ const ExtratoCompra = (data: Props) => {
           <div className={styles.alert}>
             <AlertIcon style={{color: '#F25C05'}}/>
             <div>Você ainda não cadastrou nenhuma venda. Gostaria de fazer isso agora? 
-            <div className={styles.link} onClick={()=> {router.push('/gerenciamento/venda-milhas')}}>Clique aqui</div>
+            <div className={styles.link} onClick={()=> {router.push('/calculadoras/compra-pontos')}}>Clique aqui</div>
             </div>
           </div>
         }
@@ -115,7 +147,7 @@ export default ExtratoCompra;
 
 type Props = {
   user: User;
-  selledMiles: SellMiles[];  
+  buyedMiles: BuyMiles[];  
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

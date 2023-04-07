@@ -16,6 +16,7 @@ import { User } from '../../../../types/User';
 import { authOptions } from '../../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
 import { BuyBonus } from '../../../../types/BuyBonus';
+import Title from '../../../../components/Title';
 
 
 const EditarCompraBonificada = (data: Props) => {
@@ -354,10 +355,7 @@ const EditarCompraBonificada = (data: Props) => {
 
     <div className={styles.container}>
 
-      <div className={styles.header}>
-        <ButtonBack route='/extratos/compra-bonificada'/>
-        <div className={styles.title}>Editar compra bonificada</div>
-      </div> 
+      <Title route='/extratos/compra-bonificada'>Editar compra bonificada</Title>
 
       <div className={styles.inputs}>
 

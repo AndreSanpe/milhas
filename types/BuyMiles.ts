@@ -1,6 +1,8 @@
 export type BuyMiles = {
+  id: number;
   price: number;
   pointsQuantity: number;
+  dateBuy: string;
   program: string;
   selectedAccount: string;
   cpf: string;

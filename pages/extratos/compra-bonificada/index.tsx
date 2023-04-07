@@ -14,6 +14,7 @@ import { authOptions } from '../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
 import AlertIcon from './error_outline.svg';
 import { useRouter } from 'next/router';
+import Title from '../../../components/Title';
 
 const ExtratoCompraBonificada = (data: Props) => {
 
@@ -80,12 +81,38 @@ const ExtratoCompraBonificada = (data: Props) => {
     
     <Layout><>
       
-      <div className={styles.container}>      
+      <div className={styles.container}> 
 
-        <div className={styles.header}>
-          <ButtonBack route='/dashboard'/>
-          <div className={styles.title}>Histórico de compra bonificada</div>
-        </div> 
+        <Title route='/dashboard'>Histórico de compra bonificada</Title>  
+
+        {/* RESULTS RESUME */}
+        <div className={styles.results}>
+
+        <div className={styles.row}>
+          <div className={styles.column}>
+
+            <div className={styles.doubleColumns}>
+              <div className={styles.secundaryTitle}>Total de compras:</div>
+              <div className={styles.values}>{/* {sellQuantity ? sellQuantity : ''} */}</div>
+            </div>
+
+            <div className={styles.doubleColumns}>
+              <div className={styles.secundaryTitle}>Valor economizado:</div>
+              <div className={styles.values}>{/* profit ? profit.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : '' */}</div>
+            </div>
+
+            <div className={styles.doubleColumns} style={{border: 'none'}}>
+              <div className={styles.secundaryTitle}>Percentual médio de desconto:</div>
+              <div className={styles.values}>{/* percentageProfitAverage ? percentageProfitAverage.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%' : '' */}</div>
+            </div>
+            
+          </div>
+        </div>
+
+        </div>
+        {/* RESULTS RESUME END'S */}
+
+        <div className={styles.title}>Compras bonificadas cadastradas</div>   
 
         {/* Accordion */}
         {data.buybonus.map((item: BuyBonus, index: number) => (

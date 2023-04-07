@@ -1,6 +1,7 @@
 import { NextApiHandler } from "next";
 import api from '../../../libs/api';
 import { Account } from "../../../types/Account";
+import { getSession } from "next-auth/react";
 
 
 const handlerGet: NextApiHandler = async (req, res) => {
@@ -49,6 +50,13 @@ const handlerDelete: NextApiHandler = async (req, res) => {
 };
 
 const handler: NextApiHandler = async (req, res) => {
+
+  const session = await getSession({ req });
+  if(!session) {
+    res.json({ error: 'Acesso negado' });
+    return;
+  }
+
   switch(req.method) {
     case 'GET':
       handlerGet(req, res);

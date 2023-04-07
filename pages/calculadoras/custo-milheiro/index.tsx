@@ -3,13 +3,13 @@ import { unstable_getServerSession } from 'next-auth';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react'
-import ButtonBack from '../../../components/ButtonBack';
 import Input from '../../../components/Input';
 import Layout from '../../../components/Layout';
 import api from '../../../libs/api';
 import { User } from '../../../types/User';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
+import Title from '../../../components/Title';
 
 
 const CustoMilheiro = (data: Props) => {
@@ -131,10 +131,12 @@ const CustoMilheiro = (data: Props) => {
 
     <div className={styles.container}>
 
-      <div className={styles.header}>
+      <Title route='/dashboard'>Calculadora de custo do milheiro</Title>
+
+      {/* <div className={styles.header}>
         <ButtonBack route='/dashboard'/>
         <div className={styles.title}>Calculadora de custo do milheiro</div>
-      </div> 
+      </div>  */}
 
       <div className={styles.inputs}>
         

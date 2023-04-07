@@ -160,28 +160,77 @@ export default {
   },
   
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /* Functions related to the purchase of miles///////////////////////////////////////////////// */
   /* Function to Add new miles buyed data */
-  addNewMilesBuyed: async ({price, pointsQuantity, program, selectedAccount, cpf, destiny, percentage, creditCard, parcel, month, miles, finalPrice, userId}: BuyMiles) => {
+  addNewMilesBuyed: async ({price, pointsQuantity, dateBuy, program, selectedAccount, cpf, destiny, percentage, creditCard, parcel, month, miles, finalPrice, userId}: BuyMiles) => {
 
     return await prisma.buyMiles.create({
       data: {
-        price, pointsQuantity, program, selectedAccount, cpf, destiny, percentage, creditCard, parcel, month, miles, finalPrice, userId
+        price, pointsQuantity, dateBuy, program, selectedAccount, cpf, destiny, percentage, creditCard, parcel, month, miles, finalPrice, userId
       }
     });
   },
 
   /* Function to get miles buyed data */
-  getMilesBuyed: async () => {
+  getMilesBuyed: async (userId: number) => {
+    const buyedMiles = await prisma.buyMiles.findMany({
+      where: {
+        userId
+      }
+    });
 
+    if(!buyedMiles) {
+      return null;
+    }
+    return buyedMiles;
   },
 
+  /* Function for get one miles buyed data */
+  getOneMilesBuyed: async (id: number) => {
+    const Buyed = await prisma.buyMiles.findFirst({
+      where: {
+        id
+      }
+    });
+
+    if(!Buyed) {
+      return null;
+    }
+    return Buyed;
+  },
+
+  /* Function to update an account */
+  updateMilesBuyed: async (milesBuyed: BuyMiles) => {
+    const updMilesBuyed = await prisma.buyMiles.update({
+      where: {
+        id: milesBuyed.id        
+      },
+      data: {
+        
+      }
+    });
+    return updMilesBuyed;
+  },
+
+  /* Function to delete an data miles selled */
+  deleteMilesBuyed: async (id: number) => {
+    const deleteId = await prisma.buyMiles.delete({
+      where: {
+        id
+      }
+    });
+  },
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /* Functions related to the miles selled///////////////////////////////////////////////// */
   /* Function to Add new miles selled data */
-  addNewMilesSelled: async ({pointsQuantity, priceBuy, priceSell, program, programBuyer, selectedAccount, receipt, dateSell, dateReceipt, profit, percentageProfit, userId}: SellMiles) => {
+  addNewMilesSelled: async ({pointsQuantity, priceBuy, priceSell, program, programBuyer, selectedAccount, cpf, receipt, dateSell, dateReceipt, profit, percentageProfit, userId}: SellMiles) => {
 
     return await prisma.sellMiles.create({
       data: {
-        pointsQuantity, priceBuy, priceSell, program, programBuyer, selectedAccount, receipt, dateSell, dateReceipt, profit, percentageProfit, userId
+        pointsQuantity, priceBuy, priceSell, program, programBuyer, selectedAccount, cpf, receipt, dateSell, dateReceipt, profit, percentageProfit, userId
       }
     });
   },
@@ -197,11 +246,58 @@ export default {
     if(!selledMiles) {
       return null;
     }
-
     return selledMiles;
   },
 
+  /* Function for get one miles selled data */
+  getOneMilesSelled: async (id: number) => {
+    const selled = await prisma.sellMiles.findFirst({
+      where: {
+        id
+      }
+    });
 
+    if(!selled) {
+      return null;
+    }
+    return selled;
+  },
+
+  /* Function to update an account */
+  updateMilesSelled: async (milesSelled: SellMiles) => {
+    const updMilesSelled = await prisma.sellMiles.update({
+      where: {
+        id: milesSelled.id        
+      },
+      data: {
+        pointsQuantity: milesSelled.pointsQuantity, 
+        priceBuy: milesSelled.priceBuy, 
+        priceSell: milesSelled.priceSell, 
+        program: milesSelled.program,
+        cpf: milesSelled.cpf, 
+        programBuyer: milesSelled.programBuyer, 
+        selectedAccount: milesSelled.selectedAccount, 
+        receipt: milesSelled.receipt, 
+        dateSell: milesSelled.dateSell, 
+        dateReceipt: milesSelled.dateReceipt, 
+        profit: milesSelled.profit, 
+        percentageProfit: milesSelled.percentageProfit
+      }
+    });
+    return updMilesSelled;
+  },
+
+  /* Function to delete an data miles selled */
+  deleteMilesSelled: async (id: number) => {
+    const deleteId = await prisma.sellMiles.delete({
+      where: {
+        id
+      }
+    });
+  },
+
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /* Functions related to the buy bonus///////////////////////////////////////////////// */
   addNewBuyBonus: async ({product,price,pointsForReal,program,pointsQuantity,pointsCardQuantity, totalpoints,destiny,percentage,miles,secureValue,sellPrice,priceMiles,percentageProfit,finalPrice,score,priceProtection, transfer, currencyOption,
     pointsCard, userId}: BuyBonus) => {
@@ -237,10 +333,9 @@ export default {
       }
     });
 
-    if(!id) {
+    if(!buy) {
       return null;
     }
-
     return buy;
   },
 

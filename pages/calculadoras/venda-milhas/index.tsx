@@ -4,7 +4,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react'
 import Button from '../../../components/Button';
-import ButtonBack from '../../../components/ButtonBack';
 import Dropdown from '../../../components/Dropdown';
 import Input from '../../../components/Input';
 import Layout from '../../../components/Layout';
@@ -14,6 +13,8 @@ import api from '../../../libs/api';
 import { User } from '../../../types/User';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
+import Title from '../../../components/Title';
+import FormModal from '../../../components/FormModal';
 
 
 const VendaMilhas = (data: Props) => {
@@ -35,6 +36,9 @@ const VendaMilhas = (data: Props) => {
      setUser(data.user)
    }
  }, [data, user, setUser]);
+
+ /* State modal//////////////////////////////////////////////////////////////// */
+ const [ showModal, setShowModal ] = useState<boolean>(false);
  
   /* General states ///////////////////////////////////////////////////*/
   const [ pointsQuantity, setPointsQuantity ] = useState<number>(0);
@@ -184,6 +188,10 @@ const VendaMilhas = (data: Props) => {
       newErroFields.push('selectedAccount');
       approved = false;
     }
+    if(!dateSell) {
+      newErroFields.push('dateSell');
+      approved = false;
+    }
   
     setErrorFields(newErroFields);
     return approved;
@@ -214,6 +222,7 @@ const VendaMilhas = (data: Props) => {
           'content-Type': 'application/json',
         },
       });
+      setShowModal(true);
     }
   }
   
@@ -225,15 +234,28 @@ const VendaMilhas = (data: Props) => {
   <Layout><>
 
     <div className={styles.container}>
-      
-      <div className={styles.header}>
-        <ButtonBack route='/dashboard'/>
-        <div className={styles.title}>Gerenciamento de venda de milhas</div>
-      </div>     
+
+      <Title route='/dashboard'>Calculadora de venda de milhas</Title>
       
       <div className={styles.inputs}>
 
-        {/* Input 1 */}
+        {/* Confirmation modal*/}
+        {showModal &&
+          <FormModal maxWidth={'340px'} maxHeight={'1500px'}>
+            <div className={styles.modalContainer}>
+              <div className={styles.modalTitle}>Venda salva com sucesso!</div>
+              <div className={styles.modalSubtitle}>O que deseja fazer agora?</div>
+              <div className={styles.modalLink} onClick={() => router.push('/dashboard')} >Voltar ao início</div>
+              <div className={styles.modalLink} 
+                  onClick={() => {
+                  {router.push('/calculadoras/venda-milhas')}
+                  document.location.reload()}}>Cadastrar nova venda</div>
+              <div className={styles.modalLink} onClick={() => router.push('/extratos/venda')}>Ver extrato de vendas</div>
+            </div>
+          </FormModal>
+        }
+
+        {/* Input */}
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -249,7 +271,7 @@ const VendaMilhas = (data: Props) => {
           </div>       
         </div>
         
-        {/* Input 2 */}
+        {/* Input */}
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -265,7 +287,7 @@ const VendaMilhas = (data: Props) => {
           </div>       
         </div>
 
-        {/* Input 3 */}
+        {/* Input */}
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -281,7 +303,7 @@ const VendaMilhas = (data: Props) => {
           </div>       
         </div>
 
-        {/* Input 4 */}
+        {/* Input */}
          <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -297,7 +319,7 @@ const VendaMilhas = (data: Props) => {
           </div>       
         </div>
 
-        {/* Input 4 */}
+        {/* Input */}
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -313,7 +335,7 @@ const VendaMilhas = (data: Props) => {
           </div>       
         </div>
 
-        {/* Input 5 */}
+        {/* Input */}
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -330,22 +352,25 @@ const VendaMilhas = (data: Props) => {
           </div>       
         </div>
 
+        
         {/* Link */}
-        <div className={styles.row}>
-          <div className={styles.column}>
-            <div className={styles.label} style={{color: '#525252', display: 'flex' ,justifyContent: 'flex-end'}}>
-              Ainda não cadastrou as contas 
-            </div>
-            <div className={styles.label} style={{color: '#525252', display: 'flex' ,justifyContent: 'flex-end'}}>
-              que você administra?
-            </div>
-            <div className={styles.linkAux} onClick={() => router.push({...router.query,pathname: '/gerenciamento/contas'}) }>
-              Clique aqui e cadastre
-            </div>
-          </div>       
-        </div>
+        {namesAccounts.length == 0 &&
+          <div className={styles.row}>
+            <div className={styles.column}>
+              <div className={styles.label} style={{color: '#525252', display: 'flex' ,justifyContent: 'flex-end'}}>
+                Ainda não cadastrou as contas 
+              </div>
+              <div className={styles.label} style={{color: '#525252', display: 'flex' ,justifyContent: 'flex-end'}}>
+                que você administra?
+              </div>
+              <div className={styles.linkAux} onClick={() => router.push({...router.query,pathname: '/gerenciamento/contas'}) }>
+                Clique aqui e cadastre
+              </div>
+            </div>       
+          </div>
+        }
 
-        {/* Input 6 */}
+        {/* Input */}
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -356,11 +381,12 @@ const VendaMilhas = (data: Props) => {
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 01/01/2023'}
                 mask='date'
+                warning={errorFields.includes('dateSell')}
               />
           </div>       
         </div>
 
-         {/* Input 5 */}
+         {/* Input */}
          <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -375,7 +401,7 @@ const VendaMilhas = (data: Props) => {
           </div>       
         </div>
 
-        {/* Input 6 */}
+        {/* Input */}
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -400,6 +426,13 @@ const VendaMilhas = (data: Props) => {
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
+          <div className={styles.titleValues}>Data da venda:</div>
+          <div className={styles.values}>{dateSell ? dateSell : ''}</div>
+        </div>        
+      </div>
+
+      <div className={styles.contentRow}>
+        <div className={styles.contentColumn}>
           <div className={styles.titleValues}>Conta utilizada:</div>
           <div className={styles.values}>{selectedAccount ? selectedAccount : ''}</div>
         </div>        
@@ -409,6 +442,13 @@ const VendaMilhas = (data: Props) => {
         <div className={styles.contentColumn}>
           <div className={styles.titleValues}>Documento CPF:</div>
           <div className={styles.values}>{cpf ? cpf : ''}</div>
+        </div>        
+      </div>
+
+      <div className={styles.contentRow}>
+        <div className={styles.contentColumn}>
+          <div className={styles.titleValues}>Quantidade de milhas:</div>
+          <div className={styles.values}>{pointsQuantity ? pointsQuantity.toLocaleString('pt-BR') : ''}</div>
         </div>        
       </div>
 
@@ -437,13 +477,6 @@ const VendaMilhas = (data: Props) => {
         <div className={styles.contentColumn}>
           <div className={styles.titleValues}>Vendido para:</div>
           <div className={styles.values}>{programBuyer ? programBuyer : ''}</div>
-        </div>        
-      </div>
-
-      <div className={styles.contentRow}>
-        <div className={styles.contentColumn}>
-          <div className={styles.titleValues}>Data da venda:</div>
-          <div className={styles.values}>{dateSell ? dateSell : ''}</div>
         </div>        
       </div>
 

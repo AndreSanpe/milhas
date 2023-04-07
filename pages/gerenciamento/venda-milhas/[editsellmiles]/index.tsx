@@ -3,21 +3,23 @@ import { Account, unstable_getServerSession } from 'next-auth';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react'
-import Button from '../../../components/Button';
-import ButtonBack from '../../../components/ButtonBack';
-import Dropdown from '../../../components/Dropdown';
-import Input from '../../../components/Input';
-import Layout from '../../../components/Layout';
-import { useAccountsContext } from '../../../contexts/accounts';
-import { useAuthContext } from '../../../contexts/auth';
-import api from '../../../libs/api';
-import { User } from '../../../types/User';
-import { authOptions } from '../../api/auth/[...nextauth]';
+import Button from '../../../../components/Button';
+import ButtonBack from '../../../../components/ButtonBack';
+import Dropdown from '../../../../components/Dropdown';
+import Input from '../../../../components/Input';
+import Layout from '../../../../components/Layout';
+import { useAccountsContext } from '../../../../contexts/accounts';
+import { useAuthContext } from '../../../../contexts/auth';
+import api from '../../../../libs/api';
+import { User } from '../../../../types/User';
+import { authOptions } from '../../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
+import { SellMiles } from '../../../../types/SellMiles';
 
 
-const VendaMilhas = (data: Props) => {
+const EditarVendaMilhas = (data: Props) => {
   
+
   const router = useRouter(); 
 
   /* ContextApi: accounts  */
@@ -37,25 +39,26 @@ const VendaMilhas = (data: Props) => {
  }, [data, user, setUser]);
  
   /* General states ///////////////////////////////////////////////////*/
-  const [ pointsQuantity, setPointsQuantity ] = useState<number>(0);
-  const [ priceBuy, setPriceBuy ] = useState<number>(0)
-  const [ priceSell, setPriceSell ] = useState<number>(0);
-  const [ program, setProgram ] = useState<string>('');
-  const [ programBuyer, setProgramBuyer ] = useState<string>('');
-  const [ selectedAccount, setSelectedAccount ] = useState<string>('');
-  const [ receipt, setReceipt ] = useState<number>(0);
-  const [ dateSell, setDateSell ] = useState<string>('');
-  const [ dateReceipt, setDateReceipt ] = useState<string>('');
+  const [ pointsQuantity, setPointsQuantity ] = useState<number>(data.selledMiles.pointsQuantity);
+  const [ priceBuy, setPriceBuy ] = useState<number>(data.selledMiles.priceBuy)
+  const [ priceSell, setPriceSell ] = useState<number>(data.selledMiles.priceSell);
+  const [ program, setProgram ] = useState<string>(data.selledMiles.program);
+  const [ programBuyer, setProgramBuyer ] = useState<string>(data.selledMiles.programBuyer);
+  const [ selectedAccount, setSelectedAccount ] = useState<string>(data.selledMiles.selectedAccount);
+  const [ receipt, setReceipt ] = useState<number>(data.selledMiles.receipt as number);
+  const [ dateSell, setDateSell ] = useState<string>(data.selledMiles.dateSell as string);
+  const [ dateReceipt, setDateReceipt ] = useState<string>(data.selledMiles.dateReceipt as string);
   
   /* Auxiliary states for accounts data */
   const [ namesAccounts, setNamesAccounts ] = useState<any[]>([]);
   const [ documentsAccounts, setDocumentsAccounts ] = useState<any[]>([]);
   const [ indice, setIndice ] = useState<any>();
-  const [ cpf, setCpf ] = useState<string>('');
+  const [ cpf, setCpf ] = useState<string>(data.selledMiles.cpf);
+  
 
   /* Auxiliary states for calculate*/
-  const [ profit, setProfit ] = useState<number>(0);
-  const [ percentageProfit, setPercentageProfit ] = useState<number>(0);
+  const [ profit, setProfit ] = useState<number>(data.selledMiles.profit);
+  const [ percentageProfit, setPercentageProfit ] = useState<number>(data.selledMiles.percentageProfit);
 
   /* Auxiliary states for errors */
   const [ errorFields, setErrorFields ] = useState<string[]>([]);
@@ -86,6 +89,13 @@ const VendaMilhas = (data: Props) => {
       setCpf(documentsAccounts[indice])
     }
   },[documentsAccounts, indice, selectedAccount]);
+
+  /* handle if cpf database */
+  useEffect(() => {
+    if(!indice && !cpf && data.selledMiles.cpf) {
+      setCpf(data.selledMiles.cpf)
+    }
+  }, [cpf, data.selledMiles.cpf, indice])
 
   /* Functions of handle input values ///////////////////////////////////////////////////*/
   const handleValues = useCallback((e: React.FormEvent<HTMLInputElement>) => {
@@ -203,24 +213,28 @@ const VendaMilhas = (data: Props) => {
         dateSell, 
         dateReceipt, 
         profit, 
-        percentageProfit, 
+        percentageProfit,
+        id: data.selledMiles.id, 
         userId: user.id
       }
 
       const response = await fetch('/api/sellmiles', {
-        method: 'POST',
+        method: 'PUT',
         body: JSON.stringify(sellmiles),
         headers: {
           'content-Type': 'application/json',
         },
       });
+
+      setErrorFields([]);
+      router.push('/extratos/venda')
     }
   }
   
   return (<>
 
   <Head>
-    <title>Vendas de milhas . PlanMilhas</title>
+    <title>Editar venda de milhas . PlanMilhas</title>
   </Head>
   <Layout><>
 
@@ -228,7 +242,7 @@ const VendaMilhas = (data: Props) => {
       
       <div className={styles.header}>
         <ButtonBack route='/dashboard'/>
-        <div className={styles.title}>Gerenciamento de venda de milhas</div>
+        <div className={styles.title}>Editar venda de milhas</div>
       </div>     
       
       <div className={styles.inputs}>
@@ -241,6 +255,7 @@ const VendaMilhas = (data: Props) => {
             </div>
               <Input 
                 name='pointsQuantity'
+                defaultValue={pointsQuantity ? pointsQuantity : ''}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 1.000'}
                 mask='miles'
@@ -257,6 +272,7 @@ const VendaMilhas = (data: Props) => {
             </div>
               <Input 
                 name='priceBuy'
+                defaultValue={priceBuy ? priceBuy.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'R$ 0,00'}
                 mask='currency'
@@ -273,6 +289,7 @@ const VendaMilhas = (data: Props) => {
             </div>
               <Input 
                 name='priceSell'
+                defaultValue={priceSell ? priceSell.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'R$ 0,00'}
                 mask='currency'
@@ -330,21 +347,6 @@ const VendaMilhas = (data: Props) => {
           </div>       
         </div>
 
-        {/* Link */}
-        <div className={styles.row}>
-          <div className={styles.column}>
-            <div className={styles.label} style={{color: '#525252', display: 'flex' ,justifyContent: 'flex-end'}}>
-              Ainda não cadastrou as contas 
-            </div>
-            <div className={styles.label} style={{color: '#525252', display: 'flex' ,justifyContent: 'flex-end'}}>
-              que você administra?
-            </div>
-            <div className={styles.linkAux} onClick={() => router.push({...router.query,pathname: '/gerenciamento/contas'}) }>
-              Clique aqui e cadastre
-            </div>
-          </div>       
-        </div>
-
         {/* Input 6 */}
         <div className={styles.row}>
           <div className={styles.column}>
@@ -353,6 +355,7 @@ const VendaMilhas = (data: Props) => {
             </div>
               <Input 
                 name='dateSell'
+                value={dateSell ? dateSell : ''}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 01/01/2023'}
                 mask='date'
@@ -368,6 +371,7 @@ const VendaMilhas = (data: Props) => {
             </div>
               <Input 
                 name='receipt'
+                defaultValue={receipt ? receipt : ''}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 150 dias'}
                 mask='miles'
@@ -383,6 +387,7 @@ const VendaMilhas = (data: Props) => {
             </div>
               <Input 
                 name='dateReceipt'
+                value={dateReceipt ? dateReceipt : ''}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 20/05/2023'}
                 mask='date'
@@ -525,7 +530,7 @@ const VendaMilhas = (data: Props) => {
       {/* Button and actions */}
       <div className={styles.btn}>
         <Button 
-          label= 'Salvar venda'
+          label= 'Atualizar venda'
           backgroundColor='#26408C'
           backgroundColorHover='#4D69A6'
           onClick={handleSubmit}
@@ -543,17 +548,19 @@ const VendaMilhas = (data: Props) => {
   </>)
 }
 
-export default VendaMilhas;
+export default EditarVendaMilhas;
 
 
 type Props = {
   user: User; 
   accounts: Account[];
+  selledMiles: SellMiles;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const session = await unstable_getServerSession(context.req, context.res, authOptions);
+  const { editsellmiles } = context.query;
 
   if(!session) return { redirect: { destination: '/login', permanent: true }}; 
 
@@ -568,11 +575,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   /* Get accounts */
   const accounts = await api.getAccounts(session.user.id);
 
+  /* Get one selled miles */
+ const selledMiles = await api.getOneMilesSelled(parseInt(editsellmiles as string))
+
    
   return {
     props: {
       user,
-      accounts
+      accounts,
+      selledMiles: JSON.parse(JSON.stringify(selledMiles))
     }
   }
 }

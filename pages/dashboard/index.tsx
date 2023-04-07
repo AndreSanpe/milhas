@@ -76,6 +76,8 @@ const Dashboard = (data: Props) => {
             <ButtonMenu key={index} onClick={() => router.push({...router.query,pathname: links.path})}>
               <div>
               <div className={styles.icons}>
+              {links.icon === 'shopping' && <ShoppingIcon />}
+                    {links.icon === 'sell' && <SellIcon />}
                     {links.icon === 'paid' && <PaidIcon />}
                     {links.icon === 'bag' && <BagIcon />}
                     {links.icon === 'boomerang' && <BoomerangIcon />}

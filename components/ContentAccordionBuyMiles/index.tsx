@@ -4,18 +4,18 @@ import ExpandIcon from './expand_more.svg';
 import DotsIcon from './more_vert.svg';
 import EditIcon from './edit.svg';
 import DeleteIcon from './delete.svg';
-import { SellMiles } from '../../types/SellMiles';
+import { BuyMiles } from '../../types/BuyMiles';
 
 interface DivProps extends React.ButtonHTMLAttributes<HTMLDivElement> {
   children?: ReactElement;
-  item: SellMiles;
+  item: BuyMiles;
   menuOpened: number;
   setMenuOpened: (id: number) => void;
   onEdit: (id: number) => void;
   onDelete: (id: number) => void;
 }
 
-const ContentAccordionSellMiles: React.FC<DivProps> = ({item, children, menuOpened, setMenuOpened, onEdit, onDelete, ...props}) => {
+const ContentAccordionBuyMiles: React.FC<DivProps> = ({item, children, menuOpened, setMenuOpened, onEdit, onDelete, ...props}) => {
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -23,8 +23,8 @@ const ContentAccordionSellMiles: React.FC<DivProps> = ({item, children, menuOpen
     setIsOpen((state) => !state)
   },[setIsOpen])
 
-  const date = item.createdAt.toString();
-  const validDate = new Date(date);
+  /* const date = item.createdAt.toString();
+  const validDate = new Date(date); */
 
   return (<>
     
@@ -61,23 +61,24 @@ const ContentAccordionSellMiles: React.FC<DivProps> = ({item, children, menuOpen
             
           </div> 
           {/* Edit area end's */}
-
+          <div className={styles.doubleColumns}>
+            <div className={styles.secundaryTitle}>Pontos/milhas compradas:</div>
+            <div className={styles.values}>{item.pointsQuantity ? item.pointsQuantity.toLocaleString('pt-Br') : ''}</div>
+          </div> 
+          <div className={styles.doubleColumns}>
+            <div className={styles.secundaryTitle}>Programa da compra:</div>
+            <div className={styles.values}>{item.program ? item.program : ''}</div>
+          </div>
           <div className={styles.doubleColumns}>
             <div className={styles.secundaryTitle}>Data da compra:</div>
-            <div className={styles.values}>{validDate.toLocaleDateString('pt-BR')}</div>
+            <div className={styles.values}>{item.dateBuy ? item.dateBuy : ''}</div>
           </div>
           <div className={styles.doubleColumns}>
-            <div className={styles.secundaryTitle}>Produto:</div>
-            <div className={styles.values}>...</div>
-          </div>
-          <div className={styles.doubleColumns}>
-            <div className={styles.secundaryTitle}>Preço do produto:</div>
-            <div className={styles.values}>{item.priceBuy ? item.priceBuy.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
+            <div className={styles.secundaryTitle}>Conta utilizada:</div>
+            <div className={styles.values}>{item.selectedAccount ? item.selectedAccount : ''}</div>
           </div>
         </div> 
       </div>
-
-      
 
       {/* Invisible content */}
       {isOpen &&
@@ -88,18 +89,33 @@ const ContentAccordionSellMiles: React.FC<DivProps> = ({item, children, menuOpen
           {/* Fixed items////////////////////////////////////////////////////////// */}
           <div className={styles.column}>
             <div className={styles.doubleColumns}>
-              <div className={styles.secundaryTitle}>Pontos ganhos por real:</div>
-              <div className={styles.values}>...</div>
+              <div className={styles.secundaryTitle}>Documento CPF:</div>
+              <div className={styles.values}>{item.cpf ? item.cpf : ''}</div>
             </div>
             <div className={styles.doubleColumns}>
-              <div className={styles.secundaryTitle}>Programa de acúmulo:</div>
-              <div className={styles.values}>{item.program}</div>
-            </div>          
-
-            <div className={styles.doubleColumns}>
-              <div className={styles.secundaryTitle}>Percentual de desconto:</div>
-              <div className={styles.values} style={{color: '#F25C05'}}>{item.percentageProfit ? item.percentageProfit.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%' : ''}</div>
+              <div className={styles.secundaryTitle}>Valor investido:</div>
+              <div className={styles.values}>{item.price ? item.price.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
             </div>
+            <div className={styles.doubleColumns}>
+              <div className={styles.secundaryTitle}>Cartão utilizado:</div>
+              <div className={styles.values}>{item.creditCard ? item.creditCard : ''}</div>
+            </div>
+            <div className={styles.doubleColumns}>
+              <div className={styles.secundaryTitle}>Parcelamento:</div>
+              <div className={styles.values}>{item.parcel ? item.parcel+'x' : ''}</div>
+            </div> 
+            <div className={styles.doubleColumns}>
+              <div className={styles.secundaryTitle}>Transferência para:</div>
+              <div className={styles.values}>{item.destiny ? item.destiny : ''}</div>
+            </div>
+            <div className={styles.doubleColumns}>
+              <div className={styles.secundaryTitle}>Bônus da transferência:</div>
+              <div className={styles.values}>{item.percentage ? item.percentage.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%' : ''}</div>
+            </div>
+            <div className={styles.doubleColumns}>
+              <div className={styles.secundaryTitle}>Total após transferência:</div>
+              <div className={styles.values}>{item.miles ? item.miles.toLocaleString('pt-Br') : ''}</div>
+            </div>                 
             
           </div> 
         </div>
@@ -108,9 +124,10 @@ const ContentAccordionSellMiles: React.FC<DivProps> = ({item, children, menuOpen
       </>}
 
       <div className={styles.doubleColumns}>
-        <div className={styles.secundaryTitle} style={{fontWeight: '600', fontSize:'14px'}}>Preço final do produto:</div>
-        <div className={styles.values} style={{color: '#6A9000', fontWeight: '600', fontSize: '14px'}}>{item.profit ? item.profit.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
-      </div>
+          <div className={styles.secundaryTitle} style={{fontWeight: '600', fontSize:'14px'}}>Valor final do milheiro:</div>
+          <div className={styles.values} style={{color: '#6A9000', fontWeight: '600', fontSize: '14px'}}>{item.finalPrice.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</div>
+        </div>   
+
       
       {!isOpen &&
         <div onClick={toggle} className={styles.showMore}>
@@ -133,4 +150,4 @@ const ContentAccordionSellMiles: React.FC<DivProps> = ({item, children, menuOpen
   </>)
 }
 
-export default ContentAccordionSellMiles;
+export default ContentAccordionBuyMiles;

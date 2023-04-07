@@ -11,6 +11,7 @@ import { Account } from '../../../types/Account';
 import { User } from '../../../types/User';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
+import Title from '../../../components/Title';
 
 const AssinaturaClubes = (data: Props) => {
 
@@ -117,10 +118,12 @@ const AssinaturaClubes = (data: Props) => {
       
       <div className={styles.container}> 
 
-        <div className={styles.header}>
-          <ButtonBack route='/dashboard'/>
+        <Title route='/dashboard'>Extrato de assinaturas de clubes</Title>
+
+        {/* <div className={styles.header}>
+          <Title route='/dashboard'/>
           <div className={styles.title}>Extrato de assinaturas de clubes</div>
-        </div>      
+        </div>       */}
 
         {/* Results */}
         <div className={styles.results}>

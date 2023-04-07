@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next';
 import { unstable_getServerSession } from 'next-auth';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Layout from '../../../components/Layout';
 import { useAuthContext } from '../../../contexts/auth';
@@ -8,11 +8,11 @@ import api from '../../../libs/api';
 import { User } from '../../../types/User';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
-import ButtonBack from '../../../components/ButtonBack';
 import ContentAccordion from '../../../components/ContentAccordion';
 import AlertIcon from './error_outline.svg';
 import Button from '../../../components/Button';
 import { useRouter } from 'next/router';
+import Title from '../../../components/Title';
 
 type Account = {
   name: string;
@@ -95,10 +95,12 @@ const Contas = (data: Props) => {
 
       <div className={styles.container}> 
         
-        <div className={styles.header}>
+        <Title route='/dashboard'>Contas administradas</Title>
+
+        {/* <div className={styles.header}>
           <ButtonBack route='/dashboard'/>
           <div className={styles.title}>Contas administradas</div>
-        </div>     
+        </div>    */}  
         
 
         {/* Accordion */}

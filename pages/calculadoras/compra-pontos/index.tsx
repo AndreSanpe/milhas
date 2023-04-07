@@ -4,7 +4,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react'
 import Button from '../../../components/Button';
-import ButtonBack from '../../../components/ButtonBack';
 import Dropdown from '../../../components/Dropdown';
 import Input from '../../../components/Input';
 import Layout from '../../../components/Layout';
@@ -15,6 +14,8 @@ import api from '../../../libs/api';
 import { User } from '../../../types/User';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
+import Title from '../../../components/Title';
+import FormModal from '../../../components/FormModal';
 
 
 const CompraPontos = (data: Props) => {
@@ -36,6 +37,9 @@ const CompraPontos = (data: Props) => {
       setUser(data.user)
     }
   }, [data, user, setUser]);
+
+  /* State modal//////////////////////////////////////////////////////////////// */
+  const [ showModal, setShowModal ] = useState<boolean>(false);
  
   /* General states ///////////////////////////////////////////////////////////////////////*/
   const [ price, setPrice ] = useState<number>(0);
@@ -48,7 +52,8 @@ const CompraPontos = (data: Props) => {
   const [ destiny, setDestiny ] = useState<string>('');
   const [ selectedAccount, setSelectedAccount ] = useState<string>('');
   const [ parcel, setParcel ] = useState('');
-  const [ month, setMonth ] = useState<string>('')
+  const [ month, setMonth ] = useState<string>('');
+  const [ dateBuy, setDateBuy ] = useState<string>('');
   
   /* Auxiliary states for accounts data ////////////////////////////////////////////////////*/
   const [ namesAccounts, setNamesAccounts ] = useState<any[]>([]);
@@ -111,6 +116,9 @@ const CompraPontos = (data: Props) => {
         return;
       case 'creditCard':
         setCreditCard(e.currentTarget.value);
+        return;
+      case 'dateBuy': 
+        setDateBuy(e.currentTarget.value);
         return;
     }
   },[])
@@ -175,6 +183,10 @@ const CompraPontos = (data: Props) => {
       newErroFields.push('pointsQuantity');
       approved = false;
     }
+    if(!dateBuy) {
+      newErroFields.push('dateBuy');
+      approved = false;
+    }
     if(!program){
       newErroFields.push('program');
       approved = false;
@@ -192,7 +204,8 @@ const CompraPontos = (data: Props) => {
     if(verifyData() && user) {
       let buymiles = {
         price, 
-        pointsQuantity, 
+        pointsQuantity,
+        dateBuy, 
         program, 
         selectedAccount, 
         cpf, 
@@ -212,8 +225,10 @@ const CompraPontos = (data: Props) => {
           'content-Type': 'application/json',
         },
       });
+      setShowModal(true);
     }
-  }
+  };
+
 
   return (<>
 
@@ -224,14 +239,27 @@ const CompraPontos = (data: Props) => {
 
     <div className={styles.container}>
 
-      <div className={styles.header}>
-        <ButtonBack route='/dashboard'/>
-        <div className={styles.title}>Gerenciamento de compra de pontos e milhas</div>
-      </div>     
+      <Title route={'/dashboard'}>Calculadora de compra de pontos e milhas</Title>
 
       <div className={styles.inputs}>
+
+        {/* Confirmation modal*/}
+        {showModal &&
+          <FormModal maxWidth={'340px'} maxHeight={'1500px'}>
+            <div className={styles.modalContainer}>
+              <div className={styles.modalTitle}>Compra de pontos/milhas salva com sucesso!</div>
+              <div className={styles.modalSubtitle}>O que deseja fazer agora?</div>
+              <div className={styles.modalLink} onClick={() => router.push('/dashboard')} >Voltar ao início</div>
+              <div className={styles.modalLink} 
+                  onClick={() => {
+                  {router.push('/calculadoras/compra-pontos')}
+                  document.location.reload()}}>Cadastrar nova compra</div>
+              <div className={styles.modalLink} onClick={() => router.push('/extratos/compra')}>Ver extrato de compras</div>
+            </div>
+          </FormModal>
+        }
         
-        {/* Input 1 */}
+        {/* Input */}
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -247,7 +275,7 @@ const CompraPontos = (data: Props) => {
           </div>       
         </div>
 
-        {/* Input 2 */}
+        {/* Input */}
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -263,7 +291,23 @@ const CompraPontos = (data: Props) => {
           </div>       
         </div>
 
-        {/* Input 3 */}
+        {/* Input */}
+        <div className={styles.row}>
+          <div className={styles.column}>
+            <div className={styles.label}>
+              Data da compra:
+            </div>
+              <Input 
+                name='dateBuy'
+                onSet={(e)=> handleValues(e)}
+                placeholder={'Ex.: 01/01/2023'}
+                mask='date'
+                warning={errorFields.includes('dateBuy')}
+              />
+          </div>       
+        </div>
+
+        {/* Input */}
          <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -279,7 +323,7 @@ const CompraPontos = (data: Props) => {
           </div>       
         </div>
 
-        {/* Input 4 */}
+        {/* Input */}
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -297,21 +341,23 @@ const CompraPontos = (data: Props) => {
         </div>
 
         {/* Link */}
-        <div className={styles.row}>
-          <div className={styles.column}>
-            <div className={styles.label} style={{color: '#525252', display: 'flex' ,justifyContent: 'flex-end'}}>
-              Ainda não cadastrou as contas 
-            </div>
-            <div className={styles.label} style={{color: '#525252', display: 'flex' ,justifyContent: 'flex-end'}}>
-              que você administra?
-            </div>
-            <div className={styles.linkAux} onClick={() => router.push({...router.query,pathname: '/gerenciamento/contas'}) }>
-              Clique aqui e cadastre
-            </div>
-          </div>       
-        </div>
+        {namesAccounts.length == 0 &&
+          <div className={styles.row}>
+            <div className={styles.column}>
+              <div className={styles.label} style={{color: '#525252', display: 'flex' ,justifyContent: 'flex-end'}}>
+                Ainda não cadastrou as contas 
+              </div>
+              <div className={styles.label} style={{color: '#525252', display: 'flex' ,justifyContent: 'flex-end'}}>
+                que você administra?
+              </div>
+              <div className={styles.linkAux} onClick={() => router.push({...router.query,pathname: '/gerenciamento/contas'}) }>
+                Clique aqui e cadastre
+              </div>
+            </div>       
+          </div>
+        }
 
-         {/* Input 5 */}
+         {/* Input */}
          <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -325,7 +371,7 @@ const CompraPontos = (data: Props) => {
           </div>       
         </div>
 
-        {/* Input 6 */}
+        {/* Input */}
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -340,7 +386,7 @@ const CompraPontos = (data: Props) => {
           </div>       
         </div>
 
-        {/* Input 7 */}
+        {/* Input */}
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -355,7 +401,7 @@ const CompraPontos = (data: Props) => {
           </div>       
         </div>
 
-        {/* Input 8 */}
+        {/* Input */}
         <div className={styles.row} >
           <div className={styles.toggle}>
             <div className={styles.label} style={{fontSize: '14px'}}>
@@ -371,7 +417,7 @@ const CompraPontos = (data: Props) => {
 
         {transfer && <>
 
-        {/* Input 9 */}
+        {/* Input */}
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -385,7 +431,7 @@ const CompraPontos = (data: Props) => {
           </div>       
         </div>
 
-        {/* Input 10 */}
+        {/* Input */}
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
@@ -406,6 +452,13 @@ const CompraPontos = (data: Props) => {
       {/* Results */}
       <div className={styles.titleResults} style={{paddingTop: '32px'}}>Resumo da compra</div>
       <div className={styles.results}>
+
+      <div className={styles.contentRow}>
+        <div className={styles.contentColumn}>
+          <div className={styles.titleValues}>Data da compra:</div>
+          <div className={styles.values}>{dateBuy ? dateBuy : ''}</div>
+        </div>        
+      </div>
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>

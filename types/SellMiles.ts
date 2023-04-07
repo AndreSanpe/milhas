@@ -6,6 +6,7 @@ export type SellMiles = {
   program: string;
   programBuyer: string;
   selectedAccount: string;
+  cpf: string;
   receipt?: number;
   dateSell?: string;
   dateReceipt?: string;

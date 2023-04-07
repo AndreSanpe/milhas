@@ -7,12 +7,12 @@ import api from '../../../../libs/api';
 import { User } from '../../../../types/User';
 import { authOptions } from '../../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
-import ButtonBack from '../../../../components/ButtonBack';
 import Button from '../../../../components/Button';
 import Input from '../../../../components/Input';
 import Toggle from '../../../../components/Toggle';
 import { useRouter } from 'next/router';
 import { Account } from '../../../../types/Account';
+import Title from '../../../../components/Title';
 
 
 const Contas = (data: Props) => {
@@ -203,15 +203,9 @@ const Contas = (data: Props) => {
     </Head>
     <Layout><>
 
-      <div className={styles.container}>     
+      <div className={styles.container}>   
 
-        <div className={styles.header}>
-          <ButtonBack route='/gerenciamento/contas'/>
-          <div className={styles.title}>Adicionar nova conta</div>
-        </div>     
-
-        {/* <ButtonBack route='/gerenciamento/contas'/>
-        <div className={styles.title}>Adicionar nova conta</div> */}
+        <Title route='/gerenciamento/contas'>Adicionar nova conta</Title>  
 
         {/* Edit account */}
         <div className={styles.inputs}>

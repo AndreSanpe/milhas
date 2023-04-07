@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next';
 import { unstable_getServerSession } from 'next-auth';
 import Head from 'next/head';
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import ButtonBack from '../../../components/ButtonBack';
 import Layout from '../../../components/Layout';
 import { useAuthContext } from '../../../contexts/auth';
@@ -13,6 +13,7 @@ import AlertIcon from './error_outline.svg';
 import { useRouter } from 'next/router';
 import { SellMiles } from '../../../types/SellMiles';
 import ContentAccordionSellMiles from '../../../components/ContentAccordionSellMiles';
+import Title from '../../../components/Title';
 
 const ExtratoVenda = (data: Props) => {
 
@@ -22,19 +23,55 @@ const ExtratoVenda = (data: Props) => {
   /* Contexts */
   const { user, setUser } = useAuthContext();
 
+  /* States */
+ const [ selledMilesData, setSelledMilesData ] = useState<SellMiles[]>([]);
+ const [ noHaveSelledMiles, setNoHaveSelledMiles ] = useState<boolean>(false);
+ const [ menuOpened, setMenuOpened ] = useState<number>(0);
+
   /* Setting message for not have a buy bonus//////////////////////////////////////////// */
   useEffect(() => {
     if(data.selledMiles.length === 0) {
-      setNoHaveBuyBonus(true)
+      setNoHaveSelledMiles(true)
     }
   }, [data.selledMiles]);
 
-  /* General states //////////////////////////////////////////////////////////////////*/
-  const [ noHaveBuyBonus, setNoHaveBuyBonus ] = useState<boolean>(false);
+ /* List data selledMiles /////////////////////////////////////////////////////////////////*/
+ useEffect(() => {
+  const arraySelledMiles: SellMiles[] = [];
   
-  /* Menu edit states //////////////////////////////////////////////////////////////// */
-  const [ menuOpened, setMenuOpened ] = useState<number>(0);
-  
+  if(data.selledMiles) {
+    data.selledMiles.map((item, index) => {
+      if(item.id) {
+        arraySelledMiles.push(item);
+      } else {
+        return null;
+      }
+    })  
+  }
+  setSelledMilesData(arraySelledMiles);
+
+}, [data.selledMiles])
+
+let investiment = 0;
+let profit = 0;
+let percentageProfit = 0;
+let percentageProfitAverage = 0;
+let miles = 0;
+let sellQuantity = 0;
+
+for(let i = 0; i < selledMilesData.length; i++) {
+  profit += selledMilesData[i].profit;
+  percentageProfit += selledMilesData[i].percentageProfit;
+  miles += selledMilesData[i].pointsQuantity;
+  investiment += selledMilesData[i].priceBuy;
+}
+
+if(selledMilesData.length) {
+
+  percentageProfitAverage = (percentageProfit) / (selledMilesData.length);
+  sellQuantity = selledMilesData.length;
+}
+
   /* Menu edit events //////////////////////////////////////////////////////////////// */
   const handleMenuEvent = (event: MouseEvent) => {
     const tagName = (event.target as Element).tagName;
@@ -44,7 +81,7 @@ const ExtratoVenda = (data: Props) => {
   }
   
   const handleSellMilesEdit = (id: number) => {
-    router.push(`/gerenciamento/venda-milhas/${id}`);
+    router.push(`/calculadoras/venda-milhas/${id}`);
   }
 
   const handleSellMilesDelete = async (id: number) => {
@@ -73,12 +110,48 @@ const ExtratoVenda = (data: Props) => {
     
     <Layout><>
       
-      <div className={styles.container}>      
+      <div className={styles.container}>   
 
-        <div className={styles.header}>
-          <ButtonBack route='/dashboard'/>
-          <div className={styles.title}>Extrato de venda de milhas</div>
-        </div> 
+        <Title route='/dashboard'>Extrato de venda de milhas</Title>   
+
+        {/* RESULTS RESUME */}
+        <div className={styles.results}>
+
+        <div className={styles.row}>
+          <div className={styles.column}>
+
+            <div className={styles.doubleColumns}>
+              <div className={styles.secundaryTitle}>Total de milhas vendidas:</div>
+              <div className={styles.values}>{miles ? miles.toLocaleString('pt-BR') : ''}</div>
+            </div>
+
+            <div className={styles.doubleColumns}>
+              <div className={styles.secundaryTitle}>Total de vendas:</div>
+              <div className={styles.values}>{sellQuantity ? sellQuantity : ''}</div>
+            </div>
+
+            <div className={styles.doubleColumns}>
+              <div className={styles.secundaryTitle}>Total investido:</div>
+              <div className={styles.values}>{investiment ? investiment.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
+            </div>
+
+            <div className={styles.doubleColumns}>
+              <div className={styles.secundaryTitle}>Lucro total estimado:</div>
+              <div className={styles.values}>{profit ? profit.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
+            </div>
+
+            <div className={styles.doubleColumns} style={{border: 'none'}}>
+              <div className={styles.secundaryTitle}>Percentual médio:</div>
+              <div className={styles.values}>{percentageProfitAverage ? percentageProfitAverage.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%' : ''}</div>
+            </div>
+            
+          </div>
+        </div>
+
+        </div>
+        {/* RESULTS RESUME END'S */}
+
+        <div className={styles.title}>Vendas cadastradas</div>
 
         {/* Accordion */}
         {data.selledMiles.map((item: SellMiles, index: number) => (
@@ -94,11 +167,11 @@ const ExtratoVenda = (data: Props) => {
 
 
        {/* Message for when there is no registered buy bonus yet */}
-       {noHaveBuyBonus &&
+       {noHaveSelledMiles &&
           <div className={styles.alert}>
             <AlertIcon style={{color: '#F25C05'}}/>
             <div>Você ainda não cadastrou nenhuma venda. Gostaria de fazer isso agora? 
-            <div className={styles.link} onClick={()=> {router.push('/gerenciamento/venda-milhas')}}>Clique aqui</div>
+            <div className={styles.link} onClick={()=> {router.push('/calculadoras/venda-milhas')}}>Clique aqui</div>
             </div>
           </div>
         }

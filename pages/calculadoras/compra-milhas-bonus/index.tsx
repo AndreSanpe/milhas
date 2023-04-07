@@ -10,6 +10,7 @@ import api from '../../../libs/api';
 import { User } from '../../../types/User';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
+import Title from '../../../components/Title';
 
 
 const CompraMilhasBonus = (data: Props) => {
@@ -131,10 +132,7 @@ const CompraMilhasBonus = (data: Props) => {
 
     <div className={styles.container}>
 
-      <div className={styles.header}>
-          <ButtonBack route='/dashboard'/>
-          <div className={styles.title}>Calculadora de compra de milhas com bônus</div>
-        </div> 
+      <Title route='/dashboard'>Calculadora de compra de milhas com bônus</Title>
 
       <div className={styles.inputs}>
         

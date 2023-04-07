@@ -4,7 +4,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react'
 import Button from '../../../components/Button';
-import ButtonBack from '../../../components/ButtonBack';
 import Dropdown from '../../../components/Dropdown';
 import FormModal from '../../../components/FormModal';
 import Input from '../../../components/Input';
@@ -16,6 +15,7 @@ import api from '../../../libs/api';
 import { User } from '../../../types/User';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
+import Title from '../../../components/Title';
 
 
 const CompraBonificada = (data: Props) => {
@@ -74,11 +74,6 @@ const CompraBonificada = (data: Props) => {
 
   /* Auxiliary states for errors */
   const [ errorFields, setErrorFields ] = useState<string[]>([]);
-
-  /* Modal actions ///////////////////////////////////////////////////////////////////// */
-  const closeBtn = () => { 
-    setShowModal(false);
-  }
  
   /* Functions of handle input values ///////////////////////////////////////////////////*/
   const handleValues = useCallback((e: React.FormEvent<HTMLInputElement>) => {
@@ -363,10 +358,7 @@ const CompraBonificada = (data: Props) => {
 
     <div className={styles.container}>
 
-      <div className={styles.header}>
-          <ButtonBack route='/dashboard'/>
-          <div className={styles.title}>Calculadora de compra bonificada</div>
-      </div>   
+      <Title route='/dashboard'>Calculadora de compra bonificada</Title>
 
       <div className={styles.inputs}>
 

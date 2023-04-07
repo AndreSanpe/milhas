@@ -61,7 +61,14 @@ const ContentAccordionSellMiles: React.FC<DivProps> = ({item, children, menuOpen
             
           </div> 
           {/* Edit area end's */}
-
+          <div className={styles.doubleColumns}>
+            <div className={styles.secundaryTitle}>Milhas vendidas:</div>
+            <div className={styles.values}>{item.pointsQuantity ? item.pointsQuantity.toLocaleString('pt-BR') : ''}</div>
+          </div>
+          <div className={styles.doubleColumns}>
+              <div className={styles.secundaryTitle}>Programa da venda:</div>
+              <div className={styles.values}>{item.program ? item.program : ''}</div>
+            </div> 
           <div className={styles.doubleColumns}>
             <div className={styles.secundaryTitle}>Data da venda:</div>
             <div className={styles.values}>{item.dateSell ? item.dateSell : ''}</div>
@@ -70,10 +77,7 @@ const ContentAccordionSellMiles: React.FC<DivProps> = ({item, children, menuOpen
             <div className={styles.secundaryTitle}>Conta utilizada:</div>
             <div className={styles.values}>{item.selectedAccount}</div>
           </div>
-          <div className={styles.doubleColumns}>
-            <div className={styles.secundaryTitle}>Documento CPF:</div>
-            <div className={styles.values}>...</div>
-          </div>
+          
         </div> 
       </div>
 
@@ -86,6 +90,10 @@ const ContentAccordionSellMiles: React.FC<DivProps> = ({item, children, menuOpen
           {/* Fixed items////////////////////////////////////////////////////////// */}
           <div className={styles.column}>
             <div className={styles.doubleColumns}>
+              <div className={styles.secundaryTitle}>Documento CPF:</div>
+              <div className={styles.values}>{item.cpf ? item.cpf : ''}</div>
+            </div>
+            <div className={styles.doubleColumns}>
               <div className={styles.secundaryTitle}>Valor investido:</div>
               <div className={styles.values}>{item.priceBuy ? item.priceBuy.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
             </div>
@@ -94,30 +102,38 @@ const ContentAccordionSellMiles: React.FC<DivProps> = ({item, children, menuOpen
               <div className={styles.values}>{item.priceSell ? item.priceSell.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
             </div>
             <div className={styles.doubleColumns}>
-              <div className={styles.secundaryTitle}>Programa da venda:</div>
-              <div className={styles.values}>{item.program ? item.program : ''}</div>
-            </div> 
-            <div className={styles.doubleColumns}>
               <div className={styles.secundaryTitle}>Vendido para:</div>
               <div className={styles.values}>{item.programBuyer ? item.programBuyer : ''}</div>
             </div>
             <div className={styles.doubleColumns}>
-              <div className={styles.secundaryTitle}>Data da venda:</div>
-              <div className={styles.values}>...</div>
-            </div> 
-            <div className={styles.doubleColumns}>
               <div className={styles.secundaryTitle}>Prazo de recebimento:</div>
-              <div className={styles.values}>...</div>
+              <div className={styles.values}>{item.receipt ? item.receipt+' dias' : ''}</div>
             </div>
             <div className={styles.doubleColumns}>
               <div className={styles.secundaryTitle}>Data de recebimento:</div>
-              <div className={styles.values}>...</div>
+              <div className={styles.values}>{item.dateReceipt ? item.dateReceipt : ''}</div>
             </div>                   
 
-            <div className={styles.doubleColumns}>
-              <div className={styles.secundaryTitle}>Em percentual:</div>
-              <div className={styles.values} style={{color: '#F25C05'}}>{item.percentageProfit ? item.percentageProfit.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%' : ''}</div>
-            </div>
+            {item.percentageProfit > 0 ?
+              <div className={styles.doubleColumns}>
+                <div className={styles.secundaryTitle}>Em percentual:</div>
+                <div className={styles.values} style={{color: '#6A9000'}}>{item.percentageProfit ? '+'+item.percentageProfit.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%' : ''}</div>
+              </div> : ''
+            }
+
+            {item.percentageProfit == 0 ?
+              <div className={styles.doubleColumns}>
+                <div className={styles.secundaryTitle}>Em percentual:</div>
+                <div className={styles.values} style={{color: '#F29E05'}}>{item.percentageProfit.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%' }</div>
+              </div> : ''
+            }
+            
+            {item.percentageProfit < 0 ?
+              <div className={styles.doubleColumns}>
+                <div className={styles.secundaryTitle}>Em percentual:</div>
+                <div className={styles.values} style={{color: '#D92B05'}}>{item.percentageProfit ? item.percentageProfit.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%' : ''}</div>
+              </div> : ''
+            }
             
           </div> 
         </div>
@@ -125,10 +141,26 @@ const ContentAccordionSellMiles: React.FC<DivProps> = ({item, children, menuOpen
       </div>
       </>}
 
-      <div className={styles.doubleColumns}>
-        <div className={styles.secundaryTitle} style={{fontWeight: '600', fontSize:'14px'}}>Lucro estimado:</div>
-        <div className={styles.values} style={{color: '#6A9000', fontWeight: '600', fontSize: '14px'}}>{item.profit ? item.profit.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
-      </div>
+      {item.profit > 0  && 
+        <div className={styles.doubleColumns}>
+          <div className={styles.secundaryTitle} style={{fontWeight: '600', fontSize:'14px'}}>Lucro estimado:</div>
+          <div className={styles.values} style={{color: '#6A9000', fontWeight: '600', fontSize: '14px'}}>{item.profit.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</div>
+        </div>        
+      }
+
+      {item.profit == 0  && 
+        <div className={styles.doubleColumns}>
+          <div className={styles.secundaryTitle} style={{fontWeight: '600', fontSize:'14px'}}>Lucro estimado:</div>
+          <div className={styles.values} style={{color: '#F29E05', fontWeight: '600', fontSize: '14px'}}>{item.profit.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</div>
+        </div>        
+      }
+
+      {item.profit < 0  && 
+        <div className={styles.doubleColumns}>
+          <div className={styles.secundaryTitle} style={{fontWeight: '600', fontSize:'14px'}}>Prejuízo estimado:</div>
+          <div className={styles.values} style={{color: '#D92B05', fontWeight: '600', fontSize: '14px'}}>{item.profit.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</div>
+        </div>        
+      }
       
       {!isOpen &&
         <div onClick={toggle} className={styles.showMore}>

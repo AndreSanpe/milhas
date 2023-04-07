@@ -15,6 +15,7 @@ import Input from '../../../../components/Input';
 import Toggle from '../../../../components/Toggle';
 import { useRouter } from 'next/router';
 import { Account } from '../../../../types/Account';
+import Title from '../../../../components/Title';
 
 
 const EditarConta = (data: Props) => {
@@ -209,10 +210,7 @@ const EditarConta = (data: Props) => {
 
       <div className={styles.container}>    
 
-        <div className={styles.header}>
-          <ButtonBack route='/gerenciamento/contas'/>
-          <div className={styles.title}>Editar dados da conta</div>
-        </div>     
+        <Title route='/gerenciamento/contas'>Editar dados da conta</Title>
 
         {/* Edit account */}
         <div className={styles.inputs}>

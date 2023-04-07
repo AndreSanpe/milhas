@@ -58,6 +58,7 @@ model BuyMiles {
   id              Int    @id @unique @default(autoincrement())
   price           Float
   pointsQuantity  Int
+  dateBuy         String
   program         String
   selectedAccount String
   cpf             String
@@ -88,6 +89,7 @@ model SellMiles {
   program         String
   programBuyer    String
   selectedAccount String
+  cpf             String
 
   receipt     Int?
   dateSell    String?

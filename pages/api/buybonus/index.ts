@@ -1,6 +1,7 @@
 import { NextApiHandler } from "next";
 import api from "../../../libs/api";
 import { BuyBonus } from "../../../types/BuyBonus";
+import { getSession } from "next-auth/react";
 
 const handlerGet: NextApiHandler = async (req, res) => {
   const { userId } = req.body;
@@ -31,7 +32,7 @@ const handlerPut: NextApiHandler = async (req, res) => {
     res.json({ status: true});
     return;
   }
-  res.json({ error: 'Não foi possível alterar esta conta.'});
+  res.json({ error: 'Não foi possível alterar esta compra.'});
 };
 
 const handlerDelete: NextApiHandler = async (req, res) => {
@@ -42,6 +43,13 @@ const handlerDelete: NextApiHandler = async (req, res) => {
 };
 
 const handler: NextApiHandler = async (req, res) => {
+
+  const session = await getSession({ req });
+  if(!session) {
+    res.json({ error: 'Acesso negado' });
+    return;
+  }
+
   switch(req.method) {
     case 'GET':
       handlerGet(req, res);
