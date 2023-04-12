@@ -16,6 +16,7 @@ import { authOptions } from '../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
 import Title from '../../../components/Title';
 import FormModal from '../../../components/FormModal';
+import apiAccounts from '../../../libs/apiAccounts';
 
 
 const CompraPontos = (data: Props) => {
@@ -584,13 +585,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } 
 
   /* Get accounts */
-  const accounts = await api.getAccounts(session.user.id);
+  const accounts = await apiAccounts.getAccounts(session.user.id);
 
    
   return {
     props: {
       user,
-      accounts
+      accounts: JSON.parse(JSON.stringify(accounts))
     }
   }
 }

@@ -1,12 +1,12 @@
 import { NextApiHandler } from "next";
-import api from "../../../libs/api";
 import { SellMiles } from "../../../types/SellMiles";
 import { getSession } from "next-auth/react";
+import apiSellMiles from "../../../libs/apiSellMiles";
 
 
 const handlerGet: NextApiHandler = async (req, res) => {
   const { userId } = req.body;
-  const selledMiles = await api.getMilesSelled(parseInt(userId));
+  const selledMiles = await apiSellMiles.getMilesSelled(parseInt(userId));
   
   if(selledMiles) {
     res.status(201).json({ selledMiles })
@@ -17,7 +17,7 @@ const handlerGet: NextApiHandler = async (req, res) => {
 
 const handlerPost: NextApiHandler = async (req, res) => {
   const sell: SellMiles = req.body;
-  const newSellMiles = await api.addNewMilesSelled(sell);
+  const newSellMiles = await apiSellMiles.addNewMilesSelled(sell);
 
   if(newSellMiles.id) {
     res.status(201).json({status: true});
@@ -28,7 +28,7 @@ const handlerPost: NextApiHandler = async (req, res) => {
 
 const handlerPut: NextApiHandler = async (req, res) => {
   const milesSelled: SellMiles = req.body;
-  const updMilesSelled = await api.updateMilesSelled(milesSelled);
+  const updMilesSelled = await apiSellMiles.updateMilesSelled(milesSelled);
 
   if(updMilesSelled) {
     res.json({ message: 'Venda atualizada com sucesso!'});
@@ -39,7 +39,7 @@ const handlerPut: NextApiHandler = async (req, res) => {
 
 const handlerDelete: NextApiHandler = async (req, res) => {
   const id: number = req.body;
-  await api.deleteMilesSelled(id);
+  await apiSellMiles.deleteMilesSelled(id);
 
   res.json({ status: true });
 };

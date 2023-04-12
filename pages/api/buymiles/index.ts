@@ -1,22 +1,22 @@
 import { NextApiHandler } from "next";
-import api from "../../../libs/api";
 import { BuyMiles } from "../../../types/BuyMiles";
 import { getSession } from "next-auth/react";
+import apiBuyMiles from "../../../libs/apiBuyMiles";
 
 const handlerGet: NextApiHandler = async (req, res) => {
   const { userId } = req.body;
-  const milesBuyed = await api.getMilesBuyed(parseInt(userId));
+  const milesBuyed = await apiBuyMiles.getMilesBuyed(parseInt(userId));
   
   if(milesBuyed) {
     res.status(201).json({ milesBuyed })
   } else {
     res.json({ error: "Nenhuma compra encontrada"});
-  }
+  } 
 };
 
 const handlerPost: NextApiHandler = async (req, res) => {
   const buy: BuyMiles = req.body
-  const newBuyMiles = await api.addNewMilesBuyed(buy);
+  const newBuyMiles = await apiBuyMiles.addNewMilesBuyed(buy);
 
   if(newBuyMiles.id) {
     res.status(201).json({status: true});
@@ -27,7 +27,7 @@ const handlerPost: NextApiHandler = async (req, res) => {
 
 const handlerPut: NextApiHandler = async (req, res) => {
   const milesBuyed: BuyMiles = req.body;
-  const updMilesBuyed = await api.updateMilesBuyed(milesBuyed);
+  const updMilesBuyed = await apiBuyMiles.updateMilesBuyed(milesBuyed);
 
   if(updMilesBuyed) {
     res.json({ message: 'Compra atualizada com sucesso!'});
@@ -38,7 +38,7 @@ const handlerPut: NextApiHandler = async (req, res) => {
 
 const handlerDelete: NextApiHandler = async (req, res) => {
   const id: number = req.body;
-  await api.deleteMilesBuyed(id);
+  await apiBuyMiles.deleteMilesBuyed(id);
 
   res.json({ status: true });
 };

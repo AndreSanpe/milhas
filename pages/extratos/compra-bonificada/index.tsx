@@ -15,6 +15,8 @@ import styles from './styles.module.css';
 import AlertIcon from './error_outline.svg';
 import { useRouter } from 'next/router';
 import Title from '../../../components/Title';
+import apiAccounts from '../../../libs/apiAccounts';
+import apiBuyBonus from '../../../libs/apiBuyBonus';
 
 const ExtratoCompraBonificada = (data: Props) => {
 
@@ -166,15 +168,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } 
 
   /* Get accounts */
-  const accounts = await api.getAccounts(session.user.id);
+  const accounts = await apiAccounts.getAccounts(session.user.id);
 
   /* Get buy bonus data */
-  const  buybonus  = await api.getBuyBonus(session.user.id)
+  const  buybonus  = await apiBuyBonus.getBuyBonus(session.user.id)
   
   return {
     props: {
       user,
-      accounts,
+      accounts: JSON.parse(JSON.stringify(accounts)),
       buybonus: JSON.parse(JSON.stringify(buybonus))
     }
   }

@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 import ContentAccordionBuyMiles from '../../../components/ContentAccordionBuyMiles';
 import { BuyMiles } from '../../../types/BuyMiles';
 import Title from '../../../components/Title';
+import apiBuyMiles from '../../../libs/apiBuyMiles';
 
 const ExtratoCompra = (data: Props) => {
 
@@ -157,15 +158,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if(!session) return { redirect: { destination: '/login', permanent: true }}; 
 
   /* Get tenant */
-  const user = await api.getUser(session.user.id)
+  const user = await api.getUser(session.user.id);
   if(!user){
     return {
       redirect: {destination:'/', permanent: false}
     }
   } 
 
-  /* Get selled miles */
- const buyedMiles = await api.getMilesBuyed(session.user.id)
+  /* Get buys miles */
+ const buyedMiles = await apiBuyMiles.getMilesBuyed(session.user.id);
   
   return {
     props: {

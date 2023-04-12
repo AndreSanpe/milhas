@@ -2,7 +2,6 @@ import { GetServerSideProps } from 'next';
 import { unstable_getServerSession } from 'next-auth';
 import Head from 'next/head';
 import React, { useCallback, useEffect, useState } from 'react'
-import ButtonBack from '../../../components/ButtonBack';
 import Layout from '../../../components/Layout';
 import { useAuthContext } from '../../../contexts/auth';
 import api from '../../../libs/api';
@@ -14,6 +13,7 @@ import { useRouter } from 'next/router';
 import { SellMiles } from '../../../types/SellMiles';
 import ContentAccordionSellMiles from '../../../components/ContentAccordionSellMiles';
 import Title from '../../../components/Title';
+import apiSellMiles from '../../../libs/apiSellMiles';
 
 const ExtratoVenda = (data: Props) => {
 
@@ -206,7 +206,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } 
 
   /* Get selled miles */
- const selledMiles = await api.getMilesSelled(session.user.id)
+ const selledMiles = await apiSellMiles.getMilesSelled(session.user.id)
   
   return {
     props: {

@@ -15,6 +15,8 @@ import { authOptions } from '../../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
 import { SellMiles } from '../../../../types/SellMiles';
 import Title from '../../../../components/Title';
+import apiAccounts from '../../../../libs/apiAccounts';
+import apiSellMiles from '../../../../libs/apiSellMiles';
 
 
 const EditarVendaMilhas = (data: Props) => {
@@ -575,16 +577,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } 
 
   /* Get accounts */
-  const accounts = await api.getAccounts(session.user.id);
+  const accounts = await apiAccounts.getAccounts(session.user.id);
 
   /* Get one selled miles */
- const selledMiles = await api.getOneMilesSelled(parseInt(editsellmiles as string))
-
+ const selledMiles = await apiSellMiles.getOneMilesSelled(parseInt(editsellmiles as string))
    
   return {
     props: {
       user,
-      accounts,
+      accounts: JSON.parse(JSON.stringify(accounts)),
       selledMiles: JSON.parse(JSON.stringify(selledMiles))
     }
   }

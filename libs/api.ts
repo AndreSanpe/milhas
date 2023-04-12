@@ -7,7 +7,7 @@ import prisma from './prisma';
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
 
-  /* Function for authentication ///////////////////////////////////////////////////////////////*/
+  /* Authentication function ///////////////////////////////////////////////////////////////*/
   getAuthUser: async (email: string, password: string) => {
     const user = await prisma.user.findFirst({
       where: { email, status: true }
@@ -31,19 +31,18 @@ export default {
   
   },
 
-
-  /* User-related functions//////////////////////////////////////////////////////////////////// */
-  /*Functions related to managed users */
+  /*Function that gets users */
   getUser: async (id: number) => {
+
+    if(!id) {
+      return null;
+    };
+
     const user = await prisma.user.findFirst({
       where: {
         id
       }     
     });
-
-    if(!id) {
-      return null;
-    };
 
     if(id){
       return {
@@ -61,7 +60,7 @@ export default {
 
    /* Functions related to managed accounts ////////////////////////////////////////////////////*/
   /* Add new account (cpf) controlled */
-  addNewAccount: async (account: Account) => {
+ /*  addNewAccount: async (account: Account) => {
 
     const { name, document, statusLivelo, priceLivelo, statusEsfera, priceEsfera, statusLatam, priceLatam, statusAzul, priceAzul, statusSmiles, priceSmiles, userId } = account;
 
@@ -72,10 +71,10 @@ export default {
       }
     });
 
-  },
+  }, */
 
   /* Function to get accounts data */
-  getAccounts:async (userId: number) => {
+ /*  getAccounts:async (userId: number) => {
     const accounts: Account[] = [];
     const account = await prisma.account.findMany({
       where: {
@@ -109,9 +108,9 @@ export default {
       return accounts;   
     }
   },
-
+ */
   /* Function to get one account for edit */
-  getAccount: async (userId: number, id: number) => {
+  /* getAccount: async (userId: number, id: number) => {
     const account = await prisma.account.findFirst({
       where: {
           userId,
@@ -125,9 +124,9 @@ export default {
 
     return account;
   },
-
+ */
   /* Function to update an account */
-  updateAccount: async (account: Account) => {
+  /* updateAccount: async (account: Account) => {
     const updAccount = await prisma.account.update({
       where: {
         id: account.id        
@@ -148,32 +147,32 @@ export default {
       }
     });
     return updAccount;
-  },
+  }, */
 
   /* Function to delete an account */
-  deleteAccount: async (id: number) => {
+  /* deleteAccount: async (id: number) => {
     const deleteId = await prisma.account.delete({
       where: {
         id
       }
     });
-  },
+  }, */
   
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /* Functions related to the purchase of miles///////////////////////////////////////////////// */
   /* Function to Add new miles buyed data */
-  addNewMilesBuyed: async ({price, pointsQuantity, dateBuy, program, selectedAccount, cpf, destiny, percentage, creditCard, parcel, month, miles, finalPrice, userId}: BuyMiles) => {
+  /* addNewMilesBuyed: async ({price, pointsQuantity, dateBuy, program, selectedAccount, cpf, destiny, percentage, creditCard, parcel, month, miles, finalPrice, userId}: BuyMiles) => {
 
     return await prisma.buyMiles.create({
       data: {
         price, pointsQuantity, dateBuy, program, selectedAccount, cpf, destiny, percentage, creditCard, parcel, month, miles, finalPrice, userId
       }
     });
-  },
+  }, */
 
   /* Function to get miles buyed data */
-  getMilesBuyed: async (userId: number) => {
+ /*  getMilesBuyed: async (userId: number) => {
     const buyedMiles = await prisma.buyMiles.findMany({
       where: {
         userId
@@ -184,10 +183,10 @@ export default {
       return null;
     }
     return buyedMiles;
-  },
+  }, */
 
   /* Function for get one miles buyed data */
-  getOneMilesBuyed: async (id: number) => {
+  /* getOneMilesBuyed: async (id: number) => {
     const Buyed = await prisma.buyMiles.findFirst({
       where: {
         id
@@ -198,10 +197,10 @@ export default {
       return null;
     }
     return Buyed;
-  },
+  }, */
 
   /* Function to update an account */
-  updateMilesBuyed: async (milesBuyed: BuyMiles) => {
+  /* updateMilesBuyed: async (milesBuyed: BuyMiles) => {
     const updMilesBuyed = await prisma.buyMiles.update({
       where: {
         id: milesBuyed.id        
@@ -211,32 +210,32 @@ export default {
       }
     });
     return updMilesBuyed;
-  },
+  }, */
 
   /* Function to delete an data miles selled */
-  deleteMilesBuyed: async (id: number) => {
+ /*  deleteMilesBuyed: async (id: number) => {
     const deleteId = await prisma.buyMiles.delete({
       where: {
         id
       }
     });
   },
-
+ */
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /* Functions related to the miles selled///////////////////////////////////////////////// */
   /* Function to Add new miles selled data */
-  addNewMilesSelled: async ({pointsQuantity, priceBuy, priceSell, program, programBuyer, selectedAccount, cpf, receipt, dateSell, dateReceipt, profit, percentageProfit, userId}: SellMiles) => {
+ /*  addNewMilesSelled: async ({pointsQuantity, priceBuy, priceSell, program, programBuyer, selectedAccount, cpf, receipt, dateSell, dateReceipt, profit, percentageProfit, userId}: SellMiles) => {
 
     return await prisma.sellMiles.create({
       data: {
         pointsQuantity, priceBuy, priceSell, program, programBuyer, selectedAccount, cpf, receipt, dateSell, dateReceipt, profit, percentageProfit, userId
       }
     });
-  },
+  }, */
 
   /* Function for get miles selled data */
-  getMilesSelled: async (userId: number) => {
+  /* getMilesSelled: async (userId: number) => {
     const selledMiles = await prisma.sellMiles.findMany({
       where: {
         userId
@@ -247,10 +246,10 @@ export default {
       return null;
     }
     return selledMiles;
-  },
+  }, */
 
   /* Function for get one miles selled data */
-  getOneMilesSelled: async (id: number) => {
+  /* getOneMilesSelled: async (id: number) => {
     const selled = await prisma.sellMiles.findFirst({
       where: {
         id
@@ -261,10 +260,10 @@ export default {
       return null;
     }
     return selled;
-  },
+  }, */
 
   /* Function to update an account */
-  updateMilesSelled: async (milesSelled: SellMiles) => {
+  /* updateMilesSelled: async (milesSelled: SellMiles) => {
     const updMilesSelled = await prisma.sellMiles.update({
       where: {
         id: milesSelled.id        
@@ -285,21 +284,21 @@ export default {
       }
     });
     return updMilesSelled;
-  },
+  }, */
 
   /* Function to delete an data miles selled */
-  deleteMilesSelled: async (id: number) => {
+  /* deleteMilesSelled: async (id: number) => {
     const deleteId = await prisma.sellMiles.delete({
       where: {
         id
       }
     });
-  },
+  }, */
 
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /* Functions related to the buy bonus///////////////////////////////////////////////// */
-  addNewBuyBonus: async ({product,price,pointsForReal,program,pointsQuantity,pointsCardQuantity, totalpoints,destiny,percentage,miles,secureValue,sellPrice,priceMiles,percentageProfit,finalPrice,score,priceProtection, transfer, currencyOption,
+  /* addNewBuyBonus: async ({product,price,pointsForReal,program,pointsQuantity,pointsCardQuantity, totalpoints,destiny,percentage,miles,secureValue,sellPrice,priceMiles,percentageProfit,finalPrice,score,priceProtection, transfer, currencyOption,
     pointsCard, userId}: BuyBonus) => {
 
     return await prisma.buyBonus.create({
@@ -308,10 +307,10 @@ export default {
         pointsCard, userId
       }
     });
-  },
+  }, */
 
   /* Function for get buy bonus data */
-  getBuyBonus: async (userId: number) => {
+  /* getBuyBonus: async (userId: number) => {
     const buys = await prisma.buyBonus.findMany({
       where: {
         userId
@@ -323,10 +322,10 @@ export default {
     }
 
     return buys;
-  },
+  }, */
 
   /* Function for get one buy bonus data */
-  getOneBuyBonus: async (id: number) => {
+ /*  getOneBuyBonus: async (id: number) => {
     const buy = await prisma.buyBonus.findFirst({
       where: {
         id
@@ -337,10 +336,10 @@ export default {
       return null;
     }
     return buy;
-  },
+  }, */
 
   /* Function to update an account */
-  updateBuyBonus: async (buybonus: BuyBonus) => {
+  /* updateBuyBonus: async (buybonus: BuyBonus) => {
     const updBuyBonus = await prisma.buyBonus.update({
       where: {
         id: buybonus.id        
@@ -369,16 +368,16 @@ export default {
       }
     });
     return updBuyBonus;
-  },
+  }, */
 
   /* Function to delete an buy bonus */
-  deleteBuyBonus: async (id: number) => {
+  /* deleteBuyBonus: async (id: number) => {
     const deleteId = await prisma.buyBonus.delete({
       where: {
         id
       }
     });
-  },
+  }, */
 
 
   };

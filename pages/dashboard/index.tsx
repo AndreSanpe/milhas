@@ -127,7 +127,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       loggedUser: session.user,
       user,
-      
     }
   }
 }

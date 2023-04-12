@@ -16,21 +16,14 @@ import { User } from '../../../types/User';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
 import Title from '../../../components/Title';
+import apiAccounts from '../../../libs/apiAccounts';
 
 
 const CompraBonificada = (data: Props) => {
   
   const router = useRouter(); 
 
-  /* ContextApi: accounts  */
-  const { accounts, setAccounts } = useAccountsContext();
-  useEffect(() => {
-    if(accounts === null || accounts as [] !== data.accounts) {
-      setAccounts(data.accounts as any)
-    }
-  }, [data, accounts, setAccounts]);
-
-    /* ContextApi: user  */
+  /* ContextApi: user  */
     const { user, setUser } = useAuthContext();
     useEffect(() => {
       if(user === null || user != data.user) {
@@ -751,15 +744,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       redirect: {destination:'/', permanent: false}
     }
   } 
-
-  /* Get accounts */
-  const accounts = await api.getAccounts(session.user.id);
-
    
   return {
     props: {
-      user,
-      accounts
+      user
     }
   }
 }

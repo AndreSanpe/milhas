@@ -16,6 +16,7 @@ import Toggle from '../../../../components/Toggle';
 import { useRouter } from 'next/router';
 import { Account } from '../../../../types/Account';
 import Title from '../../../../components/Title';
+import apiAccounts from '../../../../libs/apiAccounts';
 
 
 const EditarConta = (data: Props) => {
@@ -455,7 +456,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } 
 
   /* Get one account */
-  const account = await api.getAccount(session.user.id, parseInt(editaccountid as string));
+  const account = await apiAccounts.getAccount(session.user.id, parseInt(editaccountid as string));
   
   return {
     props: {

@@ -17,6 +17,7 @@ import { authOptions } from '../../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
 import { BuyBonus } from '../../../../types/BuyBonus';
 import Title from '../../../../components/Title';
+import apiBuyBonus from '../../../../libs/apiBuyBonus';
 
 
 const EditarCompraBonificada = (data: Props) => {
@@ -758,7 +759,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } 
 
   /* Get one buy bonus */
-  const buyBonus = await api.getOneBuyBonus(parseInt(editbuybonus as string));
+  const buyBonus = await apiBuyBonus.getOneBuyBonus(parseInt(editbuybonus as string));
    
   return {
     props: {

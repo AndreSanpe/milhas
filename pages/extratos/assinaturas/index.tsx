@@ -2,7 +2,6 @@ import { GetServerSideProps } from 'next';
 import { unstable_getServerSession } from 'next-auth';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react'
-import ButtonBack from '../../../components/ButtonBack';
 import Layout from '../../../components/Layout';
 import { useAccountsContext } from '../../../contexts/accounts';
 import { useAuthContext } from '../../../contexts/auth';
@@ -12,6 +11,7 @@ import { User } from '../../../types/User';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
 import Title from '../../../components/Title';
+import apiAccounts from '../../../libs/apiAccounts';
 
 const AssinaturaClubes = (data: Props) => {
 
@@ -233,12 +233,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } 
 
   /* Get accounts */
-  const accounts = await api.getAccounts(session.user.id);
+  const accounts = await apiAccounts.getAccounts(session.user.id);
   
   return {
     props: {
       user,
-      accounts
+      accounts: JSON.parse(JSON.stringify(accounts))
     }
   }
 }

@@ -13,6 +13,7 @@ import AlertIcon from './error_outline.svg';
 import Button from '../../../components/Button';
 import { useRouter } from 'next/router';
 import Title from '../../../components/Title';
+import apiAccounts from '../../../libs/apiAccounts';
 
 type Account = {
   name: string;
@@ -163,12 +164,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } 
 
   /* Get accounts */
-  const accounts = await api.getAccounts(session.user.id);
+  const accounts = await apiAccounts.getAccounts(session.user.id);
   
   return {
     props: {
       user,
-      accounts
+      accounts: JSON.parse(JSON.stringify(accounts))
     }
   }
 }
