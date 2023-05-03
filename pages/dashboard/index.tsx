@@ -115,7 +115,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if(!session) return { redirect: { destination: '/login', permanent: true }}; 
 
   // Get tenant
-  console.log(session)
   const user = await api.getUser(session.user.id)
   if(!user){
     return {

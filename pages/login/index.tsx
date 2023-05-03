@@ -123,7 +123,7 @@ const Login = () => {
         </div>
 
         <div className={styles.signup}>
-          Primeira vez na MILHAS?<div className={styles.signupLink} onClick={() => {}}>Criar conta</div>
+          Primeira vez na PlanMilhas?<div className={styles.signupLink} onClick={() => {router.push('/signup')}}>Criar conta</div>
         </div>
 
       </div>

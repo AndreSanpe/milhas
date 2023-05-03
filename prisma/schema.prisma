@@ -11,23 +11,41 @@ datasource db {
 }
 
 model User {
-  id        Int         @id @unique @default(autoincrement())
-  name      String
-  email     String      @unique
-  password  String
-  cpf       String
-  birthdate String
-  cellphone String
-  status    Boolean     @default(true)
-  accounts  Account[]
-  buymiles  BuyMiles[]
-  sellmiles SellMiles[]
-  buybonus  BuyBonus[]
+  id             Int            @id @unique @default(autoincrement())
+  name           String
+  email          String         @unique
+  password       String
+  cpf            String
+  birthdate      String
+  cellphone      String
+  stripeCustomer String?
+  status         Boolean        @default(true)
+  accounts       Account[]
+  buymiles       BuyMiles[]
+  sellmiles      SellMiles[]
+  buybonus       BuyBonus[]
+  subscriptions  Subscription[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
   @@map("users")
+}
+
+model Subscription {
+  id                 Int      @id @unique @default(autoincrement())
+  stripeId           String?
+  subscriptionStatus Boolean
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("subscriptions")
 }
 
 model Account {

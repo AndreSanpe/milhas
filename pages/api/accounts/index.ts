@@ -12,7 +12,6 @@ const handlerGet: NextApiHandler = async (req, res) => {
   } else {
     res.json({ error: "Nenhuma conta encontrada"});
   }
-    
 };
 
 const handlerPost: NextApiHandler = async (req, res) => {

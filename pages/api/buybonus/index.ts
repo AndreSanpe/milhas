@@ -2,10 +2,11 @@ import { NextApiHandler } from "next";
 import api from "../../../libs/api";
 import { BuyBonus } from "../../../types/BuyBonus";
 import { getSession } from "next-auth/react";
+import apiBuyBonus from "../../../libs/apiBuyBonus";
 
 const handlerGet: NextApiHandler = async (req, res) => {
   const { userId } = req.body;
-  const buys = await api.getBuyBonus(parseInt(userId));
+  const buys = await apiBuyBonus.getBuyBonus(parseInt(userId));
   if(buys) {
     res.status(201).json({ buys })
   } else {
@@ -15,7 +16,7 @@ const handlerGet: NextApiHandler = async (req, res) => {
 
 const handlerPost: NextApiHandler = async (req, res) => {
   const buybonus: BuyBonus = req.body;
-  const newBuyBonus = await api.addNewBuyBonus(buybonus);
+  const newBuyBonus = await apiBuyBonus.addNewBuyBonus(buybonus);
 
   if(newBuyBonus) {
     res.status(201).json({status: true});
@@ -26,7 +27,7 @@ const handlerPost: NextApiHandler = async (req, res) => {
 
 const handlerPut: NextApiHandler = async (req, res) => {
   const buyBonus: BuyBonus = req.body;
-  const updBuyBonus = await api.updateBuyBonus(buyBonus);
+  const updBuyBonus = await apiBuyBonus.updateBuyBonus(buyBonus);
 
   if(updBuyBonus) {
     res.json({ status: true});
@@ -37,7 +38,7 @@ const handlerPut: NextApiHandler = async (req, res) => {
 
 const handlerDelete: NextApiHandler = async (req, res) => {
   const id: number = req.body;
-  await api.deleteBuyBonus(id);
+  await apiBuyBonus.deleteBuyBonus(id);
 
   res.json({ status: true });
 };

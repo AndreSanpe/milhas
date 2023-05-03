@@ -80,3 +80,14 @@ export function twoDigits(e: React.FormEvent<HTMLInputElement>) {
   e.currentTarget.value = value;
   return e;
 }
+
+export function cellphone (e: React.FormEvent<HTMLInputElement>) {
+  e.currentTarget.maxLength = 12;
+  let value = e.currentTarget.value;
+  value = value.replace(/\D/g,"")
+  value = value.replace(/(.{2})(\d)/,"$1 $2")
+  value = value.replace(/(.{4})(.{2})(.{8})(\d)/,"$1$2 $3")
+
+  e.currentTarget.value = value;
+  return e;
+}
