@@ -3,7 +3,8 @@ import prisma from "../../../libs/prisma";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: '2022-11-15'
+  apiVersion: '2022-11-15',
+  typescript: true
 });
 
 export const config = {
@@ -31,40 +32,51 @@ const handlerPost: NextApiHandler = async (req, res) => {
   const webhookSecret = 
     process.env.STRIPE_WEBHOOK_SECRET_LIVE ??
     process.env.STRIPE_WEBHOOK_SECRET
-
-  let event;
-
-  console.log(sig, webhookSecret)
-
+    
   try {
-    event = stripe.webhooks.constructEvent(buf, sig as string, webhookSecret as string)
-    console.log(event)
+    let event = stripe.webhooks.constructEvent(
+      buf, 
+      sig as string,
+      webhookSecret as string) as Stripe.DiscriminatedEvent
     res.status(200).end();
     
     const checkoutSession = event.data.object as Stripe.Checkout.Session;
 
     switch(event.type) {
       case 'customer.subscription.created':
-        //@ts-ignore
-        const stripeSubscriptionId = event?.data?.object?.id  
-         //@ts-ignore
-        const status = event?.data?.object?.status
-         //@ts-ignore
-        const stripeCustomerId = event?.data?.object?.customer 
+      case 'customer.subscription.updated':
+      case 'customer.subscription.deleted':
         
+        const stripeSubscriptionId = event.data.object.id
+        const status = event.data.object.status
+        const stripeCustomerId = event.data.object.customer 
+        const currentPeriodStart = new Date(event.data.object.current_period_start * 1000) 
+        const currentPeriodEnd = new Date(event.data.object.current_period_end * 1000) 
+        
+        //Checking if the subscription is valid (paid or trial)
+        let subscriptionStatus = false;
+        if(status === 'active' || status === 'trialing') {
+          subscriptionStatus = true;
+        } else {
+          subscriptionStatus = false
+        }
+
+        //Search user via stripe consumer
         const user = await prisma.user.findFirst({
           where: {
-            stripeCustomer: stripeCustomerId
+            stripeCustomer: stripeCustomerId as string
           }
         });
 
+        //Search subscription via user and stripe ID
         const subscription = await prisma.subscription.findFirst({
           where: {
             userId: user?.id,
-            stripeId: stripeSubscriptionId
+            subscriptionId: stripeSubscriptionId
           }
         });
 
+        //If there is no signature, create one, if there is, update
         if(subscription) {
           // update
           await prisma.subscription.update({
@@ -72,7 +84,9 @@ const handlerPost: NextApiHandler = async (req, res) => {
               id: subscription.id
             }, 
             data: {
-              subscriptionStatus: true
+              subscriptionStatus,
+              currentPeriodStart,
+              currentPeriodEnd
             }
           })
         } else {
@@ -80,13 +94,14 @@ const handlerPost: NextApiHandler = async (req, res) => {
             data: {
               userId: user?.id as number,
               subscriptionStatus: true,
-              stripeId: stripeSubscriptionId,
+              subscriptionId: stripeSubscriptionId,
+              currentPeriodEnd,
+              currentPeriodStart
             }
           })
         }
-      break;
+        break
     }
-
   } catch (err) {
     console.log(`Error message: ${err}`)
     return res.send({ message: 'error webhook'});
@@ -101,12 +116,6 @@ const handler: NextApiHandler = async (req, res) => {
       case 'POST':
         handlerPost(req, res);
       break;
-      /* case 'PUT':
-        handlerPut(req, res);
-      break; */
-      /* case 'DELETE':
-        handlerDelete(req, res);
-      break; */
     }
   };
 

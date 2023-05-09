@@ -2,7 +2,6 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from 'next-auth/providers/credentials';
 import api from "../../../libs/api";
 import { AuthUser } from "../../../types/AuthUser";
-import { User } from "../../../types/User";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,

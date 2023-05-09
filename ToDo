@@ -1,0 +1,22 @@
+------------Assinatura--------------
+
+[x] Mudar db para receber trial_start, trial_end
+[x] Pensar qual formato será o status: string (padrão stripe) ou boolean
+[x] Separar ou não trial de assinatura ?
+[x] Refatorar webhooks (created, updated, etc)
+[x] Fazer lógica, se o user não estiver active ou trialing, enviar para a assinatura
+[] Tratar envio de email faltando 3 dias pra acabar a assinatura trial
+
+------------Funcionalidade--------------
+
+[x] Puxar os valores de extratos faltantes
+[ ] Fazer balanço de pontos e milhas
+[ ] Fazer calculadora boomerang
+[ ] Mostrar mensagem de erro próximo ao botão em relação a dados faltantes e/ou errados
+
+-------------Geral-------------
+
+[ ] Landing page
+[ ] Menus (suporte, etc)
+[ ] Lidar com emails
+[ ] Testar online

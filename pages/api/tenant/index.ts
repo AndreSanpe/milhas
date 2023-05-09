@@ -19,23 +19,14 @@ const handlerGet: NextApiHandler = async (req, res) => {
 //New user
 const handlerPost: NextApiHandler = async (req, res) => { 
 
-  const { email } = req.body;
-  const emailVerify = await prisma?.user.findFirst({
-    where: {
-      email
-    }
-  })
-  if(emailVerify) {
-    res.status(400).json({error: 'E-mail já cadastrado'})
-  }
-
   const user: User = req.body;
-  const newUser = await api.addNewUser(user);
+  const newUser = await api.addNewUser(user).catch((e) => {
+    res.status(400).json({error: 'email já existente'})
+  })
+  
   if(newUser) {
     res.status(201).json({status: true});
-  } else {
-    res.json({ error: "Não foi possível cadastrar este usuário"});
-  }
+  } 
 };
 
 const handler: NextApiHandler = async (req, res) => {

@@ -79,6 +79,12 @@
     background-color: #fafafa;
     transition: all ease 0.2s;
   }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
   
   .closeIcon {
     display: flex;
@@ -86,6 +92,28 @@
     width: 100%;
     padding: 24px;
     color: #666666;
+    cursor: pointer;
+  }
+
+  .title {
+    display: flex;
+    padding-left: 20px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #292929;
+  }
+
+  .subtitle {
+    display: flex;
+    font-size: 14px;
+    padding-left: 20px;
+    margin-bottom: 60px;
+    color: #666666;
+  }
+
+  .links {
+    display: flex;
+    padding: 8px 20px;
     cursor: pointer;
   }
 

@@ -24,11 +24,11 @@ const handlerPost: NextApiHandler = async (req, res) => {
     //Get subscription
     const subscription = await prisma?.subscription.findFirst({
       where: {
-        userId: user.user.id,
-        subscriptionStatus: true 
+        userId: dbUser?.id,
+        subscriptionId: dbUser?.subscriptionId
       }
     })
-    
+
     let stripCustomerId = dbUser?.stripeCustomer;
 
     //If user has active subscription >> send it to the customer portal
@@ -40,25 +40,6 @@ const handlerPost: NextApiHandler = async (req, res) => {
       return res.redirect(303, portalSession.url);
     }
 
-
-    //Customer id
-    if(!dbUser?.stripeCustomer) {
-      const customer = await stripe.customers.create({
-        metadata: {
-          id: (user.user.id).toString()
-        }
-      });
-      await prisma?.user.update({
-        where: {
-          id: user.user.id
-        },
-        data: {
-          stripeCustomer: customer.id
-        }
-      });
-      stripCustomerId = customer.id;
-    }
-    
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
       client_reference_id: (user.user.id).toString(),
@@ -66,7 +47,7 @@ const handlerPost: NextApiHandler = async (req, res) => {
       line_items: [
         {
           // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-          price: 'price_1MtzwlKU1VIdjQLhKXnThVCI',
+          price: 'price_1N4VFIKU1VIdjQLhSiCGqbHU',
           quantity: 1,
         },
       ],
@@ -76,7 +57,7 @@ const handlerPost: NextApiHandler = async (req, res) => {
     });
     return res.redirect(303, session.url as string);
   } catch (err) {
-    return res.send({ message: 'error1'});
+    return res.send({ message: 'error handler post'});
   }
 }
 

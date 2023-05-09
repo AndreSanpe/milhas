@@ -24,6 +24,11 @@ const ExtratoCompra = (data: Props) => {
   /* Contexts */
   const { user, setUser } = useAuthContext();
 
+  /* States ///////////////////////////////////////////////////////////////////////////*/
+  const [ buyedMilesData, setBuyedMilesData ] = useState<BuyMiles[]>([]);
+  const [ noHaveBuyMiles, setNoHaveBuyMiles ] = useState<boolean>(false);
+  const [ menuOpened, setMenuOpened ] = useState<number>(0);
+
   /* Setting message for not have a buy bonus//////////////////////////////////////////// */
   useEffect(() => {
     if(data.buyedMiles.length === 0) {
@@ -31,11 +36,43 @@ const ExtratoCompra = (data: Props) => {
     }
   }, [data.buyedMiles]);
 
-  /* General states //////////////////////////////////////////////////////////////////*/
-  const [ noHaveBuyMiles, setNoHaveBuyMiles ] = useState<boolean>(false);
+  /* List data buyedMiles /////////////////////////////////////////////////////////////////*/
+ useEffect(() => {
+  const arraySelledMiles: BuyMiles[] = [];
   
-  /* Menu edit states //////////////////////////////////////////////////////////////// */
-  const [ menuOpened, setMenuOpened ] = useState<number>(0);
+  if(data.buyedMiles) {
+    data.buyedMiles.map((item, index) => {
+      if(item.id) {
+        arraySelledMiles.push(item);
+      } else {
+        return null;
+      }
+    })  
+  }
+  setBuyedMilesData(arraySelledMiles);
+  }, [data.buyedMiles])
+
+  let miles = 0;
+  let buyQuantity = 0;
+  let investiment = 0;
+  let averageCoastMiles = 0;
+
+  for(let i = 0; i < buyedMilesData.length; i++) {
+    if(buyedMilesData[i].miles) {
+      miles += buyedMilesData[i].miles as number;
+    } else {
+      miles += buyedMilesData[i].pointsQuantity;
+    }
+    investiment += buyedMilesData[i].price;
+  }
+
+  if(miles && investiment) {
+    averageCoastMiles = investiment / (miles / 1000);
+  }
+
+  if(buyedMilesData.length) {
+    buyQuantity = buyedMilesData.length;
+  }
   
   /* Menu edit events //////////////////////////////////////////////////////////////// */
   const handleMenuEvent = (event: MouseEvent) => {
@@ -87,22 +124,22 @@ const ExtratoCompra = (data: Props) => {
 
             <div className={styles.doubleColumns}>
               <div className={styles.secundaryTitle}>Total de milhas compradas:</div>
-              <div className={styles.values}>{/* miles ? miles.toLocaleString('pt-BR') : '' */}</div>
+              <div className={styles.values}>{miles ? miles.toLocaleString('pt-BR') : ''}</div>
             </div>
 
             <div className={styles.doubleColumns}>
               <div className={styles.secundaryTitle}>Total de compras:</div>
-              <div className={styles.values}>{/* sellQuantity ? sellQuantity : '' */}</div>
+              <div className={styles.values}>{buyQuantity ? buyQuantity : ''}</div>
             </div>
 
             <div className={styles.doubleColumns}>
               <div className={styles.secundaryTitle}>Total investido:</div>
-              <div className={styles.values}>{/* investiment ? investiment.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : '' */}</div>
+              <div className={styles.values}>{investiment ? investiment.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
             </div>
 
             <div className={styles.doubleColumns} style={{border: 'none'}}>
               <div className={styles.secundaryTitle}>Valor médio do milheiro:</div>
-              <div className={styles.values}>{/* investiment ? investiment.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : '' */}</div>
+              <div className={styles.values}>{averageCoastMiles ? averageCoastMiles.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
             </div>
             
           </div>

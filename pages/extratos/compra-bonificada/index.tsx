@@ -26,6 +26,11 @@ const ExtratoCompraBonificada = (data: Props) => {
   /* Contexts */
   const { user, setUser } = useAuthContext();
 
+  /* States /////////////////////////////////////////////////////////////////////////////*/
+  const [ buyBonusData, setBuyBonusData ] = useState<BuyBonus[]>([]);
+  const [ noHaveBuyBonus, setNoHaveBuyBonus ] = useState<boolean>(false);
+  const [ menuOpened, setMenuOpened ] = useState<number>(0);
+
   /* Sending user data to context /////////////////////////////////////////////////////////*/
   useEffect(() => {
     if(user === null || user != data.user) {
@@ -40,12 +45,39 @@ const ExtratoCompraBonificada = (data: Props) => {
     }
   }, [data.buybonus]);
 
-  /* General states //////////////////////////////////////////////////////////////////*/
-  const [ noHaveBuyBonus, setNoHaveBuyBonus ] = useState<boolean>(false);
- 
-  /* Menu edit states //////////////////////////////////////////////////////////////// */
-  const [ menuOpened, setMenuOpened ] = useState<number>(0);
+ /* List data buyBonus /////////////////////////////////////////////////////////////////*/
+ useEffect(() => {
+  const arrayBuyBonus: BuyBonus[] = [];
   
+  if(data.buybonus) {
+    data.buybonus.map((item, index) => {
+      if(item.id) {
+        arrayBuyBonus.push(item);
+      } else {
+        return null;
+      }
+    })  
+  }
+  setBuyBonusData(arrayBuyBonus);
+  }, [data.buybonus]);
+  
+  let buyBonusQuantity = 0;
+  let valueSaved = 0;
+  let percentageDiscount = 0;
+  let price = 0;
+  let percentageDiscountAverage = 0;
+
+  for(let i = 0; i < buyBonusData.length; i++) {
+    valueSaved += (buyBonusData[i].price - buyBonusData[i].finalPrice);
+    percentageDiscount += buyBonusData[i].percentageProfit;
+    price += buyBonusData[i].price
+  }
+
+  if(buyBonusData.length) {
+    percentageDiscountAverage =  (valueSaved * 100) / price
+    buyBonusQuantity = buyBonusData.length;
+  }
+
   /* Menu edit events //////////////////////////////////////////////////////////////// */
   const handleMenuEvent = (event: MouseEvent) => {
     const tagName = (event.target as Element).tagName;
@@ -95,17 +127,17 @@ const ExtratoCompraBonificada = (data: Props) => {
 
             <div className={styles.doubleColumns}>
               <div className={styles.secundaryTitle}>Total de compras:</div>
-              <div className={styles.values}>{/* {sellQuantity ? sellQuantity : ''} */}</div>
+              <div className={styles.values}>{buyBonusQuantity ? buyBonusQuantity : ''}</div>
             </div>
 
             <div className={styles.doubleColumns}>
               <div className={styles.secundaryTitle}>Valor economizado:</div>
-              <div className={styles.values}>{/* profit ? profit.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : '' */}</div>
+              <div className={styles.values}>{valueSaved ? valueSaved.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
             </div>
 
             <div className={styles.doubleColumns} style={{border: 'none'}}>
               <div className={styles.secundaryTitle}>Percentual médio de desconto:</div>
-              <div className={styles.values}>{/* percentageProfitAverage ? percentageProfitAverage.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%' : '' */}</div>
+              <div className={styles.values}>{percentageDiscountAverage ? percentageDiscountAverage.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%' : ''}</div>
             </div>
             
           </div>

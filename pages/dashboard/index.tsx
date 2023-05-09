@@ -105,7 +105,6 @@ export default Dashboard;
 type Props = {
   user: User;
   loggedUser: Session;
-  
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -121,6 +120,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       redirect: {destination:'/', permanent: false}
     }
   } 
+
+  //Get subscription
+  const subscription = await api.getSubscription(user.id as number, user.subscriptionId as string);
+  
+  if(!subscription?.subscriptionStatus) {
+    return{
+      redirect: {destination: '/assinatura', permanent: false}
+    }
+  }
   
   return {
     props: {

@@ -19,7 +19,7 @@ model User {
   birthdate      String
   cellphone      String
   stripeCustomer String?
-  status         Boolean        @default(true)
+  subscriptionId String?
   accounts       Account[]
   buymiles       BuyMiles[]
   sellmiles      SellMiles[]
@@ -34,7 +34,7 @@ model User {
 
 model Subscription {
   id                 Int      @id @unique @default(autoincrement())
-  stripeId           String?
+  subscriptionId     String?
   subscriptionStatus Boolean
   currentPeriodStart DateTime
   currentPeriodEnd   DateTime

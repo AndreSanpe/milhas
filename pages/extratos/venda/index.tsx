@@ -50,27 +50,26 @@ const ExtratoVenda = (data: Props) => {
   }
   setSelledMilesData(arraySelledMiles);
 
-}, [data.selledMiles])
+  }, [data.selledMiles])
 
-let investiment = 0;
-let profit = 0;
-let percentageProfit = 0;
-let percentageProfitAverage = 0;
-let miles = 0;
-let sellQuantity = 0;
+  let investiment = 0;
+  let profit = 0;
+  let percentageProfit = 0;
+  let percentageProfitAverage = 0;
+  let miles = 0;
+  let sellQuantity = 0;
 
-for(let i = 0; i < selledMilesData.length; i++) {
-  profit += selledMilesData[i].profit;
-  percentageProfit += selledMilesData[i].percentageProfit;
-  miles += selledMilesData[i].pointsQuantity;
-  investiment += selledMilesData[i].priceBuy;
-}
+  for(let i = 0; i < selledMilesData.length; i++) {
+    profit += selledMilesData[i].profit;
+    percentageProfit += selledMilesData[i].percentageProfit;
+    miles += selledMilesData[i].pointsQuantity;
+    investiment += selledMilesData[i].priceBuy;
+  }
 
-if(selledMilesData.length) {
-
-  percentageProfitAverage = (percentageProfit) / (selledMilesData.length);
-  sellQuantity = selledMilesData.length;
-}
+  if(selledMilesData.length) {
+    percentageProfitAverage = (profit * 100) / (investiment);
+    sellQuantity = selledMilesData.length;
+  }
 
   /* Menu edit events //////////////////////////////////////////////////////////////// */
   const handleMenuEvent = (event: MouseEvent) => {

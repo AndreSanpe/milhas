@@ -95,10 +95,11 @@ const Signup = () => {
         headers: {
           'content-Type': 'application/json',
         },
-      });
+      });     
       
       if(response.status === 400) {
-        console.log('Email já cadastrado')
+        console.log(response);
+        
         return
       }
      
@@ -187,7 +188,7 @@ const Signup = () => {
               />
           </div>
           <div className={styles.input}>
-            <div className={styles.label}>Senha</div>
+            <div className={styles.label}>Crie uma senha</div>
               <Input
                 onSet={handleChange}
                 name='password' 
