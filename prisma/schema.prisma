@@ -81,6 +81,7 @@ model BuyMiles {
   selectedAccount String
   cpf             String
 
+  transfer   Boolean?
   destiny    String?
   percentage Int?
   creditCard String?
@@ -147,9 +148,9 @@ model BuyBonus {
   percentageProfit Float
   finalPrice       Float
 
-  score           Boolean
-  priceProtection Boolean
-  transfer        Boolean
+  score           Boolean?
+  priceProtection Boolean?
+  transfer        Boolean?
 
   user   User @relation(fields: [userId], references: [id])
   userId Int

@@ -3,23 +3,24 @@ import { Account, unstable_getServerSession } from 'next-auth';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react'
-import Button from '../../../components/Button';
-import Dropdown from '../../../components/Dropdown';
-import Input from '../../../components/Input';
-import Layout from '../../../components/Layout';
-import Toggle from '../../../components/Toggle';
-import { useAccountsContext } from '../../../contexts/accounts';
-import { useAuthContext } from '../../../contexts/auth';
-import api from '../../../libs/api';
-import { User } from '../../../types/User';
-import { authOptions } from '../../api/auth/[...nextauth]';
+import Button from '../../../../components/Button';
+import Dropdown from '../../../../components/Dropdown';
+import Input from '../../../../components/Input';
+import Layout from '../../../../components/Layout';
+import Toggle from '../../../../components/Toggle';
+import { useAccountsContext } from '../../../../contexts/accounts';
+import { useAuthContext } from '../../../../contexts/auth';
+import api from '../../../../libs/api';
+import { User } from '../../../../types/User';
+import { authOptions } from '../../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
-import Title from '../../../components/Title';
-import FormModal from '../../../components/FormModal';
-import apiAccounts from '../../../libs/apiAccounts';
+import Title from '../../../../components/Title';
+import apiAccounts from '../../../../libs/apiAccounts';
+import apiBuyMiles from '../../../../libs/apiBuyMiles';
+import { BuyMiles } from '../../../../types/BuyMiles';
 
 
-const CompraPontos = (data: Props) => {
+const EditarCompraPontos = (data: Props) => {
   
   const router = useRouter(); 
 
@@ -43,28 +44,28 @@ const CompraPontos = (data: Props) => {
   const [ showModal, setShowModal ] = useState<boolean>(false);
  
   /* General states ///////////////////////////////////////////////////////////////////////*/
-  const [ price, setPrice ] = useState<number>(0);
-  const [ pointsQuantity, setPointsQuantity ] = useState<number>(0);
-  const [ percentage, setPercentage ] = useState<number>(0);
+  const [ price, setPrice ] = useState<number>(data.buyedMiles.price);
+  const [ pointsQuantity, setPointsQuantity ] = useState<number>(data.buyedMiles.pointsQuantity);
+  const [ percentage, setPercentage ] = useState<number>(data.buyedMiles.percentage as number);
   const [ sellPrice, setSellPrice ] = useState<number>(0);
-  const [ transfer, setTransfer ] = useState<boolean>(false);
-  const [ creditCard, setCreditCard ] = useState<string>('')
-  const [ program, setProgram ] = useState<string>('');
-  const [ destiny, setDestiny ] = useState<string>('');
-  const [ selectedAccount, setSelectedAccount ] = useState<string>('');
-  const [ parcel, setParcel ] = useState('');
-  const [ month, setMonth ] = useState<string>('');
-  const [ dateBuy, setDateBuy ] = useState<string>('');
+  const [ transfer, setTransfer ] = useState<boolean>(data.buyedMiles.transfer);
+  const [ creditCard, setCreditCard ] = useState<string>(data.buyedMiles.creditCard as string)
+  const [ program, setProgram ] = useState<string>(data.buyedMiles.program);
+  const [ destiny, setDestiny ] = useState<string>(data.buyedMiles.destiny as string);
+  const [ selectedAccount, setSelectedAccount ] = useState<string>(data.buyedMiles.selectedAccount);
+  const [ parcel, setParcel ] = useState(data.buyedMiles.parcel as string);
+  const [ month, setMonth ] = useState<string>(data.buyedMiles.month as string);
+  const [ dateBuy, setDateBuy ] = useState<string>(data.buyedMiles.dateBuy as string);
   
   /* Auxiliary states for accounts data ////////////////////////////////////////////////////*/
   const [ namesAccounts, setNamesAccounts ] = useState<any[]>([]);
   const [ documentsAccounts, setDocumentsAccounts ] = useState<any[]>([]);
   const [ indice, setIndice ] = useState<any>();
-  const [ cpf, setCpf ] = useState<string>('');
+  const [ cpf, setCpf ] = useState<string>(data.buyedMiles.cpf);
 
   /* Auxiliary states for calculate/////////////////////////////////////////////////////////*/
-  const [ miles, setMiles ] = useState<number>();
-  const [ finalPrice, setFinalPrice ] = useState<number>();
+  const [ miles, setMiles ] = useState<number>(data.buyedMiles.miles as number);
+  const [ finalPrice, setFinalPrice ] = useState<number>(data.buyedMiles.finalPrice);
 
   /* Auxiliary states for errors */
   const [ errorFields, setErrorFields ] = useState<string[]>([]);
@@ -226,16 +227,18 @@ const CompraPontos = (data: Props) => {
         month, 
         miles, 
         finalPrice, 
-        userId: user.id
+        userId: user.id,
+        id: data.buyedMiles.id
       }
       const response = await fetch('/api/buymiles', {
-        method: 'POST',
+        method: 'PUT',
         body: JSON.stringify(buymiles),
         headers: {
           'content-Type': 'application/json',
         },
       });
-      setShowModal(true);
+      
+      router.push('/extratos/compra')
     }
   };
 
@@ -243,32 +246,16 @@ const CompraPontos = (data: Props) => {
   return (<>
 
   <Head>
-    <title>Compra de Pontos . PlanMilhas</title>
+    <title>Editar compra de pontos . PlanMilhas</title>
   </Head>
   <Layout><>
 
     <div className={styles.container}>
 
-      <Title route={'/dashboard'}>Calculadora de compra de pontos e milhas</Title>
+      <Title route={'/dashboard'}>Editar compra de pontos</Title>
 
       <div className={styles.inputs}>
 
-        {/* Confirmation modal*/}
-        {showModal &&
-          <FormModal maxWidth={'340px'} maxHeight={'1500px'}>
-            <div className={styles.modalContainer}>
-              <div className={styles.modalTitle}>Compra de pontos/milhas salva com sucesso!</div>
-              <div className={styles.modalSubtitle}>O que deseja fazer agora?</div>
-              <div className={styles.modalLink} onClick={() => router.push('/dashboard')} >Voltar ao início</div>
-              <div className={styles.modalLink} 
-                  onClick={() => {
-                  {router.push('/calculadoras/compra-pontos')}
-                  document.location.reload()}}>Cadastrar nova compra</div>
-              <div className={styles.modalLink} onClick={() => router.push('/extratos/compra')}>Ver extrato de compras</div>
-            </div>
-          </FormModal>
-        }
-        
         {/* Input */}
         <div className={styles.row}>
           <div className={styles.column}>
@@ -277,6 +264,7 @@ const CompraPontos = (data: Props) => {
             </div>
               <Input 
                 name='price'
+                defaultValue={price ? price.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'R$ 0,00'}
                 mask='currency'
@@ -293,6 +281,7 @@ const CompraPontos = (data: Props) => {
             </div>
               <Input 
                 name='pointsQuantity'
+                defaultValue={pointsQuantity ? pointsQuantity.toLocaleString('pt-BR') : ''}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 1.000'}
                 mask='miles'
@@ -309,6 +298,7 @@ const CompraPontos = (data: Props) => {
             </div>
               <Input 
                 name='dateBuy'
+                value={dateBuy ? dateBuy : ''}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 01/01/2023'}
                 mask='date'
@@ -375,6 +365,7 @@ const CompraPontos = (data: Props) => {
             </div>
               <Input 
                 name='creditCard'
+                value={creditCard ? creditCard : ''}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: Visa Infinite XP'}
               />
@@ -449,6 +440,7 @@ const CompraPontos = (data: Props) => {
             </div>
               <Input 
                 name='percentage'
+                value={percentage ? percentage : ''}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 100%'}
                 mask='percentage'
@@ -553,17 +545,12 @@ const CompraPontos = (data: Props) => {
       {/* Button and actions */}
       <div className={styles.btn}>
         <Button 
-          label= 'Salvar compra'
+          label= 'Atualizar compra'
           backgroundColor='#26408C'
           backgroundColorHover='#4D69A6'
           onClick={handleSubmit}
         />
       </div>
-
-      <div className={styles.linkClean} onClick={() => document.location.reload()}>
-        Limpar e refazer simulação
-      </div>
-
 
     </div>
 
@@ -571,17 +558,18 @@ const CompraPontos = (data: Props) => {
   </>)
 }
 
-export default CompraPontos;
-
+export default EditarCompraPontos;
 
 type Props = {
   user: User; 
   accounts: Account[];
+  buyedMiles: BuyMiles;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const session = await unstable_getServerSession(context.req, context.res, authOptions);
+  const { editbuymiles } = context.query;
 
   if(!session) return { redirect: { destination: '/login', permanent: true }}; 
 
@@ -596,11 +584,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   /* Get accounts */
   const accounts = await apiAccounts.getAccounts(session.user.id);
 
-   
+  /* Get one selled miles */
+ const buyedMiles = await apiBuyMiles.getOneMilesBuyed(parseInt(editbuymiles as string));
+
   return {
     props: {
       user,
-      accounts: JSON.parse(JSON.stringify(accounts))
+      accounts: JSON.parse(JSON.stringify(accounts)),
+      buyedMiles: JSON.parse(JSON.stringify(buyedMiles))
     }
   }
 }

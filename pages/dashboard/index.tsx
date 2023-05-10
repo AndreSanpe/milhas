@@ -43,10 +43,10 @@ const Dashboard = (data: Props) => {
     </Head>
     <Layout>
       <div className={styles.container}>
-        <div className={styles.title}>Olá, {user?.name}!</div>
-        <span className={styles.subtitle}>Gerenciamento</span>
-               
-
+      
+            <div className={styles.title}>Olá, {user?.name}!</div>
+            <span className={styles.subtitle}>Gerenciamento</span>
+          
         <div className={styles.buttons}>
           {management.map((links, index) => (
             <ButtonMenu key={index} onClick={() => router.push({...router.query, pathname: links.path})}>

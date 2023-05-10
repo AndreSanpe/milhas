@@ -724,11 +724,6 @@ const EditarCompraBonificada = (data: Props) => {
         />
       </div>
 
-      <div className={styles.linkClean} onClick={() => document.location.reload()}>
-        Limpar e refazer simulação
-      </div>
-
-
     </div>
 
   </></Layout>  

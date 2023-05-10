@@ -131,7 +131,7 @@ const ExtratoCompraBonificada = (data: Props) => {
             </div>
 
             <div className={styles.doubleColumns}>
-              <div className={styles.secundaryTitle}>Valor economizado:</div>
+              <div className={styles.secundaryTitle}>Valor total economizado:</div>
               <div className={styles.values}>{valueSaved ? valueSaved.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
             </div>
 

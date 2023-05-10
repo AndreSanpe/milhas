@@ -21,7 +21,6 @@ import apiSellMiles from '../../../../libs/apiSellMiles';
 
 const EditarVendaMilhas = (data: Props) => {
   
-
   const router = useRouter(); 
 
   /* ContextApi: accounts  */
@@ -258,7 +257,7 @@ const EditarVendaMilhas = (data: Props) => {
             </div>
               <Input 
                 name='pointsQuantity'
-                defaultValue={pointsQuantity ? pointsQuantity : ''}
+                defaultValue={pointsQuantity ? pointsQuantity.toLocaleString('pt-BR') : ''}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 1.000'}
                 mask='miles'
@@ -541,10 +540,6 @@ const EditarVendaMilhas = (data: Props) => {
         />
       </div>
 
-      <div className={styles.linkClean} onClick={() => document.location.reload()}>
-        Limpar e refazer simulação
-      </div>
-
 
     </div>
 
@@ -553,7 +548,6 @@ const EditarVendaMilhas = (data: Props) => {
 }
 
 export default EditarVendaMilhas;
-
 
 type Props = {
   user: User; 
@@ -580,7 +574,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const accounts = await apiAccounts.getAccounts(session.user.id);
 
   /* Get one selled miles */
- const selledMiles = await apiSellMiles.getOneMilesSelled(parseInt(editsellmiles as string))
+ const selledMiles = await apiSellMiles.getOneMilesSelled(parseInt(editsellmiles as string));
    
   return {
     props: {

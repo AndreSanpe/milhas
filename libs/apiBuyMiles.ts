@@ -1,3 +1,4 @@
+import { miles } from '../components/Input/mask';
 import { BuyMiles } from '../types/BuyMiles';
 import prisma from './prisma';
 
@@ -5,11 +6,11 @@ import prisma from './prisma';
 export default {
 
   /* POST NEW BUY MILES */
-  addNewMilesBuyed: async ({price, pointsQuantity, dateBuy, program, selectedAccount, cpf, destiny, percentage, creditCard, parcel, month, miles, finalPrice, userId}: BuyMiles) => {
+  addNewMilesBuyed: async ({price, pointsQuantity, dateBuy, program, selectedAccount, cpf,transfer, destiny, percentage, creditCard, parcel, month, miles, finalPrice, userId}: BuyMiles) => {
 
     return await prisma.buyMiles.create({
       data: {
-        price, pointsQuantity, dateBuy, program, selectedAccount, cpf, destiny, percentage, creditCard, parcel, month, miles, finalPrice, userId
+        price, pointsQuantity, dateBuy, program, selectedAccount, cpf, transfer, destiny, percentage, creditCard, parcel, month, miles, finalPrice, userId
       }
     });
   },
@@ -49,7 +50,19 @@ export default {
         id: milesBuyed.id        
       },
       data: {
-        
+        price: milesBuyed.price, 
+        pointsQuantity: milesBuyed.pointsQuantity,
+        dateBuy: milesBuyed.dateBuy, 
+        program: milesBuyed.program, 
+        selectedAccount: milesBuyed.selectedAccount, 
+        transfer: milesBuyed.transfer, 
+        destiny: milesBuyed.destiny, 
+        percentage: milesBuyed.percentage, 
+        creditCard: milesBuyed.creditCard, 
+        parcel: milesBuyed.parcel, 
+        month: milesBuyed.month, 
+        miles: milesBuyed.miles, 
+        finalPrice: milesBuyed.finalPrice
       }
     });
     return updMilesBuyed;

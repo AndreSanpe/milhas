@@ -6,6 +6,7 @@ export type BuyMiles = {
   program: string;
   selectedAccount: string;
   cpf: string;
+  transfer: boolean;
   destiny?: string;
   percentage?: number;
   creditCard?: string;
