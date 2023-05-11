@@ -13,7 +13,7 @@ export const calculators = [
   { label: 'Calcular: Venda de milhas' , path:'/calculadoras/venda-milhas' , icon: 'sell' },
   { label: 'Calcular: Custo do milheiro' , path:'/calculadoras/custo-milheiro' , icon: 'paid' },
   { label: 'Calcular: Compra bonificada', path: '/calculadoras/compra-bonificada', icon: 'bag' },
-  { label: 'Calcular: Compra Boomerang' , path:'/calculadoras/boomerang' , icon: 'boomerang' },
+  { label: 'Calcular: Compra Bumerangue' , path:'/calculadoras/compra-bumerangue' , icon: 'boomerang' },
   { label: 'Calcular: Compra de milhas com bônus' , path:'/calculadoras/compra-milhas-bonus' , icon: 'percent' },
 ];
 
