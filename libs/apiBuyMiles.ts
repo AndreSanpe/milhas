@@ -1,4 +1,3 @@
-import { miles } from '../components/Input/mask';
 import { BuyMiles } from '../types/BuyMiles';
 import prisma from './prisma';
 

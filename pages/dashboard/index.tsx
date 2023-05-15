@@ -23,6 +23,7 @@ import BoomerangIcon from './icons/boomerang.svg';
 import BonusIcon from './icons/percent.svg';
 import TrendingIcon from './icons/trending.svg';
 import AnalyticsIcon from './icons/analytics.svg';
+import BumerangueIcon from './icons/bumerangue.svg';
 
 
 const Dashboard = (data: Props) => {
@@ -58,6 +59,7 @@ const Dashboard = (data: Props) => {
                     {links.icon === 'extract' && <ExtractIcon />}
                     {links.icon === 'shopping' && <ShoppingIcon />}
                     {links.icon === 'sell' && <SellIcon />}
+                    {links.icon === 'bumerangue' && <BumerangueIcon />}
                     {links.icon === 'trending' && <TrendingIcon />}
                     {links.icon === 'analytics' && <AnalyticsIcon />}
                 </div>

@@ -15,12 +15,12 @@ import { User } from '../../../../types/User';
 import { authOptions } from '../../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
 import Title from '../../../../components/Title';
+import FormModal from '../../../../components/FormModal';
 import apiAccounts from '../../../../libs/apiAccounts';
-import apiBuyMiles from '../../../../libs/apiBuyMiles';
-import { BuyMiles } from '../../../../types/BuyMiles';
+import apiBuyBumerangue from '../../../../libs/apiBuyBumerangue';
+import { BuyBumerangue } from '../../../../types/BuyBumerangue';
 
-
-const EditarCompraPontos = (data: Props) => {
+const EditCompraBumerangue = (data: Props) => {
   
   const router = useRouter(); 
 
@@ -44,28 +44,32 @@ const EditarCompraPontos = (data: Props) => {
   const [ showModal, setShowModal ] = useState<boolean>(false);
  
   /* General states ///////////////////////////////////////////////////////////////////////*/
-  const [ price, setPrice ] = useState<number>(data.buyedMiles.price);
-  const [ pointsQuantity, setPointsQuantity ] = useState<number>(data.buyedMiles.pointsQuantity);
-  const [ percentage, setPercentage ] = useState<number>(data.buyedMiles.percentage as number);
-  const [ sellPrice, setSellPrice ] = useState<number>(0);
-  const [ transfer, setTransfer ] = useState<boolean>(data.buyedMiles.transfer);
-  const [ creditCard, setCreditCard ] = useState<string>(data.buyedMiles.creditCard as string)
-  const [ program, setProgram ] = useState<string>(data.buyedMiles.program);
-  const [ destiny, setDestiny ] = useState<string>(data.buyedMiles.destiny as string);
-  const [ selectedAccount, setSelectedAccount ] = useState<string>(data.buyedMiles.selectedAccount);
-  const [ parcel, setParcel ] = useState(data.buyedMiles.parcel as string);
-  const [ month, setMonth ] = useState<string>(data.buyedMiles.month as string);
-  const [ dateBuy, setDateBuy ] = useState<string>(data.buyedMiles.dateBuy as string);
+  const [ price, setPrice ] = useState<number>(data.buyBumerangue.price);
+  const [ pointsQuantity, setPointsQuantity ] = useState<number>(data.buyBumerangue.pointsQuantity);
+  const [ dateBuy, setDateBuy ] = useState<string>(data.buyBumerangue.dateBuy);
+  const [ selectedAccount, setSelectedAccount ] = useState<string>(data.buyBumerangue.selectedAccount);
+
+  const [ program, setProgram ] = useState<string>(data.buyBumerangue.program);
+  const [ destinyOne, setDestinyOne ] = useState<string>(data.buyBumerangue.destinyOne);
+  const [ percentage, setPercentage ] = useState<number>(data.buyBumerangue.percentage);
+  const [ miles, setMiles ] = useState<number>(data.buyBumerangue.miles as number);
+
+  const [ returnPercentage, setReturnPercentage ] = useState<number>(data.buyBumerangue.returnPercentage as number);
+  const [ points, setPoints ] = useState<number>(data.buyBumerangue.points as number);
+
+  const [ transfer, setTransfer ] = useState<boolean>(data.buyBumerangue.transfer);
+  const [ percentageTwo, setPercentageTwo ] = useState<number>(data.buyBumerangue.percentageTwo as number);
+  const [ destinyTwo, setDestinyTwo ] = useState<string>(data.buyBumerangue.destinyTwo as string);
+  const [ milesTwo, setMilesTwo ] = useState<number>(data.buyBumerangue.milesTwo as number);
+
+  const [ totalMiles, setTotalMiles ] = useState<number>(data.buyBumerangue.totalMiles);
+  const [ finalPrice, setFinalPrice ] = useState<number>(data.buyBumerangue.finalPrice);
   
   /* Auxiliary states for accounts data ////////////////////////////////////////////////////*/
   const [ namesAccounts, setNamesAccounts ] = useState<any[]>([]);
   const [ documentsAccounts, setDocumentsAccounts ] = useState<any[]>([]);
   const [ indice, setIndice ] = useState<any>();
-  const [ cpf, setCpf ] = useState<string>(data.buyedMiles.cpf);
-
-  /* Auxiliary states for calculate/////////////////////////////////////////////////////////*/
-  const [ miles, setMiles ] = useState<number>(data.buyedMiles.miles as number);
-  const [ finalPrice, setFinalPrice ] = useState<number>(data.buyedMiles.finalPrice);
+  const [ cpf, setCpf ] = useState<string>('');
 
   /* Auxiliary states for errors */
   const [ errorFields, setErrorFields ] = useState<string[]>([]);
@@ -95,7 +99,14 @@ const EditarCompraPontos = (data: Props) => {
     if(selectedAccount) {
       setCpf(documentsAccounts[indice])
     }
-  },[documentsAccounts, indice, selectedAccount])
+  },[documentsAccounts, indice, selectedAccount]);
+
+  /* handle if cpf database */
+  useEffect(() => {
+    if(!indice && !cpf && data.buyBumerangue.cpf) {
+      setCpf(data.buyBumerangue.cpf)
+    }
+  }, [cpf, data.buyBumerangue.cpf, indice])
 
   /* Functions of handle input values ///////////////////////////////////////////////////*/
   const handleValues = useCallback((e: React.FormEvent<HTMLInputElement>) => {
@@ -112,12 +123,13 @@ const EditarCompraPontos = (data: Props) => {
         const percentageInput = parseInt(e.currentTarget.value);
         setPercentage(percentageInput);
         return;
-      case 'sellPrice':
-        const sellPriceInput = parseFloat((e.currentTarget.value).replace('R$ ', '').replace('.', '').replace(',', '.'));
-        setSellPrice(sellPriceInput);
+      case 'returnPercentage':
+        const returnPercentageInput = parseInt(e.currentTarget.value);
+        setReturnPercentage(returnPercentageInput);
         return;
-      case 'creditCard':
-        setCreditCard(e.currentTarget.value);
+      case 'percentageTwo':
+        const percentageTwoInput = parseInt(e.currentTarget.value);
+        setPercentageTwo(percentageTwoInput);
         return;
       case 'dateBuy': 
         setDateBuy(e.currentTarget.value);
@@ -133,8 +145,8 @@ const EditarCompraPontos = (data: Props) => {
   /* Cleaning Inputs /////////////////////////////////////////////////////////////////////*/
   useEffect(() => {
     if(!transfer) {
-      setDestiny('');
-      setPercentage(0);
+      setDestinyTwo('');
+      setPercentageTwo(0);
     }
   }, [transfer]);
 
@@ -149,10 +161,14 @@ const EditarCompraPontos = (data: Props) => {
     if(Number.isNaN(percentage)) {
       setPercentage(0);
     }
-    if(Number.isNaN(sellPrice)) {
-      setSellPrice(0);
+    if(Number.isNaN(returnPercentage)) {
+      setReturnPercentage(0);
     }
-  }, [percentage, pointsQuantity, price, sellPrice])
+    if(Number.isNaN(percentageTwo)) {
+      setPercentageTwo(0);
+    }
+    
+  }, [percentage, percentageTwo, pointsQuantity, price, returnPercentage])
 
   /* Calculation after transfer ///////////////////////////////////////////////////*/
   useEffect(()=> {
@@ -164,21 +180,57 @@ const EditarCompraPontos = (data: Props) => {
     }
   }, [percentage, pointsQuantity])
 
+  /* Calculation return to Livelo */
+  useEffect(() => {
+    if(returnPercentage) {
+      const calcPoints = ((returnPercentage)/100 * pointsQuantity)
+      setPoints(calcPoints)
+    } else {
+      setPoints(0)
+    }
+  }, [pointsQuantity, returnPercentage]);
+
+  /* Calculation after second transfer ///////////////////////////////////////////////////*/
+  useEffect(()=> {
+    if (percentageTwo && points) {
+      const calcMilesTwo = ((percentageTwo + 100)/100 * points);
+      setMilesTwo(calcMilesTwo);
+    } else {
+      setMilesTwo(0);
+    }
+  }, [percentageTwo, points, pointsQuantity])
+
+  /* Calculation all miles  */
+  useEffect(() => {
+    if(pointsQuantity && !miles && !points && !milesTwo) {
+      setTotalMiles(pointsQuantity);
+    }
+    else if(miles && !points && !milesTwo) {
+      setTotalMiles(miles);
+    }
+    else if(miles && points && !milesTwo) {
+      const allMiles = (miles + points)
+      setTotalMiles(allMiles);
+    }
+    else if(miles && points && milesTwo) {
+      const allMiles = (miles + milesTwo)
+      setTotalMiles(allMiles);
+    }
+    else {
+      setTotalMiles(0);
+    }
+  },[miles, milesTwo, points, pointsQuantity]);
+
    /* Calculation price ///////////////////////////////////////////////////*/
    useEffect(()=> { 
-    if(!miles && price && pointsQuantity) {
-      const simpleCalc = ((price) / ((pointsQuantity)/1000));
+    if(totalMiles) {
+      const simpleCalc = ((price) / ((totalMiles)/1000));
       setFinalPrice(simpleCalc);
-    }
-    else if(miles && pointsQuantity && percentage && percentage){
-      const completeCalc = ((price) / ((miles)/1000));
-      setFinalPrice(completeCalc);
     }
     else {
       setFinalPrice(0);
     }
-
-  }, [miles, percentage, pointsQuantity, price]);
+  }, [price, totalMiles]);
 
   /* verify each default entry, if exists errors, push to array */
   const verifyData = () => {
@@ -212,50 +264,51 @@ const EditarCompraPontos = (data: Props) => {
   
   const handleSubmit = async () => {
     if(verifyData() && user) {
-      let buymiles = {
-        price, 
-        pointsQuantity,
-        dateBuy, 
-        program, 
-        selectedAccount, 
-        cpf,
-        transfer, 
-        destiny, 
-        percentage, 
-        creditCard, 
-        parcel, 
-        month, 
-        miles, 
-        finalPrice, 
-        userId: user.id,
-        id: data.buyedMiles.id
+      let buyBumerangue = {
+        price, pointsQuantity, dateBuy, selectedAccount, cpf, program, destinyOne, percentage, miles, returnPercentage, points, transfer, percentageTwo, destinyTwo, milesTwo, totalMiles, finalPrice,
+        userId: user.id, id: data.buyBumerangue.id
       }
-      const response = await fetch('/api/buymiles', {
+      const response = await fetch('/api/buybumerangue', {
         method: 'PUT',
-        body: JSON.stringify(buymiles),
+        body: JSON.stringify(buyBumerangue),
         headers: {
           'content-Type': 'application/json',
         },
       });
-      
-      router.push('/extratos/compra')
+
+      router.push('/extratos/bumerangue');
     }
   };
-
 
   return (<>
 
   <Head>
-    <title>Editar compra de pontos . PlanMilhas</title>
+    <title>Compra de Pontos . PlanMilhas</title>
   </Head>
   <Layout><>
 
     <div className={styles.container}>
 
-      <Title route={'/dashboard'}>Editar compra de pontos</Title>
+      <Title route={'/dashboard'}>Editar compra Bumerangue</Title>
 
       <div className={styles.inputs}>
 
+        {/* Confirmation modal*/}
+        {showModal &&
+          <FormModal maxWidth={'340px'} maxHeight={'1500px'}>
+            <div className={styles.modalContainer}>
+              <div className={styles.modalTitle}>Compra de pontos/milhas salva com sucesso!</div>
+              <div className={styles.modalSubtitle}>O que deseja fazer agora?</div>
+              <div className={styles.modalLink} onClick={() => router.push('/dashboard')} >Voltar ao início</div>
+              <div className={styles.modalLink} 
+                  onClick={() => {
+                  {router.push('/calculadoras/compra-bumerangue')}
+                  document.location.reload()}}>Cadastrar nova compra</div>
+              <div className={styles.modalLink} onClick={() => router.push('/extratos/bumerangue')}>Ver extrato de compras</div>
+            </div>
+          </FormModal>
+        }
+        
         {/* Input */}
         <div className={styles.row}>
           <div className={styles.column}>
@@ -298,11 +351,28 @@ const EditarCompraPontos = (data: Props) => {
             </div>
               <Input 
                 name='dateBuy'
-                value={dateBuy ? dateBuy : ''}
+                defaultValue={dateBuy ? dateBuy : ''}
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 01/01/2023'}
                 mask='date'
                 warning={errorFields.includes('dateBuy')}
+              />
+          </div>       
+        </div>
+
+         {/* Input */}
+         <div className={styles.row}>
+          <div className={styles.column}>
+            <div className={styles.label}>
+              Selecione a conta da compra:
+            </div>
+              <Dropdown 
+                style={{zIndex: '999'}}
+                selected={selectedAccount}
+                setSelected={setSelectedAccount}
+                options={namesAccounts}
+                setIndice={setIndice}
+                warning={errorFields.includes('selectedAccount')}
               />
           </div>       
         </div>
@@ -317,8 +387,22 @@ const EditarCompraPontos = (data: Props) => {
                 style={{zIndex: '999'}}
                 selected={program}
                 setSelected={setProgram}
-                options={['Livelo', 'Esfera', 'Tudo Azul', 'Latam Pass', 'Smiles']}
+                options={['Livelo']}
                 warning={errorFields.includes('program')}
+              />
+          </div>       
+        </div>
+
+       {/* Input */}
+       <div className={styles.row}>
+          <div className={styles.column}>
+            <div className={styles.label}>
+              Programa destino da transferência:
+            </div>
+              <Dropdown 
+                selected={destinyOne}
+                setSelected={setDestinyOne}
+                options={['Latam Pass']}
               />
           </div>       
         </div>
@@ -327,15 +411,30 @@ const EditarCompraPontos = (data: Props) => {
         <div className={styles.row}>
           <div className={styles.column}>
             <div className={styles.label}>
-              Selecione a conta da compra:
+              Bônus da transferência em %:
             </div>
-              <Dropdown 
-                style={{zIndex: '999'}}
-                selected={selectedAccount}
-                setSelected={setSelectedAccount}
-                options={namesAccounts}
-                setIndice={setIndice}
-                warning={errorFields.includes('selectedAccount')}
+              <Input 
+                name='percentage'
+                defaultValue={percentage ? percentage : ''}
+                onSet={(e)=> handleValues(e)}
+                placeholder={'Ex.: 100%'}
+                mask='percentage'
+              />
+          </div>       
+        </div>
+
+        {/* Input */}
+        <div className={styles.row}>
+          <div className={styles.column}>
+            <div className={styles.label}>
+              Bônus de retorno para Livelo em %:
+            </div>
+              <Input 
+                name='returnPercentage'
+                defaultValue={returnPercentage ? returnPercentage : ''}
+                onSet={(e)=> handleValues(e)}
+                placeholder={'Ex.: 100%'}
+                mask='percentage'
               />
           </div>       
         </div>
@@ -357,56 +456,12 @@ const EditarCompraPontos = (data: Props) => {
           </div>
         }
 
-         {/* Input */}
-         <div className={styles.row}>
-          <div className={styles.column}>
-            <div className={styles.label}>
-              Cartão utilizado na compra:
-            </div>
-              <Input 
-                name='creditCard'
-                value={creditCard ? creditCard : ''}
-                onSet={(e)=> handleValues(e)}
-                placeholder={'Ex.: Visa Infinite XP'}
-              />
-          </div>       
-        </div>
-
-        {/* Input */}
-        <div className={styles.row}>
-          <div className={styles.column}>
-            <div className={styles.label}>
-              Número de parcelas do pagamento:
-            </div>
-              <Dropdown 
-                style={{zIndex: '999'}}
-                selected={parcel}
-                setSelected={setParcel}
-                options={['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']}
-              />
-          </div>       
-        </div>
-
-        {/* Input */}
-        <div className={styles.row}>
-          <div className={styles.column}>
-            <div className={styles.label}>
-              Selecione o mês da primeira parcela:
-            </div>
-              <Dropdown 
-                style={{zIndex: '999'}}
-                selected={month}
-                setSelected={setMonth}
-                options={['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']}
-              />
-          </div>       
-        </div>
 
         {/* Input */}
         <div className={styles.row} >
           <div className={styles.toggle}>
             <div className={styles.label} style={{fontSize: '14px'}}>
-              Haverá transferência de pontos?
+              Haverá uma nova transferência <br></br>de pontos?
             </div>
             <Toggle 
               name='transfer'
@@ -425,9 +480,9 @@ const EditarCompraPontos = (data: Props) => {
               Programa destino da transferência:
             </div>
               <Dropdown 
-                selected={destiny}
-                setSelected={setDestiny}
-                options={['Livelo', 'Esfera', 'Tudo Azul', 'Latam Pass', 'Smiles']}
+                selected={destinyTwo}
+                setSelected={setDestinyTwo}
+                options={['Tudo Azul', 'Latam Pass', 'Smiles']}
               />
           </div>       
         </div>
@@ -439,8 +494,7 @@ const EditarCompraPontos = (data: Props) => {
               Bônus da transferência em %:
             </div>
               <Input 
-                name='percentage'
-                value={percentage ? percentage : ''}
+                name='percentageTwo'
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 100%'}
                 mask='percentage'
@@ -483,19 +537,6 @@ const EditarCompraPontos = (data: Props) => {
         </div>        
       </div>
 
-      <div className={styles.contentRow}>
-        <div className={styles.contentColumn}>
-          <div className={styles.titleValues}>Cartão utilizado:</div>
-          <div className={styles.values}>{creditCard}</div>
-        </div>        
-      </div>
-
-      <div className={styles.contentRow}>
-        <div className={styles.contentColumn}>
-          <div className={styles.titleValues}>Parcelamento:</div>
-          <div className={styles.values}>{parcel ? parcel + 'x' : ''}</div>
-        </div>        
-      </div>
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
@@ -514,7 +555,7 @@ const EditarCompraPontos = (data: Props) => {
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>
           <div className={styles.titleValues}>Transferência para:</div>
-          <div className={styles.values}>{destiny}</div>
+          <div className={styles.values}>{destinyOne ? destinyOne : ''}</div>
         </div>        
       </div>
 
@@ -532,9 +573,51 @@ const EditarCompraPontos = (data: Props) => {
         </div>        
       </div>
 
+      <div className={styles.contentRow}>
+        <div className={styles.contentColumn}>
+          <div className={styles.titleValues}>Bônus de retorno para Livelo:</div>
+          <div className={styles.values}>{returnPercentage ? returnPercentage + '%' : ''}</div>
+        </div>        
+      </div>
+
+      <div className={styles.contentRow}>
+        <div className={styles.contentColumn}>
+          <div className={styles.titleValues}>Pontos retornados a Livelo:</div>
+          <div className={styles.values}>{points ? points.toLocaleString('pt-BR') : ''}</div>
+        </div>        
+      </div>
+
+      <div className={styles.contentRow}>
+        <div className={styles.contentColumn}>
+          <div className={styles.titleValues}>Nova transferência para:</div>
+          <div className={styles.values}>{destinyTwo ? destinyTwo : ''}</div>
+        </div>        
+      </div>
+
+      <div className={styles.contentRow}>
+        <div className={styles.contentColumn}>
+          <div className={styles.titleValues}>Bônus da transferência:</div>
+          <div className={styles.values}>{percentageTwo ? percentageTwo.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%' : ''}</div>
+        </div>        
+      </div>    
+
+      <div className={styles.contentRow}>
+        <div className={styles.contentColumn}>
+          <div className={styles.titleValues}>Total após transferência:</div>
+          <div className={styles.values}>{milesTwo ? milesTwo.toLocaleString('pt-BR') : ''}</div>
+        </div>        
+      </div>
+
       <div className={styles.contentRow} >
         <div className={styles.contentColumn} style={{border: 'none', paddingTop: '12px'}}>
-          <div style={{fontWeight: '600', fontSize:'14px'}}>Valor final do milheiro:</div>
+          <div style={{fontWeight: '600', fontSize:'14px'}}>Milhas totais acumuladas:</div>
+          <div className={styles.values} style={{color: '#6A9000', fontWeight: '600', fontSize: '14px'}}>{totalMiles ? totalMiles.toLocaleString('pt-BR') : ''}</div>
+        </div>        
+      </div>
+
+      <div className={styles.contentRow} >
+        <div className={styles.contentColumn} style={{border: 'none', paddingTop: '12px'}}>
+          <div style={{fontWeight: '600', fontSize:'14px'}}>Valor médio do milheiro:</div>
           <div className={styles.values} style={{color: '#6A9000', fontWeight: '600', fontSize: '14px'}}>{finalPrice ? finalPrice.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : 'R$ 0,00'}</div>
         </div>        
       </div>
@@ -558,19 +641,20 @@ const EditarCompraPontos = (data: Props) => {
   </>)
 }
 
-export default EditarCompraPontos;
+export default EditCompraBumerangue;
+
 
 type Props = {
   user: User; 
   accounts: Account[];
-  buyedMiles: BuyMiles;
+  buyBumerangue: BuyBumerangue;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const session = await unstable_getServerSession(context.req, context.res, authOptions);
-  const { editbuymiles } = context.query;
-
+  const { editbumerangue } = context.query;
+   
   if(!session) return { redirect: { destination: '/login', permanent: true }}; 
 
   /* Get tenant */
@@ -584,14 +668,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   /* Get accounts */
   const accounts = await apiAccounts.getAccounts(session.user.id);
 
-  /* Get one selled miles */
- const buyedMiles = await apiBuyMiles.getOneMilesBuyed(parseInt(editbuymiles as string));
-
+  /* Ge one Buy Bumerangue */
+  const buyBumerangue = await apiBuyBumerangue.getOneBuyBumerangue(parseInt(editbumerangue as string));
+  
   return {
     props: {
       user,
       accounts: JSON.parse(JSON.stringify(accounts)),
-      buyedMiles: JSON.parse(JSON.stringify(buyedMiles))
+      buyBumerangue: JSON.parse(JSON.stringify(buyBumerangue))
     }
   }
 }

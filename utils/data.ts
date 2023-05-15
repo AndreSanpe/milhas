@@ -4,6 +4,7 @@ export const management = [
   { label: 'Extrato de assinatura de clubes', path: '/extratos/assinaturas', icon: 'extract'},
   { label: 'Extrato de compra de pontos', path: '/extratos/compra', icon: 'balance'},
   { label: 'Extrato de venda de milhas', path: '/extratos/venda', icon: 'trending'},
+  { label: 'Extrato de compra Bumerangue', path: '/extratos/bumerangue', icon: 'bumerangue'},
   { label: 'Balanço de pontos e milhas', path: '/extratos/balanco', icon: 'analytics'},
   { label: 'Histórico de compra bonificada', path: '/extratos/compra-bonificada', icon: 'savings'},
 ];

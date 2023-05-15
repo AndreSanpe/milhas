@@ -61,7 +61,7 @@ const EditarCompraPontos = (data: Props) => {
   const [ namesAccounts, setNamesAccounts ] = useState<any[]>([]);
   const [ documentsAccounts, setDocumentsAccounts ] = useState<any[]>([]);
   const [ indice, setIndice ] = useState<any>();
-  const [ cpf, setCpf ] = useState<string>(data.buyedMiles.cpf);
+  const [ cpf, setCpf ] = useState<string>('');
 
   /* Auxiliary states for calculate/////////////////////////////////////////////////////////*/
   const [ miles, setMiles ] = useState<number>(data.buyedMiles.miles as number);
@@ -96,6 +96,13 @@ const EditarCompraPontos = (data: Props) => {
       setCpf(documentsAccounts[indice])
     }
   },[documentsAccounts, indice, selectedAccount])
+
+  /* handle if cpf database */
+  useEffect(() => {
+    if(!indice && !cpf && data.buyedMiles.cpf) {
+      setCpf(data.buyedMiles.cpf)
+    }
+  }, [cpf, data.buyedMiles.cpf, indice])
 
   /* Functions of handle input values ///////////////////////////////////////////////////*/
   const handleValues = useCallback((e: React.FormEvent<HTMLInputElement>) => {

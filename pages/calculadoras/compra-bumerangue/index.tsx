@@ -18,7 +18,6 @@ import Title from '../../../components/Title';
 import FormModal from '../../../components/FormModal';
 import apiAccounts from '../../../libs/apiAccounts';
 
-
 const CompraBumerangue = (data: Props) => {
   
   const router = useRouter(); 
@@ -62,7 +61,6 @@ const CompraBumerangue = (data: Props) => {
   const [ milesTwo, setMilesTwo ] = useState<number>();
 
   const [ totalMiles, setTotalMiles ] = useState<number>();
-  const [ sellPrice, setSellPrice ] = useState<number>(0);
   const [ finalPrice, setFinalPrice ] = useState<number>();
   
   /* Auxiliary states for accounts data ////////////////////////////////////////////////////*/
@@ -124,10 +122,6 @@ const CompraBumerangue = (data: Props) => {
         const percentageTwoInput = parseInt(e.currentTarget.value);
         setPercentageTwo(percentageTwoInput);
         return;
-      case 'sellPrice':
-        const sellPriceInput = parseFloat((e.currentTarget.value).replace('R$ ', '').replace('.', '').replace(',', '.'));
-        setSellPrice(sellPriceInput);
-        return;
       case 'dateBuy': 
         setDateBuy(e.currentTarget.value);
         return;
@@ -164,10 +158,8 @@ const CompraBumerangue = (data: Props) => {
     if(Number.isNaN(percentageTwo)) {
       setPercentageTwo(0);
     }
-    if(Number.isNaN(sellPrice)) {
-      setSellPrice(0);
-    }
-  }, [percentage, percentageTwo, pointsQuantity, price, returnPercentage, sellPrice])
+    
+  }, [percentage, percentageTwo, pointsQuantity, price, returnPercentage])
 
   /* Calculation after transfer ///////////////////////////////////////////////////*/
   useEffect(()=> {
@@ -263,27 +255,17 @@ const CompraBumerangue = (data: Props) => {
   
   const handleSubmit = async () => {
     if(verifyData() && user) {
-      /* let buymiles = {
-        price, 
-        pointsQuantity,
-        dateBuy, 
-        program, 
-        selectedAccount, 
-        cpf,
-        transfer, 
-        destinyOne, 
-        percentage, 
-        miles, 
-        finalPrice, 
+      let buyBumerangue = {
+        price, pointsQuantity, dateBuy, selectedAccount, cpf, program, destinyOne, percentage, miles, returnPercentage, points, transfer, percentageTwo, destinyTwo, milesTwo, totalMiles, finalPrice,
         userId: user.id
       }
-      const response = await fetch('/api/buymiles', {
+      const response = await fetch('/api/buybumerangue', {
         method: 'POST',
-        body: JSON.stringify(buymiles),
+        body: JSON.stringify(buyBumerangue),
         headers: {
           'content-Type': 'application/json',
         },
-      }); */
+      });
       setShowModal(true);
     }
   };
@@ -312,7 +294,7 @@ const CompraBumerangue = (data: Props) => {
                   onClick={() => {
                   {router.push('/calculadoras/compra-bumerangue')}
                   document.location.reload()}}>Cadastrar nova compra</div>
-              <div className={styles.modalLink} onClick={() => router.push('/extratos/compra')}>Ver extrato de compras</div>
+              <div className={styles.modalLink} onClick={() => router.push('/extratos/bumerangue')}>Ver extrato de compras</div>
             </div>
           </FormModal>
         }
@@ -596,6 +578,13 @@ const CompraBumerangue = (data: Props) => {
           <div className={styles.values}>{destinyTwo ? destinyTwo : ''}</div>
         </div>        
       </div>
+
+      <div className={styles.contentRow}>
+        <div className={styles.contentColumn}>
+          <div className={styles.titleValues}>Bônus da transferência:</div>
+          <div className={styles.values}>{percentageTwo ? percentageTwo.toLocaleString('pt-BR', {maximumFractionDigits: 2})+'%' : ''}</div>
+        </div>        
+      </div>    
 
       <div className={styles.contentRow}>
         <div className={styles.contentColumn}>

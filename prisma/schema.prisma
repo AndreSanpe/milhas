@@ -25,6 +25,7 @@ model User {
   sellmiles      SellMiles[]
   buybonus       BuyBonus[]
   subscriptions  Subscription[]
+  buybumerangue  BuyBumerange[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -159,4 +160,38 @@ model BuyBonus {
   updatedAt DateTime? @updatedAt
 
   @@map("buybonus")
+}
+
+model BuyBumerange {
+  id Int @id @unique @default(autoincrement())
+
+  price           Float
+  pointsQuantity  Int
+  dateBuy         String
+  selectedAccount String
+  cpf             String
+
+  program    String
+  destinyOne String
+  percentage Int
+  miles      Int?
+
+  returnPercentage Int?
+  points           Int?
+
+  transfer      Boolean?
+  percentageTwo Int?
+  destinyTwo    String?
+  milesTwo      Int?
+
+  totalMiles Int
+  finalPrice Float
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("buybumerangue")
 }

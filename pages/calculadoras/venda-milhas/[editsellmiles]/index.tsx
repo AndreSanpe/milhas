@@ -54,7 +54,7 @@ const EditarVendaMilhas = (data: Props) => {
   const [ namesAccounts, setNamesAccounts ] = useState<any[]>([]);
   const [ documentsAccounts, setDocumentsAccounts ] = useState<any[]>([]);
   const [ indice, setIndice ] = useState<any>();
-  const [ cpf, setCpf ] = useState<string>(data.selledMiles.cpf);
+  const [ cpf, setCpf ] = useState<string>('');
   
 
   /* Auxiliary states for calculate*/

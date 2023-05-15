@@ -11,12 +11,12 @@ import { authOptions } from '../../api/auth/[...nextauth]';
 import styles from './styles.module.css';
 import AlertIcon from './error_outline.svg';
 import { useRouter } from 'next/router';
-import ContentAccordionBuyMiles from '../../../components/ContentAccordionBuyMiles';
-import { BuyMiles } from '../../../types/BuyMiles';
+import ContentAccordionBuyBumerangue from '../../../components/ContentAccordionBuyBumerangue';
 import Title from '../../../components/Title';
-import apiBuyMiles from '../../../libs/apiBuyMiles';
+import apiBuyBumerangue from '../../../libs/apiBuyBumerangue';
+import { BuyBumerangue } from '../../../types/BuyBumerangue';
 
-const ExtratoCompra = (data: Props) => {
+const ExtratoCompraBumerangue = (data: Props) => {
 
   /* Router ///////////////////////////////////////////////////////////////////////////////*/
   const router = useRouter();
@@ -25,34 +25,34 @@ const ExtratoCompra = (data: Props) => {
   const { user, setUser } = useAuthContext();
 
   /* States ///////////////////////////////////////////////////////////////////////////*/
-  const [ buyedMilesData, setBuyedMilesData ] = useState<BuyMiles[]>([]);
-  const [ noHaveBuyMiles, setNoHaveBuyMiles ] = useState<boolean>(false);
+  const [ buyBumerangueData, setBuyBumerangueData ] = useState<BuyBumerangue[]>([]);
+  const [ noHaveBuyBumerangue, setNoHaveBuyBumerangue ] = useState<boolean>(false);
   const [ menuOpened, setMenuOpened ] = useState<number>(0);
 
-  /* Setting message for not have a buy miles//////////////////////////////////////////// */
+  /* Setting message for not have a buy bumerangue//////////////////////////////////////////// */
   useEffect(() => {
-    if(data.buyedMiles.length === 0) {
-      setNoHaveBuyMiles(true)
+    if(data.buyBumerangue.length === 0) {
+      setNoHaveBuyBumerangue(true)
     }
-  }, [data.buyedMiles]);
+  }, [data.buyBumerangue.length]);
 
-  /* List data buyedMiles /////////////////////////////////////////////////////////////////*/
+  /* List data buyBumerangue /////////////////////////////////////////////////////////////////*/
  useEffect(() => {
-  const arrayBuyedMiles: BuyMiles[] = [];
+  const arrayBuyBumerangue: BuyBumerangue[] = [];
   
-  if(data.buyedMiles) {
-    data.buyedMiles.map((item, index) => {
+  if(data.buyBumerangue) {
+    data.buyBumerangue.map((item, index) => {
       if(item.id) {
-        arrayBuyedMiles.push(item);
+        arrayBuyBumerangue.push(item);
       } else {
         return null;
       }
     })  
   }
-  setBuyedMilesData(arrayBuyedMiles);
-  }, [data.buyedMiles])
+  setBuyBumerangueData(arrayBuyBumerangue);
+  }, [data.buyBumerangue])
 
-  let miles = 0;
+  /* let miles = 0;
   let buyQuantity = 0;
   let investiment = 0;
   let averageCoastMiles = 0;
@@ -72,7 +72,7 @@ const ExtratoCompra = (data: Props) => {
 
   if(buyedMilesData.length) {
     buyQuantity = buyedMilesData.length;
-  }
+  } */
   
   /* Menu edit events //////////////////////////////////////////////////////////////// */
   const handleMenuEvent = (event: MouseEvent) => {
@@ -82,19 +82,19 @@ const ExtratoCompra = (data: Props) => {
     }
   }
   
-  const handleBuyMilesEdit = (id: number) => {
-    router.push(`/calculadoras/compra-pontos/${id}`);
+  const handleBuyBumerangueEdit = (id: number) => {
+    router.push(`/calculadoras/compra-bumerangue/${id}`);
   }
 
-  const handleBuyMilesDelete = async (id: number) => {
-    const response = await fetch('/api/buymiles', {
+  const handleBuyBumerangueDelete = async (id: number) => {
+    const response = await fetch('/api/buybumerangue', {
       method: 'DELETE',
       body: JSON.stringify(id),
       headers: {
         'content-Type': 'application/json',
       },
     });
-    router.push('/extratos/compra')
+    router.push('/extratos/bumerangue')
   }
 
   useEffect(() => {
@@ -114,7 +114,7 @@ const ExtratoCompra = (data: Props) => {
       
       <div className={styles.container}>    
 
-        <Title route='/dashboard'>Extrato de compra de milhas</Title>  
+        <Title route='/dashboard'>Extrato de compra Bumerangue</Title>  
 
         {/* RESULTS RESUME */}
         <div className={styles.results}>
@@ -124,22 +124,22 @@ const ExtratoCompra = (data: Props) => {
 
             <div className={styles.doubleColumns}>
               <div className={styles.secundaryTitle}>Total de milhas compradas:</div>
-              <div className={styles.values}>{miles ? miles.toLocaleString('pt-BR') : ''}</div>
+              <div className={styles.values}>{/* miles ? miles.toLocaleString('pt-BR') : '' */}</div>
             </div>
 
             <div className={styles.doubleColumns}>
               <div className={styles.secundaryTitle}>Total de compras:</div>
-              <div className={styles.values}>{buyQuantity ? buyQuantity : ''}</div>
+              <div className={styles.values}>{/* buyQuantity ? buyQuantity : '' */}</div>
             </div>
 
             <div className={styles.doubleColumns}>
               <div className={styles.secundaryTitle}>Total investido:</div>
-              <div className={styles.values}>{investiment ? investiment.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
+              <div className={styles.values}>{/* investiment ? investiment.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : '' */}</div>
             </div>
 
             <div className={styles.doubleColumns} style={{border: 'none'}}>
               <div className={styles.secundaryTitle}>Valor médio do milheiro:</div>
-              <div className={styles.values}>{averageCoastMiles ? averageCoastMiles.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
+              <div className={styles.values}>{/* averageCoastMiles ? averageCoastMiles.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : '' */}</div>
             </div>
             
           </div>
@@ -148,27 +148,27 @@ const ExtratoCompra = (data: Props) => {
         </div>
         {/* RESULTS RESUME END'S */}
 
-        <div className={styles.title}>Compras cadastradas</div>
+        <div className={styles.title}>Compras Bumerangue</div>
 
         {/* Accordion */}
-        {data.buyedMiles.map((item: BuyMiles, index: number) => (
-          <ContentAccordionBuyMiles
+        {data.buyBumerangue.map((item: BuyBumerangue, index: number) => (
+          <ContentAccordionBuyBumerangue
             key={index} 
             item={item}
             menuOpened={menuOpened}
             setMenuOpened={setMenuOpened}
-            onEdit={handleBuyMilesEdit}
-            onDelete={handleBuyMilesDelete}
+            onEdit={handleBuyBumerangueEdit}
+            onDelete={handleBuyBumerangueDelete}
             /> 
         ))} 
 
 
        {/* Message for when there is no registered buy miles yet */}
-       {noHaveBuyMiles &&
+       {noHaveBuyBumerangue &&
           <div className={styles.alert}>
             <AlertIcon style={{color: '#F25C05'}}/>
-            <div>Você ainda não cadastrou nenhuma compra. Gostaria de fazer isso agora? 
-            <div className={styles.link} onClick={()=> {router.push('/calculadoras/compra-pontos')}}>Clique aqui</div>
+            <div>Você ainda não cadastrou nenhuma compra bumerangue. Gostaria de fazer isso agora? 
+            <div className={styles.link} onClick={()=> {router.push('/calculadoras/compra-bumerangue')}}>Clique aqui</div>
             </div>
           </div>
         }
@@ -181,11 +181,11 @@ const ExtratoCompra = (data: Props) => {
   )
 }
 
-export default ExtratoCompra;
+export default ExtratoCompraBumerangue;
 
 type Props = {
   user: User;
-  buyedMiles: BuyMiles[];  
+  buyBumerangue: BuyBumerangue[];  
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -202,13 +202,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   } 
 
-  /* Get buys miles */
- const buyedMiles = await apiBuyMiles.getMilesBuyed(session.user.id);
+  /* Get buys bumerangue */
+ const buyBumerangue = await apiBuyBumerangue.getBuysBumerangue(session.user.id);
   
   return {
     props: {
       user,
-      buyedMiles: JSON.parse(JSON.stringify(buyedMiles))
+      buyBumerangue: JSON.parse(JSON.stringify(buyBumerangue))
     }
   }
 }
