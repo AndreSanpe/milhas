@@ -257,6 +257,16 @@ const EditCompraBumerangue = (data: Props) => {
       newErroFields.push('selectedAccount');
       approved = false;
     }
+
+    if(!percentage) {
+      newErroFields.push('percetage');
+      approved = false;
+    }
+
+    if(!returnPercentage) {
+      newErroFields.push('returnPercetage');
+      approved = false;
+    }
   
     setErrorFields(newErroFields);
     return approved;
@@ -419,6 +429,7 @@ const EditCompraBumerangue = (data: Props) => {
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 100%'}
                 mask='percentage'
+                warning={errorFields.includes('percetage')}
               />
           </div>       
         </div>
@@ -435,6 +446,7 @@ const EditCompraBumerangue = (data: Props) => {
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 100%'}
                 mask='percentage'
+                warning={errorFields.includes('returnPercetage')}
               />
           </div>       
         </div>
@@ -633,6 +645,11 @@ const EditCompraBumerangue = (data: Props) => {
           backgroundColorHover='#4D69A6'
           onClick={handleSubmit}
         />
+      </div>
+
+      {/* Error message */}
+      <div className={styles.messageError}>
+      {errorFields.length ? 'Campo(s) obrigatório(s), por favor preencha-o(s)!' : ''}
       </div>
 
     </div>

@@ -5,6 +5,8 @@ import { GetServerSideProps } from 'next';
 import { unstable_getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
 import api from '../../libs/api';
+import Button from '../../components/Button';
+import AlertIcon from './error_outline.svg';
 
 
 const Assinatura = () => {
@@ -13,11 +15,24 @@ const Assinatura = () => {
       
       <div className={styles.container}>
 
-        <title>Assinatura</title>
+        <title>Gerenciar assinatura . PlanMilhas</title>
 
-        <form action={`/api/subscription`} method='POST'>
-          <button>Assinar</button>
-        </form>
+        <div className={styles.content}>
+          <AlertIcon style={{color: '#F25C05'}}/>
+          <div className={styles.message}>Ops, sua assinatura precisa de atenção! Clique no botão abaixo e verique-a para continuar utilizando todos benefícios da ferramenta.</div>
+
+          <form action={`/api/subscription`} method='POST'>
+            {/* Button and actions */}
+            
+            <div className={styles.btn}>
+              <Button 
+                label= 'Gerenciar assinatura'
+                backgroundColor='#26408C'
+                backgroundColorHover='#4D69A6'
+              />
+            </div>
+          </form>
+        </div>
 
       </div>
     

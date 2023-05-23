@@ -52,27 +52,27 @@ const ExtratoCompraBumerangue = (data: Props) => {
   setBuyBumerangueData(arrayBuyBumerangue);
   }, [data.buyBumerangue])
 
-  /* let miles = 0;
+  let miles = 0;
   let buyQuantity = 0;
   let investiment = 0;
   let averageCoastMiles = 0;
 
-  for(let i = 0; i < buyedMilesData.length; i++) {
-    if(buyedMilesData[i].miles) {
-      miles += buyedMilesData[i].miles as number;
+  for(let i = 0; i < buyBumerangueData.length; i++) {
+    if(buyBumerangueData[i].totalMiles) {
+      miles += buyBumerangueData[i].totalMiles as number;
     } else {
-      miles += buyedMilesData[i].pointsQuantity;
+      miles += buyBumerangueData[i].pointsQuantity;
     }
-    investiment += buyedMilesData[i].price;
+    investiment += buyBumerangueData[i].price;
   }
 
   if(miles && investiment) {
     averageCoastMiles = investiment / (miles / 1000);
   }
 
-  if(buyedMilesData.length) {
-    buyQuantity = buyedMilesData.length;
-  } */
+  if(buyBumerangueData.length) {
+    buyQuantity = buyBumerangueData.length;
+  }
   
   /* Menu edit events //////////////////////////////////////////////////////////////// */
   const handleMenuEvent = (event: MouseEvent) => {
@@ -123,23 +123,23 @@ const ExtratoCompraBumerangue = (data: Props) => {
           <div className={styles.column}>
 
             <div className={styles.doubleColumns}>
-              <div className={styles.secundaryTitle}>Total de milhas compradas:</div>
-              <div className={styles.values}>{/* miles ? miles.toLocaleString('pt-BR') : '' */}</div>
+              <div className={styles.secundaryTitle}>Total de milhas acumuladas:</div>
+              <div className={styles.values}>{miles ? miles.toLocaleString('pt-BR') : ''}</div>
             </div>
 
             <div className={styles.doubleColumns}>
               <div className={styles.secundaryTitle}>Total de compras:</div>
-              <div className={styles.values}>{/* buyQuantity ? buyQuantity : '' */}</div>
+              <div className={styles.values}>{buyQuantity ? buyQuantity : ''}</div>
             </div>
 
             <div className={styles.doubleColumns}>
               <div className={styles.secundaryTitle}>Total investido:</div>
-              <div className={styles.values}>{/* investiment ? investiment.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : '' */}</div>
+              <div className={styles.values}>{investiment ? investiment.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
             </div>
 
             <div className={styles.doubleColumns} style={{border: 'none'}}>
               <div className={styles.secundaryTitle}>Valor médio do milheiro:</div>
-              <div className={styles.values}>{/* averageCoastMiles ? averageCoastMiles.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : '' */}</div>
+              <div className={styles.values}>{averageCoastMiles ? averageCoastMiles.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : ''}</div>
             </div>
             
           </div>
@@ -200,7 +200,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       redirect: {destination:'/', permanent: false}
     }
-  } 
+  };
+  
+  //Get subscription
+  const subscription = await api.getSubscription(user.id as number, user.subscriptionId as string);
+  
+  if(!subscription?.subscriptionStatus) {
+    return{
+      redirect: {destination: '/assinatura', permanent: false}
+    }
+  };
 
   /* Get buys bumerangue */
  const buyBumerangue = await apiBuyBumerangue.getBuysBumerangue(session.user.id);

@@ -126,7 +126,7 @@ const Contas = (data: Props) => {
           </div>
         }
         
-        <div style={{margin: '52px', marginTop: '24px'}}>
+        <div style={{marginTop: '24px'}}>
           <Button 
             label={'Adicionar nova conta'}
             backgroundColor={'#26408C'}

@@ -156,3 +156,14 @@
   color: #F25C05;
   text-decoration: underline;
 }
+
+.messageError {
+  display: flex;
+  margin-top: 20px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 10px;
+  color:#D92B05;
+  font-weight: 500;
+}

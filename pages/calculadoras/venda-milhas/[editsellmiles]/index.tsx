@@ -540,6 +540,11 @@ const EditarVendaMilhas = (data: Props) => {
         />
       </div>
 
+      {/* Error message */}
+      <div className={styles.messageError}>
+        {errorFields.length ? 'Campo(s) obrigatório(s), por favor preencha-o(s)!' : ''}
+      </div>
+
 
     </div>
 
@@ -568,7 +573,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       redirect: {destination:'/', permanent: false}
     }
-  } 
+  };
+
+  //Get subscription
+  const subscription = await api.getSubscription(user.id as number, user.subscriptionId as string);
+  
+  if(!subscription?.subscriptionStatus) {
+    return{
+      redirect: {destination: '/assinatura', permanent: false}
+    }
+  };
 
   /* Get accounts */
   const accounts = await apiAccounts.getAccounts(session.user.id);

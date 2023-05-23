@@ -66,3 +66,14 @@
   margin-right: 20px;
   margin-bottom: 40px;
 }
+
+.messageError {
+  display: flex;
+  margin-top: 20px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 10px;
+  color:#D92B05;
+  font-weight: 500;
+}

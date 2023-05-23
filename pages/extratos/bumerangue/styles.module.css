@@ -44,7 +44,7 @@
   display: grid;
   align-items: center;
   padding-right: 12px;
-  grid-template-columns: 60% 40%;
+  grid-template-columns: 63% 37%;
   gap: 8px;
   border-bottom: 1px solid #DCE7FF;
 }

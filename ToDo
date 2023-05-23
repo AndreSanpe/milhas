@@ -5,14 +5,19 @@
 [x] Separar ou não trial de assinatura ?
 [x] Refatorar webhooks (created, updated, etc)
 [x] Fazer lógica, se o user não estiver active ou trialing, enviar para a assinatura
+[x] Proteger todas páginas, conferindo assinatura true no server >>> false = redirect
 [] Tratar envio de email faltando 3 dias pra acabar a assinatura trial
 
 ------------Funcionalidade--------------
 
 [x] Puxar os valores de extratos faltantes
-[ ] Fazer balanço de pontos e milhas
-[ ] Fazer calculadora boomerang
-[ ] Mostrar mensagem de erro próximo ao botão em relação a dados faltantes e/ou errados
+[x] Editar e deletar extratos 
+[x] Fazer calculadora bumerangue
+[x] Mostrar mensagem de erro próximo ao botão em relação a dados faltantes e/ou errados
+[x] Página da assinatura ou mandar direto para stripe
+[] Fazer balanço de pontos e milhas
+[] Separar a função de controle de cartão
+[] Editar dados da conta
 
 -------------Geral-------------
 

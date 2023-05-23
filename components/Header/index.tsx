@@ -68,6 +68,12 @@ const Header = () => {
               </div>
             </div>
             )}
+
+            
+            <form action={`/api/subscription`} method='POST'>
+              <input className={styles.submit} type="submit" value="Minha assinatura"/>
+            </form>
+            
             <div className={styles.links} onClick={() => signOut()}>Sair</div>
 
           </div>

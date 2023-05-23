@@ -21,7 +21,6 @@ export const calculators = [
 export const menuLinks = [
   { label: 'Página inicial', path: '/dashboard', icon: 'home'},
   { label: 'Minha conta', path: '/minha-conta', icon: 'person'},
-  { label: 'Minha assinatura', path: '/assinatura', icon: 'sign'},
   { label: 'Fale conosco' , path:'/support' , icon: 'support' }, 
   { label: 'Ajuda', path: '/help', icon: 'help'},
 ];

@@ -248,6 +248,16 @@ const CompraBumerangue = (data: Props) => {
       newErroFields.push('selectedAccount');
       approved = false;
     }
+
+    if(!percentage) {
+      newErroFields.push('percetage');
+      approved = false;
+    }
+
+    if(!returnPercentage) {
+      newErroFields.push('returnPercetage');
+      approved = false;
+    }
   
     setErrorFields(newErroFields);
     return approved;
@@ -405,6 +415,7 @@ const CompraBumerangue = (data: Props) => {
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 100%'}
                 mask='percentage'
+                warning={errorFields.includes('percetage')}
               />
           </div>       
         </div>
@@ -420,6 +431,7 @@ const CompraBumerangue = (data: Props) => {
                 onSet={(e)=> handleValues(e)}
                 placeholder={'Ex.: 100%'}
                 mask='percentage'
+                warning={errorFields.includes('returnPercetage')}
               />
           </div>       
         </div>
@@ -620,6 +632,11 @@ const CompraBumerangue = (data: Props) => {
         />
       </div>
 
+      {/* Error message */}
+      <div className={styles.messageError}>
+        {errorFields.length ? 'Campo(s) obrigatório(s), por favor preencha-o(s)!' : ''}
+      </div>
+
       <div className={styles.linkClean} onClick={() => document.location.reload()}>
         Limpar e refazer simulação
       </div>
@@ -651,7 +668,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       redirect: {destination:'/', permanent: false}
     }
-  } 
+  };
+  
+  //Get subscription
+  const subscription = await api.getSubscription(user.id as number, user.subscriptionId as string);
+  
+  if(!subscription?.subscriptionStatus) {
+    return{
+      redirect: {destination: '/assinatura', permanent: false}
+    }
+  };
 
   /* Get accounts */
   const accounts = await apiAccounts.getAccounts(session.user.id);

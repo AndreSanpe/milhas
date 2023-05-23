@@ -724,6 +724,11 @@ const EditarCompraBonificada = (data: Props) => {
         />
       </div>
 
+      {/* Error message */}
+      <div className={styles.messageError}>
+        {errorFields.length ? 'Campo(s) obrigatório(s), por favor preencha-o(s)!' : ''}
+      </div>
+
     </div>
 
   </></Layout>  
@@ -751,7 +756,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       redirect: {destination:'/', permanent: false}
     }
-  } 
+  };
+  
+  //Get subscription
+  const subscription = await api.getSubscription(user.id as number, user.subscriptionId as string);
+  
+  if(!subscription?.subscriptionStatus) {
+    return{
+      redirect: {destination: '/assinatura', permanent: false}
+    }
+  };
 
   /* Get one buy bonus */
   const buyBonus = await apiBuyBonus.getOneBuyBonus(parseInt(editbuybonus as string));
