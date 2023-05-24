@@ -24,6 +24,7 @@ import BonusIcon from './icons/percent.svg';
 import TrendingIcon from './icons/trending.svg';
 import AnalyticsIcon from './icons/analytics.svg';
 import BumerangueIcon from './icons/bumerangue.svg';
+import CardIcon from './icons/card.svg';
 
 
 const Dashboard = (data: Props) => {
@@ -62,6 +63,7 @@ const Dashboard = (data: Props) => {
                     {links.icon === 'bumerangue' && <BumerangueIcon />}
                     {links.icon === 'trending' && <TrendingIcon />}
                     {links.icon === 'analytics' && <AnalyticsIcon />}
+                    {links.icon === 'card' && <CardIcon />}
                 </div>
                 <div className={styles.label}>
                   {links.label}
@@ -77,13 +79,13 @@ const Dashboard = (data: Props) => {
           {calculators.map((links, index) => (
             <ButtonMenu key={index} onClick={() => router.push({...router.query,pathname: links.path})}>
               <div>
-              <div className={styles.icons}>
-              {links.icon === 'shopping' && <ShoppingIcon />}
-                    {links.icon === 'sell' && <SellIcon />}
-                    {links.icon === 'paid' && <PaidIcon />}
-                    {links.icon === 'bag' && <BagIcon />}
-                    {links.icon === 'boomerang' && <BoomerangIcon />}
-                    {links.icon === 'percent' && <BonusIcon />}
+                <div className={styles.icons}>
+                  {links.icon === 'shopping' && <ShoppingIcon />}
+                  {links.icon === 'sell' && <SellIcon />}
+                  {links.icon === 'paid' && <PaidIcon />}
+                  {links.icon === 'bag' && <BagIcon />}
+                  {links.icon === 'boomerang' && <BoomerangIcon />}
+                  {links.icon === 'percent' && <BonusIcon />}
                 </div>
                 <div className={styles.label}>
                   {links.label}

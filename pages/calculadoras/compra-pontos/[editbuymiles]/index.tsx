@@ -559,6 +559,11 @@ const EditarCompraPontos = (data: Props) => {
         />
       </div>
 
+      {/* Error message */}
+      <div className={styles.messageError}>
+        {errorFields.length ? 'Campo(s) obrigatório(s), por favor preencha-o(s)!' : ''}
+      </div>
+
     </div>
 
   </></Layout>  

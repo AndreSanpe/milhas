@@ -560,6 +560,11 @@ const CompraPontos = (data: Props) => {
         />
       </div>
 
+      {/* Error message */}
+      <div className={styles.messageError}>
+        {errorFields.length ? 'Campo(s) obrigatório(s), por favor preencha-o(s)!' : ''}
+      </div>
+
       <div className={styles.linkClean} onClick={() => document.location.reload()}>
         Limpar e refazer simulação
       </div>

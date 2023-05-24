@@ -5,8 +5,9 @@ export const management = [
   { label: 'Extrato de compra de pontos', path: '/extratos/compra', icon: 'balance'},
   { label: 'Extrato de venda de milhas', path: '/extratos/venda', icon: 'trending'},
   { label: 'Extrato de compra Bumerangue', path: '/extratos/bumerangue', icon: 'bumerangue'},
-  { label: 'Balanço de pontos e milhas', path: '/extratos/balanco', icon: 'analytics'},
+  { label: 'Extrato de pontos e milhas', path: '/extratos/pontos-milhas', icon: 'analytics'},
   { label: 'Histórico de compra bonificada', path: '/extratos/compra-bonificada', icon: 'savings'},
+  { label: 'Controle de cartões e parcelas (em breve)', path: '', icon: 'card'},
 ];
 
 export const calculators = [

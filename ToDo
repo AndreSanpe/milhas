@@ -15,7 +15,7 @@
 [x] Fazer calculadora bumerangue
 [x] Mostrar mensagem de erro próximo ao botão em relação a dados faltantes e/ou errados
 [x] Página da assinatura ou mandar direto para stripe
-[] Fazer balanço de pontos e milhas
+[x] Fazer balanço de pontos e milhas
 [] Separar a função de controle de cartão
 [] Editar dados da conta
 

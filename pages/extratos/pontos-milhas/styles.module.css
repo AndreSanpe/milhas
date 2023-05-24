@@ -1,0 +1,87 @@
+/* CSS general */
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+/* CSS Results resume */
+
+.results {
+  width: 100%;
+  background-color: #fff;
+  margin-bottom: 32px;
+  border-radius: 5px;
+  border: 1px solid #DCE7FF;
+  color: #525252;
+  padding: 12px 12px;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #26408C;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  /* margin-top: 4px; */
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.doubleColumns {
+  display: grid;
+  align-items: center;
+  padding-right: 12px;
+  grid-template-columns: 60% 40%;
+  gap: 8px;
+  border-bottom: 1px solid #DCE7FF;
+}
+
+.secundaryTitle {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  line-height: 28px;
+  font-weight: 400;
+}
+
+.values {
+  display: flex;
+  justify-content: flex-end;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* CSS alert for when not exist data */
+.alert {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #8F8F8F;
+}
+
+.link {
+  padding-left: 4px;
+  text-decoration: underline;
+  color: #F25C05;
+  cursor: pointer;
+}
