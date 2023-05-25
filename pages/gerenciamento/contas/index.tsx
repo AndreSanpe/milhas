@@ -14,22 +14,7 @@ import Button from '../../../components/Button';
 import { useRouter } from 'next/router';
 import Title from '../../../components/Title';
 import apiAccounts from '../../../libs/apiAccounts';
-
-type Account = {
-  name: string;
-  document: string;
-  statusLivelo: boolean;
-  priceLivelo: number;
-  statusEsfera: boolean;
-  priceEsfera: number;
-  statusAzul: boolean;
-  priceAzul: number;
-  statusLatam: boolean;
-  priceLatam: number;
-  statusSmiles: boolean;
-  priceSmiles: number;
-  userId: number;
-}
+import { Account } from '../../../types/Account';
 
 const Contas = (data: Props) => {
 
@@ -53,21 +38,21 @@ const Contas = (data: Props) => {
   const [ noHaveAccount, setNoHaveAccount ] = useState<boolean>(false);
   
   /* Menu edit states //////////////////////////////////////////////////////////////// */
-  const [ menuOpened, setMenuOpened ] = useState<number>(0);
+  const [ menuOpened, setMenuOpened ] = useState<string>('');
   
   /* Menu edit events //////////////////////////////////////////////////////////////// */
   const handleMenuEvent = (event: MouseEvent) => {
     const tagName = (event.target as Element).tagName;
     if(!['path', 'svg'].includes(tagName)) {
-      setMenuOpened(0);
+      setMenuOpened('');
     }
   }
   
-  const handleAccountEdit = (id: number) => {
+  const handleAccountEdit = (id: string) => {
     router.push(`/gerenciamento/contas/${id}`);
   }
 
-  const handleAccountDelete = async (id: number) => {
+  const handleAccountDelete = async (id: string) => {
     const response = await fetch('/api/accounts', {
       method: 'DELETE',
       body: JSON.stringify(id),

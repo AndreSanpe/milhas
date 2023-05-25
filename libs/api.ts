@@ -1,4 +1,3 @@
-import { error } from 'console';
 import { User } from '../types/User';
 import prisma from './prisma';
 import bcrypt from 'bcrypt';
@@ -35,7 +34,7 @@ export default {
   },
 
   /*Function that gets users */
-  getUser: async (id: number) => {
+  getUser: async (id: string) => {
 
     if(!id) {
       return null;
@@ -125,7 +124,7 @@ export default {
   },
 
   /*Function that gets subscription */
-  getSubscription: async (userId: number, subscriptionId: string) => {
+  getSubscription: async (userId: string, subscriptionId: string) => {
     const subscription = await prisma.subscription.findFirst({
       where: {
         userId,

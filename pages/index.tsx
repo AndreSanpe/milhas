@@ -1,7 +1,10 @@
 import { signIn, signOut, useSession } from 'next-auth/react';
 import styles from '../styles/Home.module.css'
+import { useRouter } from 'next/router';
 
 export default function Home() {
+
+  const router = useRouter();
 
   const { data: session } = useSession();
 
@@ -17,8 +20,10 @@ export default function Home() {
         {!session && 
           <button onClick={() => signIn()}>Fazer Login</button>
         }
-        {session && 
+        {session && <>
+          <button onClick={() => router.push('/dashboard')}>Dashboard</button>
           <button onClick={() => signOut()}>Sair</button>
+          </>
         }
         
       </div>

@@ -9,10 +9,10 @@ import { SellMiles } from '../../types/SellMiles';
 interface DivProps extends React.ButtonHTMLAttributes<HTMLDivElement> {
   children?: ReactElement;
   item: SellMiles;
-  menuOpened: number;
-  setMenuOpened: (id: number) => void;
-  onEdit: (id: number) => void;
-  onDelete: (id: number) => void;
+  menuOpened: string;
+  setMenuOpened: (id: string) => void;
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
 const ContentAccordionSellMiles: React.FC<DivProps> = ({item, children, menuOpened, setMenuOpened, onEdit, onDelete, ...props}) => {
@@ -38,18 +38,18 @@ const ContentAccordionSellMiles: React.FC<DivProps> = ({item, children, menuOpen
           {/* Edit account area */}
           <div className={styles.edit}>
             <div className={styles.iconEdit}>
-              <DotsIcon onClick={() => setMenuOpened(item.id as number)}/>
+              <DotsIcon onClick={() => setMenuOpened(item.id as string)}/>
             </div>
 
             {menuOpened === item.id &&
               <div className={styles.popup}>
                 <div className={styles.popupContent}>
                   <div className={styles.popupRow}>
-                    <div className={styles.popupColumn} onClick={() => onEdit(item.id as number)}>
+                    <div className={styles.popupColumn} onClick={() => onEdit(item.id as string)}>
                       <EditIcon />
                       <div>Editar</div>
                     </div>
-                    <div className={styles.popupColumn} onClick={() => onDelete(item.id as number)}>
+                    <div className={styles.popupColumn} onClick={() => onDelete(item.id as string)}>
                       <DeleteIcon />
                       <div>Deletar</div>
                     </div>

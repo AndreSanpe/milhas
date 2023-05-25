@@ -5,7 +5,7 @@ import apiBuyMiles from "../../../libs/apiBuyMiles";
 
 const handlerGet: NextApiHandler = async (req, res) => {
   const { userId } = req.body;
-  const milesBuyed = await apiBuyMiles.getMilesBuyed(parseInt(userId));
+  const milesBuyed = await apiBuyMiles.getMilesBuyed(userId);
   
   if(milesBuyed) {
     res.status(201).json({ milesBuyed })
@@ -37,7 +37,7 @@ const handlerPut: NextApiHandler = async (req, res) => {
 };
 
 const handlerDelete: NextApiHandler = async (req, res) => {
-  const id: number = req.body;
+  const id: string = req.body;
   await apiBuyMiles.deleteMilesBuyed(id);
 
   res.json({ status: true });

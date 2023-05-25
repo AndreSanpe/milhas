@@ -686,7 +686,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const accounts = await apiAccounts.getAccounts(session.user.id);
 
   /* Ge one Buy Bumerangue */
-  const buyBumerangue = await apiBuyBumerangue.getOneBuyBumerangue(parseInt(editbumerangue as string));
+  const buyBumerangue = await apiBuyBumerangue.getOneBuyBumerangue(editbumerangue as string);
   
   return {
     props: {

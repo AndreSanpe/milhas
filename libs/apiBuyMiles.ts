@@ -15,7 +15,7 @@ export default {
   },
 
   /* GET ALL BUY MILES */
-  getMilesBuyed: async (userId: number) => {
+  getMilesBuyed: async (userId: string) => {
     const buyedMiles = await prisma.buyMiles.findMany({
       where: {
         userId
@@ -29,7 +29,7 @@ export default {
   },
 
   /* GET ONE BUY MILES */
-  getOneMilesBuyed: async (id: number) => {
+  getOneMilesBuyed: async (id: string) => {
     const Buyed = await prisma.buyMiles.findFirst({
       where: {
         id
@@ -68,7 +68,7 @@ export default {
   },
 
   /* DELETE BUY MILES */
-  deleteMilesBuyed: async (id: number) => {
+  deleteMilesBuyed: async (id: string) => {
     const deleteId = await prisma.buyMiles.delete({
       where: {
         id

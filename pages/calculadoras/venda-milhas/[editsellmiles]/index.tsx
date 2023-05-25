@@ -576,7 +576,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 
   //Get subscription
-  const subscription = await api.getSubscription(user.id as number, user.subscriptionId as string);
+  const subscription = await api.getSubscription(user.id as string, user.subscriptionId as string);
   
   if(!subscription?.subscriptionStatus) {
     return{
@@ -588,7 +588,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const accounts = await apiAccounts.getAccounts(session.user.id);
 
   /* Get one selled miles */
- const selledMiles = await apiSellMiles.getOneMilesSelled(parseInt(editsellmiles as string));
+ const selledMiles = await apiSellMiles.getOneMilesSelled(editsellmiles as string);
    
   return {
     props: {

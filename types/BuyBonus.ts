@@ -1,5 +1,5 @@
 export type BuyBonus = {
-  id: number;
+  id: string;
   product: string;
   price: number;
   pointsForReal: number;
@@ -15,7 +15,7 @@ export type BuyBonus = {
   priceMiles: number;
   percentageProfit: number;
   finalPrice: number;
-  userId: number;
+  userId: string;
   score: boolean;
   priceProtection: boolean;
   transfer: boolean;

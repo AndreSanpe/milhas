@@ -6,7 +6,7 @@ import apiBuyBonus from "../../../libs/apiBuyBonus";
 
 const handlerGet: NextApiHandler = async (req, res) => {
   const { userId } = req.body;
-  const buys = await apiBuyBonus.getBuyBonus(parseInt(userId));
+  const buys = await apiBuyBonus.getBuyBonus(userId);
   if(buys) {
     res.status(201).json({ buys })
   } else {
@@ -37,7 +37,7 @@ const handlerPut: NextApiHandler = async (req, res) => {
 };
 
 const handlerDelete: NextApiHandler = async (req, res) => {
-  const id: number = req.body;
+  const id: string = req.body;
   await apiBuyBonus.deleteBuyBonus(id);
 
   res.json({ status: true });

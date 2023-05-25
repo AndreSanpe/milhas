@@ -1,5 +1,5 @@
 export type Account = {
-  id?: number;
+  id: string;
   name: string;
   document: string;
   statusLivelo: boolean;
@@ -12,7 +12,7 @@ export type Account = {
   priceAzul: number;
   statusSmiles: boolean;
   priceSmiles: number;
-  userId: number;
+  userId: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

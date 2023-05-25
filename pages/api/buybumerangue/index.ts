@@ -6,7 +6,7 @@ import { BuyBumerangue } from "../../../types/BuyBumerangue";
 
 const handlerGet: NextApiHandler = async (req, res) => {
   const { userId } = req.body;
-  const buyBumerangue = await apiBuyBumerangue.getBuysBumerangue(parseInt(userId));
+  const buyBumerangue = await apiBuyBumerangue.getBuysBumerangue(userId);
   
   if(buyBumerangue) {
     res.status(201).json({ buyBumerangue })
@@ -38,7 +38,7 @@ const handlerPut: NextApiHandler = async (req, res) => {
 };
 
 const handlerDelete: NextApiHandler = async (req, res) => {
-  const id: number = req.body;
+  const id: string = req.body;
   await apiBuyBumerangue.deleteBuyBumerangue(id);
 
   res.json({ status: true });

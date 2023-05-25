@@ -597,7 +597,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const accounts = await apiAccounts.getAccounts(session.user.id);
 
   /* Get one selled miles */
- const buyedMiles = await apiBuyMiles.getOneMilesBuyed(parseInt(editbuymiles as string));
+ const buyedMiles = await apiBuyMiles.getOneMilesBuyed(editbuymiles as string);
 
   return {
     props: {

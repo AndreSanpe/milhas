@@ -1,5 +1,5 @@
 export type BuyMiles = {
-  id: number;
+  id: string;
   price: number;
   pointsQuantity: number;
   dateBuy: string;
@@ -14,7 +14,7 @@ export type BuyMiles = {
   month?: string;
   miles?: number;
   finalPrice: number;
-  userId: number;
+  userId: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

@@ -92,7 +92,7 @@ const handlerPost: NextApiHandler = async (req, res) => {
         } else {
           await prisma.subscription.create({
             data: {
-              userId: user?.id as number,
+              userId: user?.id as string,
               subscriptionStatus: true,
               subscriptionId: stripeSubscriptionId,
               currentPeriodEnd,

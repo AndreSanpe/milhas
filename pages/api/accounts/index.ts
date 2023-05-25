@@ -6,7 +6,7 @@ import apiAccounts from "../../../libs/apiAccounts";
 
 const handlerGet: NextApiHandler = async (req, res) => {
   const { userId } = req.body;
-  const accounts = await apiAccounts.getAccounts(parseInt(userId));
+  const accounts = await apiAccounts.getAccounts(userId);
   if(accounts) {
     res.status(201).json({ accounts })
   } else {
@@ -40,7 +40,7 @@ const handlerPut: NextApiHandler = async (req, res) => {
 };
 
 const handlerDelete: NextApiHandler = async (req, res) => {
-  const id: number = req.body;
+  const id: string = req.body;
   await apiAccounts.deleteAccount(id);
 
   res.json({ status: true });

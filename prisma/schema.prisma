@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  id             Int            @id @unique @default(autoincrement())
+  id             String         @id @unique @default(uuid())
   name           String
   email          String         @unique
   password       String
@@ -34,14 +34,14 @@ model User {
 }
 
 model Subscription {
-  id                 Int      @id @unique @default(autoincrement())
+  id                 String   @id @unique @default(uuid())
   subscriptionId     String?
   subscriptionStatus Boolean
   currentPeriodStart DateTime
   currentPeriodEnd   DateTime
 
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -50,7 +50,7 @@ model Subscription {
 }
 
 model Account {
-  id           Int     @id @unique @default(autoincrement())
+  id           String  @id @unique @default(uuid())
   name         String
   document     String
   statusLivelo Boolean
@@ -64,8 +64,8 @@ model Account {
   statusSmiles Boolean
   priceSmiles  Float
 
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -74,7 +74,7 @@ model Account {
 }
 
 model BuyMiles {
-  id              Int    @id @unique @default(autoincrement())
+  id              String @id @unique @default(uuid())
   price           Float
   pointsQuantity  Int
   dateBuy         String
@@ -92,8 +92,8 @@ model BuyMiles {
 
   finalPrice Float
 
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -102,7 +102,7 @@ model BuyMiles {
 }
 
 model SellMiles {
-  id              Int    @id @unique @default(autoincrement())
+  id              String @id @unique @default(uuid())
   pointsQuantity  Int
   priceBuy        Float
   priceSell       Float
@@ -118,8 +118,8 @@ model SellMiles {
   profit           Float
   percentageProfit Float
 
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -128,7 +128,7 @@ model SellMiles {
 }
 
 model BuyBonus {
-  id             Int    @id @unique @default(autoincrement())
+  id             String @id @unique @default(uuid())
   product        String
   price          Float
   pointsForReal  Int
@@ -153,8 +153,8 @@ model BuyBonus {
   priceProtection Boolean?
   transfer        Boolean?
 
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -163,7 +163,7 @@ model BuyBonus {
 }
 
 model BuyBumerange {
-  id Int @id @unique @default(autoincrement())
+  id String @id @unique @default(uuid())
 
   price           Float
   pointsQuantity  Int
@@ -187,8 +187,8 @@ model BuyBumerange {
   totalMiles Int
   finalPrice Float
 
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt

@@ -205,7 +205,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
   
   //Get subscription
-  const subscription = await api.getSubscription(user.id as number, user.subscriptionId as string);
+  const subscription = await api.getSubscription(user.id as string, user.subscriptionId as string);
   
   if(!subscription?.subscriptionStatus) {
     return{

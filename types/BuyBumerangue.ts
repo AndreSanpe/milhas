@@ -1,6 +1,6 @@
 export type BuyBumerangue = {
-  id: number,
-  userId: number,
+  id: string,
+  userId: string,
   price: number;
   pointsQuantity: number;
   dateBuy: string;

@@ -3,7 +3,6 @@ import { unstable_getServerSession } from 'next-auth';
 import React, { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import Layout from '../../../../components/Layout';
-import { useAuthContext } from '../../../../contexts/auth';
 import api from '../../../../libs/api';
 import { User } from '../../../../types/User';
 import { authOptions } from '../../../api/auth/[...nextauth]';
@@ -460,7 +459,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
   
   //Get subscription
-  const subscription = await api.getSubscription(user.id as number, user.subscriptionId as string);
+  const subscription = await api.getSubscription(user.id as string, user.subscriptionId as string);
   
   if(!subscription?.subscriptionStatus) {
     return{
@@ -469,7 +468,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 
   /* Get one account */
-  const account = await apiAccounts.getAccount(session.user.id, parseInt(editaccountid as string));
+  const account = await apiAccounts.getAccount(session.user.id, editaccountid as string);
   
   return {
     props: {

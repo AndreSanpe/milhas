@@ -17,7 +17,7 @@ export default {
   },
 
   /* GET ALL BUY BONUS */
-  getBuyBonus: async (userId: number) => {
+  getBuyBonus: async (userId: string) => {
     const buys = await prisma.buyBonus.findMany({
       where: {
         userId
@@ -32,7 +32,7 @@ export default {
   },
 
   /* GET ONE BUY BONUS */
-  getOneBuyBonus: async (id: number) => {
+  getOneBuyBonus: async (id: string) => {
     const buy = await prisma.buyBonus.findFirst({
       where: {
         id
@@ -78,7 +78,7 @@ export default {
   },
 
   /* DELETE BUY BONUS */
-  deleteBuyBonus: async (id: number) => {
+  deleteBuyBonus: async (id: string) => {
     const deleteId = await prisma.buyBonus.delete({
       where: {
         id

@@ -6,7 +6,7 @@ import { User } from "../../../types/User";
 //Get user data
 const handlerGet: NextApiHandler = async (req, res) => {
   const { id }  = req.body;
-  const user = await api.getUser(parseInt(id as string)); 
+  const user = await api.getUser(id); 
   
   if(user?.id) {
     res.json({ user });

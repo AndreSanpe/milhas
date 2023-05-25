@@ -15,7 +15,7 @@ export default {
   },
 
   /* GET ALL BUY BUMERANGUES */
-  getBuysBumerangue: async (userId: number) => {
+  getBuysBumerangue: async (userId: string) => {
     const buysBumerangue = await prisma.buyBumerange.findMany({
       where: {
         userId
@@ -29,7 +29,7 @@ export default {
   },
 
   /* GET ONE BUY BUMERANGUE */
-  getOneBuyBumerangue: async (id: number) => {
+  getOneBuyBumerangue: async (id: string) => {
     const buyBumerangue = await prisma.buyBumerange.findFirst({
       where: {
         id
@@ -72,7 +72,7 @@ export default {
   },
 
   /* DELETE BUY BUMERANGUE */
-  deleteBuyBumerangue: async (id: number) => {
+  deleteBuyBumerangue: async (id: string) => {
     const deleteId = await prisma.buyBumerange.delete({
       where: {
         id

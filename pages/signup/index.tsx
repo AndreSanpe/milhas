@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import Logo from './fitnezz_.png';
@@ -96,13 +95,7 @@ const Signup = () => {
           'content-Type': 'application/json',
         },
       });     
-      
-      if(response.status === 400) {
-        console.log(response);
-        
-        return
-      }
-     
+           
       router.push('/login');
 
       }

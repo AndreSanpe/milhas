@@ -19,7 +19,7 @@ export default {
   },
 
    /* GET ALL ACCOUNTS */
-  getAccounts:async (userId: number) => {
+  getAccounts:async (userId: string) => {
     if(!userId) {
       return null;
     }
@@ -33,7 +33,7 @@ export default {
   },
 
   /* GET ONE ACCOUNT */
-  getAccount: async (userId: number, id: number) => {
+  getAccount: async (userId: string, id: string) => {
     const account = await prisma.account.findFirst({
       where: {
           userId,
@@ -73,7 +73,7 @@ export default {
   },
 
   /* DELETE ACCOUNT */
-  deleteAccount: async (id: number) => {
+  deleteAccount: async (id: string) => {
     const deleteId = await prisma.account.delete({
       where: {
         id
