@@ -16,6 +16,7 @@
 [x] Mostrar mensagem de erro próximo ao botão em relação a dados faltantes e/ou errados
 [x] Página da assinatura ou mandar direto para stripe
 [x] Fazer balanço de pontos e milhas
+[x] Passar id para uuid
 [] Separar a função de controle de cartão
 [] Editar dados da conta
 

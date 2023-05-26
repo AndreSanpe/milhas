@@ -8,32 +8,29 @@ export default function Home() {
 
   const { data: session } = useSession();
 
-  if (session) {
-    console.log('user:', session.user)
-  }
-
-
   return (
     <div className={styles.container}>
-      <div>HOME:</div>
+
+      <div className={styles.logo}>
+        <div className={styles.circle}></div>
+        <div className={styles.circle2}></div>
+        PlanMilhas
+        <div className={styles.circle3}></div>
+        <div className={styles.circle4}></div>
+      </div> 
+
       <div style={{display:'flex', flexDirection: 'column', gap: '12px', width:'200px'}}>
         {!session && 
-          <button onClick={() => signIn()}>Fazer Login</button>
+          <button className={styles.btn} onClick={() => signIn()}>Fazer Login</button>
         }
         {session && <>
-          <button onClick={() => router.push('/dashboard')}>Dashboard</button>
-          <button onClick={() => signOut()}>Sair</button>
+          <button className={styles.btn} onClick={() => router.push('/dashboard')}>Dashboard</button>
+          <button className={styles.btn} onClick={() => signOut()}>Sair</button>
           </>
         }
         
       </div>
-      <div>
-        {session &&  
-        <>
-         Olá {session.user?.name}
-        </>
-        }
-      </div>
+      
     </div>
   )
 }
