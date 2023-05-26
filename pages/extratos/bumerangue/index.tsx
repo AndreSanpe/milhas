@@ -2,7 +2,6 @@ import { GetServerSideProps } from 'next';
 import { unstable_getServerSession } from 'next-auth';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react'
-import ButtonBack from '../../../components/ButtonBack';
 import Layout from '../../../components/Layout';
 import { useAuthContext } from '../../../contexts/auth';
 import api from '../../../libs/api';
@@ -27,7 +26,7 @@ const ExtratoCompraBumerangue = (data: Props) => {
   /* States ///////////////////////////////////////////////////////////////////////////*/
   const [ buyBumerangueData, setBuyBumerangueData ] = useState<BuyBumerangue[]>([]);
   const [ noHaveBuyBumerangue, setNoHaveBuyBumerangue ] = useState<boolean>(false);
-  const [ menuOpened, setMenuOpened ] = useState<number>(0);
+  const [ menuOpened, setMenuOpened ] = useState<string>('');
 
   /* Setting message for not have a buy bumerangue//////////////////////////////////////////// */
   useEffect(() => {
@@ -78,15 +77,15 @@ const ExtratoCompraBumerangue = (data: Props) => {
   const handleMenuEvent = (event: MouseEvent) => {
     const tagName = (event.target as Element).tagName;
     if(!['path', 'svg'].includes(tagName)) {
-      setMenuOpened(0);
+      setMenuOpened('');
     }
   }
   
-  const handleBuyBumerangueEdit = (id: number) => {
+  const handleBuyBumerangueEdit = (id: string) => {
     router.push(`/calculadoras/compra-bumerangue/${id}`);
   }
 
-  const handleBuyBumerangueDelete = async (id: number) => {
+  const handleBuyBumerangueDelete = async (id: string) => {
     const response = await fetch('/api/buybumerangue', {
       method: 'DELETE',
       body: JSON.stringify(id),

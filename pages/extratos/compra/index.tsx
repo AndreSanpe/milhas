@@ -27,7 +27,7 @@ const ExtratoCompra = (data: Props) => {
   /* States ///////////////////////////////////////////////////////////////////////////*/
   const [ buyedMilesData, setBuyedMilesData ] = useState<BuyMiles[]>([]);
   const [ noHaveBuyMiles, setNoHaveBuyMiles ] = useState<boolean>(false);
-  const [ menuOpened, setMenuOpened ] = useState<number>(0);
+  const [ menuOpened, setMenuOpened ] = useState<string>('');
 
   /* Setting message for not have a buy miles//////////////////////////////////////////// */
   useEffect(() => {
@@ -78,15 +78,15 @@ const ExtratoCompra = (data: Props) => {
   const handleMenuEvent = (event: MouseEvent) => {
     const tagName = (event.target as Element).tagName;
     if(!['path', 'svg'].includes(tagName)) {
-      setMenuOpened(0);
+      setMenuOpened('');
     }
   }
   
-  const handleBuyMilesEdit = (id: number) => {
+  const handleBuyMilesEdit = (id: string) => {
     router.push(`/calculadoras/compra-pontos/${id}`);
   }
 
-  const handleBuyMilesDelete = async (id: number) => {
+  const handleBuyMilesDelete = async (id: string) => {
     const response = await fetch('/api/buymiles', {
       method: 'DELETE',
       body: JSON.stringify(id),

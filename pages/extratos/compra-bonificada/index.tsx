@@ -29,7 +29,7 @@ const ExtratoCompraBonificada = (data: Props) => {
   /* States /////////////////////////////////////////////////////////////////////////////*/
   const [ buyBonusData, setBuyBonusData ] = useState<BuyBonus[]>([]);
   const [ noHaveBuyBonus, setNoHaveBuyBonus ] = useState<boolean>(false);
-  const [ menuOpened, setMenuOpened ] = useState<number>(0);
+  const [ menuOpened, setMenuOpened ] = useState<string>('');
 
   /* Sending user data to context /////////////////////////////////////////////////////////*/
   useEffect(() => {
@@ -82,15 +82,15 @@ const ExtratoCompraBonificada = (data: Props) => {
   const handleMenuEvent = (event: MouseEvent) => {
     const tagName = (event.target as Element).tagName;
     if(!['path', 'svg'].includes(tagName)) {
-      setMenuOpened(0);
+      setMenuOpened('');
     }
   }
   
-  const handleBuyBonusEdit = (id: number) => {
+  const handleBuyBonusEdit = (id: string) => {
     router.push(`/calculadoras/compra-bonificada/${id}`);
   }
 
-  const handleBuyBonusDelete = async (id: number) => {
+  const handleBuyBonusDelete = async (id: string) => {
     const response = await fetch('/api/buybonus', {
       method: 'DELETE',
       body: JSON.stringify(id),

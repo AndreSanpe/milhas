@@ -26,7 +26,7 @@ const ExtratoVenda = (data: Props) => {
   /* States */
  const [ selledMilesData, setSelledMilesData ] = useState<SellMiles[]>([]);
  const [ noHaveSelledMiles, setNoHaveSelledMiles ] = useState<boolean>(false);
- const [ menuOpened, setMenuOpened ] = useState<number>(0);
+ const [ menuOpened, setMenuOpened ] = useState<string>('');
 
   /* Setting message for not have a buy bonus//////////////////////////////////////////// */
   useEffect(() => {
@@ -75,15 +75,15 @@ const ExtratoVenda = (data: Props) => {
   const handleMenuEvent = (event: MouseEvent) => {
     const tagName = (event.target as Element).tagName;
     if(!['path', 'svg'].includes(tagName)) {
-      setMenuOpened(0);
+      setMenuOpened('');
     }
   }
   
-  const handleSellMilesEdit = (id: number) => {
+  const handleSellMilesEdit = (id: string) => {
     router.push(`/calculadoras/venda-milhas/${id}`);
   }
 
-  const handleSellMilesDelete = async (id: number) => {
+  const handleSellMilesDelete = async (id: string) => {
     const response = await fetch('/api/sellmiles', {
       method: 'DELETE',
       body: JSON.stringify(id),
