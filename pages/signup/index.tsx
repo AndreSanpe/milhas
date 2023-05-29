@@ -62,16 +62,21 @@ const Signup = () => {
       approved = false;
     }
 
-    if(email !== emailVerify) {
+    /* if(email !== emailVerify) {
       newErroFields.push('emailVerify');
       approved = false;
-    }
+    } */
 
     if(password === '') {
       newErroFields.push('password');
       approved = false;
     }
 
+    if(password !== passwordVerify) {
+      newErroFields.push('passwordVerify');
+      approved = false;
+    }
+   
     setErrorFields(newErroFields);
     return approved;
   }
@@ -171,7 +176,7 @@ const Signup = () => {
                 warning={errorFields.includes('email' || 'emailVerify')}
               />
           </div>
-          <div className={styles.input}>
+          {/* <div className={styles.input}>
             <div className={styles.label}>Confirmar E-mail</div>
               <Input
                 onSet={handleChange}
@@ -179,7 +184,7 @@ const Signup = () => {
                 placeholder='Ex.: rafa@gmail.com'
                 warning={errorFields.includes('emailVerify')}
               />
-          </div>
+          </div> */}
           <div className={styles.input}>
             <div className={styles.label}>Crie uma senha</div>
               <Input

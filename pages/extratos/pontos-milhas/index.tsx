@@ -249,13 +249,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
   
   //Get subscription
-  const subscription = await api.getSubscription(user.id as string, user.subscriptionId as string);
+  /* const subscription = await api.getSubscription(user.id as string, user.subscriptionId as string);
   
   if(!subscription?.subscriptionStatus) {
     return{
       redirect: {destination: '/assinatura', permanent: false}
     }
-  };
+  }; */
 
   /* Get selled miles */
   const selledMiles = await apiSellMiles.getMilesSelled(session.user.id);
