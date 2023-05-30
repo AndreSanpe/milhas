@@ -1,6 +1,7 @@
 import { signIn, signOut, useSession } from 'next-auth/react';
 import styles from '../styles/Home.module.css'
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 export default function Home() {
 
@@ -8,7 +9,12 @@ export default function Home() {
 
   const { data: session } = useSession();
 
-  return (
+  return (<>
+
+    <Head>
+      <title>PlanMilhas</title>
+    </Head>
+
     <div className={styles.container}>
 
       <div className={styles.logo}>
@@ -32,5 +38,5 @@ export default function Home() {
       </div>
       
     </div>
-  )
+    </>)
 }

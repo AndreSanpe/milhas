@@ -6,6 +6,7 @@ import Button from '../../components/Button';
 import Input from '../../components/Input';
 import Logo from './fitnezz_.png';
 import styles from './styles.module.css';
+import Head from 'next/head';
 
 const Login = () => {
 
@@ -65,6 +66,10 @@ const Login = () => {
    }
   
   return (
+    <>
+    <Head>
+      <title>Login: Acesse sua conta . PlanMilhas</title>
+    </Head>
 
     <div className={styles.container}>
       <div className={styles.loginArea}>
@@ -128,7 +133,7 @@ const Login = () => {
 
       </div>
     </div>
-  )
+    </>)
 }
 
 export default Login;

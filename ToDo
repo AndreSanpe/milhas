@@ -6,6 +6,7 @@
 [x] Refatorar webhooks (created, updated, etc)
 [x] Fazer lógica, se o user não estiver active ou trialing, enviar para a assinatura
 [x] Proteger todas páginas, conferindo assinatura true no server >>> false = redirect
+[] Mudar Stripe para o modo de produção e ativar proteção de todas as páginas
 [] Tratar envio de email faltando 3 dias pra acabar a assinatura trial
 
 ------------Funcionalidade--------------
@@ -17,8 +18,10 @@
 [x] Página da assinatura ou mandar direto para stripe
 [x] Fazer balanço de pontos e milhas
 [x] Passar id para uuid
+[] IMPORTANTE: Tratar as telas de loading
 [] Separar a função de controle de cartão
 [] Editar dados da conta
+[] Tratar uso de email e cpf iguais, retornar erro (no momento, está redirecionando)
 
 -------------Geral-------------
 
