@@ -21,6 +21,10 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
     setLoading(false)
   });
 
+  Router.events.on('routeChangeError',(url) => {
+    setLoading(false)
+  });
+
   return (<>
 
     {loading && <Loader />}

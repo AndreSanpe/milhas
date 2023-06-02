@@ -1,7 +1,11 @@
 .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
   border: none;
   height: 48px;
-  width: 100%;
+  width: 300px;
   border-radius: 5px;
   color: #FBFFF9;
   font-size: 16px;

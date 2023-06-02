@@ -14,6 +14,8 @@ import { SellMiles } from '../../../types/SellMiles';
 import ContentAccordionSellMiles from '../../../components/ContentAccordionSellMiles';
 import Title from '../../../components/Title';
 import apiSellMiles from '../../../libs/apiSellMiles';
+import AddButton from '../../../components/AddButton';
+import FormModal from '../../../components/FormModal';
 
 const ExtratoVenda = (data: Props) => {
 
@@ -27,6 +29,7 @@ const ExtratoVenda = (data: Props) => {
  const [ selledMilesData, setSelledMilesData ] = useState<SellMiles[]>([]);
  const [ noHaveSelledMiles, setNoHaveSelledMiles ] = useState<boolean>(false);
  const [ menuOpened, setMenuOpened ] = useState<string>('');
+ const [ showModal, setShowModal ] = useState<boolean>(false);
 
   /* Setting message for not have a buy bonus//////////////////////////////////////////// */
   useEffect(() => {
@@ -162,8 +165,25 @@ const ExtratoVenda = (data: Props) => {
             onEdit={handleSellMilesEdit}
             onDelete={handleSellMilesDelete}
             /> 
-        ))} 
+        ))}
 
+        {!noHaveSelledMiles &&
+          <div onClick={()=> setShowModal(true)}>
+            <AddButton />
+          </div>
+        }  
+        
+        {/* Alert modal*/}
+        {showModal && 
+          <FormModal maxWidth={'340px'} maxHeight={'1500px'}>
+            <div className={styles.modalContainer}>
+              <div className={styles.modalTitle}>Deseja cadastrar uma nova venda?</div>
+              <div className={styles.modalLink} onClick={() => router.push('/calculadoras/venda-milhas')}>Sim, cadastrar</div>
+              <div className={styles.modalLink} 
+                  onClick={() => {setShowModal(false)}}>Não, voltar ao extrato</div>
+            </div>
+          </FormModal>
+        }
 
        {/* Message for when there is no registered buy bonus yet */}
        {noHaveSelledMiles &&

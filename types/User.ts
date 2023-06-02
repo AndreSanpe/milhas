@@ -6,6 +6,5 @@ export type User = {
     birthdate: string;
     cellphone: string;
     cpf: string;
-    status: boolean;
     createdAt: Date;
 }

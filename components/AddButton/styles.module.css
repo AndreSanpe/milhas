@@ -1,0 +1,18 @@
+/* CSS general */
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.button {
+  color: #26408C;
+  cursor: pointer;
+}
+
+.button:hover {
+  color: #F25C05;
+  cursor: pointer;
+}

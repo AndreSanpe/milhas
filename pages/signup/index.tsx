@@ -38,9 +38,9 @@ const Signup = () => {
       case 'email':
         setEmail(e.currentTarget.value)
         return;
-      case 'emailVerify':
+      /* case 'emailVerify':
         setEmailVerify(e.currentTarget.value)
-        return;
+        return; */
       case 'password':
         setPassword(e.currentTarget.value)
         return;
@@ -100,7 +100,9 @@ const Signup = () => {
         headers: {
           'content-Type': 'application/json',
         },
-      });     
+      }); 
+      
+      console.log(response)
            
       router.push('/login');
 

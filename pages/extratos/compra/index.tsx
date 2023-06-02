@@ -15,6 +15,8 @@ import ContentAccordionBuyMiles from '../../../components/ContentAccordionBuyMil
 import { BuyMiles } from '../../../types/BuyMiles';
 import Title from '../../../components/Title';
 import apiBuyMiles from '../../../libs/apiBuyMiles';
+import AddButton from '../../../components/AddButton';
+import FormModal from '../../../components/FormModal';
 
 const ExtratoCompra = (data: Props) => {
 
@@ -28,6 +30,7 @@ const ExtratoCompra = (data: Props) => {
   const [ buyedMilesData, setBuyedMilesData ] = useState<BuyMiles[]>([]);
   const [ noHaveBuyMiles, setNoHaveBuyMiles ] = useState<boolean>(false);
   const [ menuOpened, setMenuOpened ] = useState<string>('');
+  const [ showModal, setShowModal ] = useState<boolean>(false);
 
   /* Setting message for not have a buy miles//////////////////////////////////////////// */
   useEffect(() => {
@@ -162,7 +165,24 @@ const ExtratoCompra = (data: Props) => {
             /> 
         ))} 
 
-
+        {!noHaveBuyMiles &&
+          <div onClick={()=> setShowModal(true)}>
+            <AddButton />
+          </div>
+        }  
+        
+        {/* Alert modal*/}
+        {showModal && 
+          <FormModal maxWidth={'340px'} maxHeight={'1500px'}>
+            <div className={styles.modalContainer}>
+              <div className={styles.modalTitle}>Deseja cadastrar uma nova compra?</div>
+              <div className={styles.modalLink} onClick={() => router.push('/calculadoras/compra-pontos')}>Sim, cadastrar</div>
+              <div className={styles.modalLink} 
+                  onClick={() => {setShowModal(false)}}>Não, voltar ao extrato</div>
+            </div>
+          </FormModal>
+        }
+        
        {/* Message for when there is no registered buy miles yet */}
        {noHaveBuyMiles &&
           <div className={styles.alert}>

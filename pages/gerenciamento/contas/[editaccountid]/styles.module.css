@@ -1,10 +1,24 @@
-/* CSS general */
-.container {
+@media screen and (min-width: 720px){ 
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 720px;
+  }
+}
+
+@media screen and (max-width: 719px){
+
+  .container {
   display: flex;
   flex-direction: column;
   margin-left: 20px;
   margin-right: 20px;
+  }
 }
+
+/* CSS general */
 
 /* CSS modal */
 .inputs {

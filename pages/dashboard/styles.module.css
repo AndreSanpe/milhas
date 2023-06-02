@@ -1,6 +1,7 @@
   .container {
     display: flex;
     flex-direction: column;
+    width: 360px;
     gap: 12px;
     margin: auto;
   }
@@ -21,7 +22,6 @@
   .title {
     display: flex;
     margin-top: 32px;
-    margin-left: 20px;
     font-size: 18px;
     font-weight: 600;
     color: #292929;

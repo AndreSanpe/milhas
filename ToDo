@@ -18,14 +18,20 @@
 [x] Página da assinatura ou mandar direto para stripe
 [x] Fazer balanço de pontos e milhas
 [x] Passar id para uuid
-[] IMPORTANTE: Tratar as telas de loading
+[x] IMPORTANTE: Tratar as telas de loading
+[] Permitir salvar prints?!
+[] Senha com no mínimo 8 caracteres
+[] Editar dados da conta (Minha conta)
+[] Permitir a adição de milhas acumuladas anteriormente, sem a necessidade de adicionar todas compras
 [] Separar a função de controle de cartão
-[] Editar dados da conta
 [] Tratar uso de email e cpf iguais, retornar erro (no momento, está redirecionando)
+[] Tratar o uso de emails do sistema
+[] Páginas: Home {landing page}, suporte, etc
 
--------------Geral-------------
+-------------Institucional-------------
 
-[ ] Landing page
-[ ] Menus (suporte, etc)
-[ ] Lidar com emails
-[ ] Testar online
+[] Dados de  CNPJ para ativar a stripe
+[] Precificação
+[] Definir tempo de teste
+[] Contrato
+

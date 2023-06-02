@@ -17,6 +17,8 @@ import { useRouter } from 'next/router';
 import Title from '../../../components/Title';
 import apiAccounts from '../../../libs/apiAccounts';
 import apiBuyBonus from '../../../libs/apiBuyBonus';
+import AddButton from '../../../components/AddButton';
+import FormModal from '../../../components/FormModal';
 
 const ExtratoCompraBonificada = (data: Props) => {
 
@@ -30,6 +32,7 @@ const ExtratoCompraBonificada = (data: Props) => {
   const [ buyBonusData, setBuyBonusData ] = useState<BuyBonus[]>([]);
   const [ noHaveBuyBonus, setNoHaveBuyBonus ] = useState<boolean>(false);
   const [ menuOpened, setMenuOpened ] = useState<string>('');
+  const [ showModal, setShowModal ] = useState<boolean>(false);
 
   /* Sending user data to context /////////////////////////////////////////////////////////*/
   useEffect(() => {
@@ -158,7 +161,25 @@ const ExtratoCompraBonificada = (data: Props) => {
             onEdit={handleBuyBonusEdit}
             onDelete={handleBuyBonusDelete}
             /> 
-        ))} 
+        ))}
+
+        {!noHaveBuyBonus &&
+          <div onClick={()=> setShowModal(true)}>
+            <AddButton />
+          </div>
+        }  
+        
+        {/* Alert modal*/}
+        {showModal && 
+          <FormModal maxWidth={'340px'} maxHeight={'1500px'}>
+            <div className={styles.modalContainer}>
+              <div className={styles.modalTitle}>Deseja cadastrar uma nova compra bonificada?</div>
+              <div className={styles.modalLink} onClick={() => router.push('/calculadoras/compra-bonificada')}>Sim, cadastrar</div>
+              <div className={styles.modalLink} 
+                  onClick={() => {setShowModal(false)}}>Não, voltar ao extrato</div>
+            </div>
+          </FormModal>
+        } 
               
         {/* Message for when there is no registered buy bonus yet */}
         {noHaveBuyBonus &&

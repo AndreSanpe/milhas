@@ -7,6 +7,7 @@ import Input from '../../components/Input';
 import Logo from './fitnezz_.png';
 import styles from './styles.module.css';
 import Head from 'next/head';
+import Loader from '../../components/Loader';
 
 const Login = () => {
 
@@ -14,6 +15,7 @@ const Login = () => {
   const [ password, setPassword ] = useState('');
   const [ hasError, setHasError ] = useState(false);
   const [ errorFields, setErrorFields ] = useState<string[]>([]);
+  const [ loading, setLoading ] = useState<boolean>(false);
 
   const handleChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
     if(e.currentTarget.name === 'email') {
@@ -49,6 +51,7 @@ const Login = () => {
 
   //Once verified, log in
   const handleSubmit = async () => {
+    setLoading(true);
     if(verifyUser()){
       setErrorFields([])
       const request = await signIn('credentials', {
@@ -63,6 +66,7 @@ const Login = () => {
         setHasError(true);
       }
     } 
+    setLoading(false);
    }
   
   return (
@@ -111,8 +115,6 @@ const Login = () => {
           </div>
         </div>
 
-        
-
         <div className={styles.button}>
           
           <Button 
@@ -130,6 +132,8 @@ const Login = () => {
         <div className={styles.signup}>
           Primeira vez na PlanMilhas?<div className={styles.signupLink} onClick={() => {router.push('/signup')}}>Criar conta</div>
         </div>
+
+        {loading && <Loader />}
 
       </div>
     </div>
