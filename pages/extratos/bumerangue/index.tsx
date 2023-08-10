@@ -14,6 +14,8 @@ import ContentAccordionBuyBumerangue from '../../../components/ContentAccordionB
 import Title from '../../../components/Title';
 import apiBuyBumerangue from '../../../libs/apiBuyBumerangue';
 import { BuyBumerangue } from '../../../types/BuyBumerangue';
+import AddButton from '../../../components/AddButton';
+import FormModal from '../../../components/FormModal';
 
 const ExtratoCompraBumerangue = (data: Props) => {
 
@@ -27,6 +29,7 @@ const ExtratoCompraBumerangue = (data: Props) => {
   const [ buyBumerangueData, setBuyBumerangueData ] = useState<BuyBumerangue[]>([]);
   const [ noHaveBuyBumerangue, setNoHaveBuyBumerangue ] = useState<boolean>(false);
   const [ menuOpened, setMenuOpened ] = useState<string>('');
+  const [ showModal, setShowModal ] = useState<boolean>(false);
 
   /* Setting message for not have a buy bumerangue//////////////////////////////////////////// */
   useEffect(() => {
@@ -160,6 +163,24 @@ const ExtratoCompraBumerangue = (data: Props) => {
             onDelete={handleBuyBumerangueDelete}
             /> 
         ))} 
+
+        {!noHaveBuyBumerangue &&
+          <div onClick={()=> setShowModal(true)}>
+            <AddButton />
+          </div>
+        }  
+        
+        {/* Alert modal*/}
+        {showModal && 
+          <FormModal maxWidth={'340px'} maxHeight={'1500px'}>
+            <div className={styles.modalContainer}>
+              <div className={styles.modalTitle}>Deseja cadastrar uma nova compra Bumerangue?</div>
+              <div className={styles.modalLink} onClick={() => router.push('/calculadoras/compra-bumerangue')}>Sim, cadastrar</div>
+              <div className={styles.modalLink} 
+                  onClick={() => {setShowModal(false)}}>Não, voltar ao extrato</div>
+            </div>
+          </FormModal>
+        } 
 
 
        {/* Message for when there is no registered buy miles yet */}

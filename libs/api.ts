@@ -52,6 +52,7 @@ export default {
         name: user?.name,
         email: user?.email,
         birthDate: user?.birthdate,
+        cpf: user?.cpf,
         cellphone: user?.cellphone,
         subscriptionId: user?.subscriptionId,
         stripeCustomer: user?.stripeCustomer,
@@ -64,7 +65,7 @@ export default {
   addNewUser: async ({ name, email, cpf, birthdate, cellphone, password }: User) => {
 
     //Handle the password
-    let hashedPass = await bcrypt.hashSync(password, 10);
+    let hashedPass = bcrypt.hashSync(password, 10);
     password = hashedPass;
 
     //Create new user

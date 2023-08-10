@@ -6,26 +6,42 @@
 [x] Refatorar webhooks (created, updated, etc)
 [x] Fazer lógica, se o user não estiver active ou trialing, enviar para a assinatura
 [x] Proteger todas páginas, conferindo assinatura true no server >>> false = redirect
+[x] Tratar envio de email faltando 3 dias pra acabar a assinatura trial
 [] Mudar Stripe para o modo de produção e ativar proteção de todas as páginas
-[] Tratar envio de email faltando 3 dias pra acabar a assinatura trial
 
 ------------Funcionalidade--------------
 
 [x] Puxar os valores de extratos faltantes
-[x] Editar e deletar extratos 
+[x] Editar e deletar extratos
 [x] Fazer calculadora bumerangue
 [x] Mostrar mensagem de erro próximo ao botão em relação a dados faltantes e/ou errados
 [x] Página da assinatura ou mandar direto para stripe
 [x] Fazer balanço de pontos e milhas
 [x] Passar id para uuid
-[] IMPORTANTE: Tratar as telas de loading
+[x] IMPORTANTE: Tratar as telas de loading
+[x] Senha com no mínimo 8 caracteres
+[x] Tratar uso de email e cpf iguais, retornar erro (no momento, está redirecionando)
+[x] Editar dados da conta (Minha conta)
+[x] Servidor email criado ZOHOMAIL B7.....!d
+[x] Tratar o uso de emails do sistema https://www.youtube.com/watch?v=GTiuAm6S-OU
+[x] Recuperar senha (linkar no login e em nova conta) Um campo coleta o email do usuário... esse email é buscado no db, se existe, pegamos o user id relacionado a este email e encapsulamos em um token... o token vira parte de uma url [slug], e é enviado no email cadastrado... Nota: esse token expira depois de um tempo definido... entrando no link, o user depara com input de nova senha... assim que a nova senha é enviada, o token é verificado e se tudo estiver ok, o user id é usado para atualizar a senha... caso o token esteja expirado, o usuário é redirecionado para o reenvio do email => https://www.youtube.com/watch?v=RCdG2frnyxw
+
+[x] Tela de sucesso ao trocar senha e redirecionamento para login
+[] Criar emails HTML personalizados para cada situação (recovery, signup)
+[] React email
+[x] Refatorar as APIs usando try/catch com os devidos erros
+[] Página 404
+[] Política de privacidade e termos de uso
+[] Em extrato de compra de pontos, separar a média do milheiro para cada programa
+[] Permitir a adição de milhas acumuladas anteriormente, sem a necessidade de adicionar todas compras
 [] Separar a função de controle de cartão
-[] Editar dados da conta
-[] Tratar uso de email e cpf iguais, retornar erro (no momento, está redirecionando)
+[] Páginas: Home {landing page}, suporte, etc
+[] Pixel, Analytics, Hotjar, Cloudflare, SEO, Google TAG manager
+[] Permitir salvar prints?!
 
--------------Geral-------------
+-------------Institucional-------------
 
-[ ] Landing page
-[ ] Menus (suporte, etc)
-[ ] Lidar com emails
-[ ] Testar online
+[x] Precificação
+[x] Definir tempo de teste
+[] Dados de CNPJ para ativar a stripe
+[] Contrato

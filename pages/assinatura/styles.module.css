@@ -1,9 +1,25 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  margin: 40px;
+@media screen and (min-width: 720px){ 
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 50px;
+    width: 720px;
+  }
 }
 
+@media screen and (max-width: 719px){
+
+  .container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  margin-right: 20px;
+  }
+}
+
+/* CSS general */
 .content {
   display: flex;
   flex-direction: column;

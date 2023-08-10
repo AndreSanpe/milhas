@@ -3,9 +3,11 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
-import Logo from './fitnezz_.png';
+import Logo from '../../public/logo_plamilhas.png';
 import styles from './styles.module.css';
 import Head from 'next/head';
+import Image from 'next/image';
+import Loader from '../../components/Loader';
 
 
 const Signup = () => {
@@ -15,11 +17,14 @@ const Signup = () => {
   const [ birthdate, setBirthdate ] = useState<string>('');
   const [ cellphone, setCellphone ] = useState<string>('');
   const [ email, setEmail ] = useState<string>('');
-  const [ emailVerify, setEmailVerify ] = useState<string>('');
   const [ password, setPassword ] = useState<string>('');
   const [ passwordVerify, setPasswordVerify ] = useState<string>('');
   const [ hasError, setHasError ] = useState<boolean>(false);
   const [ errorFields, setErrorFields ] = useState<string[]>([]);
+  const [ errorPasswordLess, setErrorPasswordLess ] = useState<string[]>([]);
+  const [ errorPasswordVerify, setErrorPasswordVerify ] = useState<string[]>([]);
+  const [ errorEmailOrCpf, setErrorEmailOrCpf ] = useState<boolean>(false);
+  const [ loading, setLoading ] = useState<boolean>(false);
 
   const handleChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
     switch(e.currentTarget.name) {
@@ -38,9 +43,6 @@ const Signup = () => {
       case 'email':
         setEmail(e.currentTarget.value)
         return;
-      case 'emailVerify':
-        setEmailVerify(e.currentTarget.value)
-        return;
       case 'password':
         setPassword(e.currentTarget.value)
         return;
@@ -54,7 +56,29 @@ const Signup = () => {
   //verify each default entry, if exists errors, push to array
   const verifyUser = () => {
     let newErroFields = [];
+    let newErrorPasswordVerify = [];
+    let newErrorPasswordLess = [];
     let approved = true;
+
+    if(name === '') {
+      newErroFields.push('name');
+      approved = false;
+    }
+
+    if(cpf.length < 14) {
+      newErroFields.push('cpf');
+      approved = false;
+    }
+
+    if(birthdate.length < 10) {
+      newErroFields.push('birthdate');
+      approved = false;
+    }
+
+    if(cellphone === '') {
+      newErroFields.push('cellphone');
+      approved = false;
+    }
 
     const emailRegexp = /[a-z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi;
 
@@ -63,27 +87,25 @@ const Signup = () => {
       approved = false;
     }
 
-    /* if(email !== emailVerify) {
-      newErroFields.push('emailVerify');
-      approved = false;
-    } */
-
-    if(password === '') {
-      newErroFields.push('password');
+    if(password === '' || password.length < 8) {
+      newErrorPasswordLess.push('password');
       approved = false;
     }
 
     if(password !== passwordVerify) {
-      newErroFields.push('passwordVerify');
+      newErrorPasswordVerify.push('passwordVerify');
       approved = false;
     }
    
     setErrorFields(newErroFields);
+    setErrorPasswordLess(newErrorPasswordLess);
+    setErrorPasswordVerify(newErrorPasswordVerify);
     return approved;
   }
 
   //Once verified, log in
   const handleSubmit = async () => {
+    setLoading(true);
     if(verifyUser()){
       let user = {
         name,
@@ -100,12 +122,50 @@ const Signup = () => {
         headers: {
           'content-Type': 'application/json',
         },
-      });     
-           
-      router.push('/login');
-
+      }); 
+      
+      if(response.status === 401) {
+        console.log('cpf ou email já cadastrado')
+        setErrorEmailOrCpf(true);
+        setLoading(false);
+        return
       }
 
+      if(response.ok) {
+        const request = await signIn('credentials', {
+          redirect: false,
+          email, password
+        });
+
+        if(request && request.error === null && request.ok){
+          router.push('/dashboard');
+          } else {
+            router.push('/login');
+            console.log('Ocorreu algum erro no login automático');
+          }
+      } else {
+        router.push('/login');
+      }
+
+      //If it's ok >> send welcome email
+      let dataEmail = {
+        emailplan: 'contato@planmilhas.com.br',
+        emailuser: email,
+        subject: 'Bem vindo a PlanMilhas!',
+        text: 'Texto',
+        texthtml: '<b>Olá fulano, obrigado por se cadastrar!</b>'
+      }
+      
+      const sendEmail = await fetch('/api/email', {
+        method: 'POST',
+        body: JSON.stringify(dataEmail),
+        headers: {
+          'content-Type': 'application/json',
+        },
+      }); 
+  
+    }
+    setLoading(false);
   } 
    
   return (<>
@@ -118,14 +178,16 @@ const Signup = () => {
       <div className={styles.loginArea}>
 
         <div className={styles.logo}>  
-          {/* <Image 
-          src={Logo}
-          width={140}
-          height={48}
-          alt=''
-          /> */}
 
-          <div style={{fontSize: '24px', fontWeight: '700', color: '#26408C'}}>LOGO</div>
+          <Image 
+          src={Logo}
+          width={180}
+          height={35}
+          alt=''
+          priority={true}
+          className={styles.image}
+          />       
+
         </div>
 
         <div className={styles.title}>Criar conta</div>
@@ -180,15 +242,7 @@ const Signup = () => {
                 warning={errorFields.includes('email' || 'emailVerify')}
               />
           </div>
-          {/* <div className={styles.input}>
-            <div className={styles.label}>Confirmar E-mail</div>
-              <Input
-                onSet={handleChange}
-                name='emailVerify' 
-                placeholder='Ex.: rafa@gmail.com'
-                warning={errorFields.includes('emailVerify')}
-              />
-          </div> */}
+          
           <div className={styles.input}>
             <div className={styles.label}>Crie uma senha</div>
               <Input
@@ -196,7 +250,7 @@ const Signup = () => {
                 name='password' 
                 placeholder=''
                 password
-                warning={errorFields.includes('password')}
+                warning={errorPasswordLess.includes('password')}
               />
             <div className={styles.forget}>Mínimo de 8 caracteres</div>
           </div>
@@ -207,13 +261,11 @@ const Signup = () => {
                 name='passwordVerify' 
                 placeholder=''
                 password
-                warning={errorFields.includes('passwordVerify')}
+                warning={errorPasswordVerify.includes('passwordVerify')}
               />
           </div>
           
         </div>
-
-        
 
         <div className={styles.button}>
           
@@ -226,12 +278,30 @@ const Signup = () => {
         </div>
 
         <div className={styles.errors}>
-          {errorFields.length || hasError ? <div>Usuário e/ou senha inválido(s)!</div> : ''}
+          {errorFields.length || hasError ? <div>Campo(s) obrigatório(s), por favor preencha-o(s)!</div> : ''}
+        </div>
+
+        <div className={styles.errors}>
+          {errorPasswordLess.length ? <div> A senha deve conter no mínimo 8 caracteres.</div> : ''}
+        </div>
+
+        <div className={styles.errors}>
+          {errorPasswordVerify.length ? <div> A confirmação de senhas falhou. As senhas devem ser iguais.</div> : ''}
+        </div>
+
+        <div className={styles.errors}>
+          {errorEmailOrCpf ? <div> E-mail e/ou cpf já cadastrado.</div> : ''}
+        </div>
+
+        <div className={styles.recovery}>
+        {errorEmailOrCpf? <div>Se você já se cadastrou e esqueceu a senha, <span  className={styles.recoveryBtn} onClick={() => {}}>clique aqui</span></div> : ''}
         </div>
 
         <div className={styles.signup}>
           Já tem uma conta?<div className={styles.signupLink} onClick={() => {router.push('/login')}}>Entrar</div>
         </div>
+
+        {loading && <Loader />}
 
       </div>
     </div>

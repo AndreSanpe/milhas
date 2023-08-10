@@ -1,0 +1,150 @@
+@media screen and (min-width: 951px) {
+  .loginArea {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 420px;
+    height: 620px;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0px 0px 4px 0px rgba(61, 61, 61, 0.2);
+  }
+}
+
+.container {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: #fafafa;
+}
+
+.loginArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 360px;
+  height: 620px;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0px 0px 4px 0px rgba(61, 61, 61, 0.2);
+}
+
+.image {
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 20px;
+  line-height: 40px;
+  color: #525252;
+}
+
+.subtitle {
+  font-size: 12px;
+  text-align: center;
+  line-height: 24px;
+  color: #a3a3a3;
+  padding: 0px 20px;
+  padding-bottom: 32px;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input {
+  width: 300px;
+}
+
+.label {
+  font-size: 12px;
+  line-height: 24px;
+  color: #292929;
+}
+
+.button {
+  display: flex;
+  width: 300px;
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+
+.errors {
+  display: flex;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 500;
+  color: #E92D30;
+}
+
+.forget {
+  display: flex;
+  flex-direction: row-reverse;
+  font-size: 12px;
+  font-weight: 500;
+  padding-top: 4px;
+  color: #666666;
+}
+
+.signup {
+  display: flex;
+  padding-top: 8px;
+  font-size: 14px;
+  color: #a3a3a3;
+}
+
+.signupLink {
+  font-weight: 500;
+  padding-left: 4px;
+  color: #666666;
+  cursor: pointer;
+}
+
+.alert {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 32px;
+  color: #292929;
+}
+
+.icon {
+  color: #26408C;
+}
+
+.alertEmail {
+  font-size: 16px;
+  text-align: center;
+  line-height: 24px;
+  color: #a3a3a3;
+  padding: 0px 20px;
+}
+
+.link {
+  font-weight: 500;
+  padding-left: 4px;
+  text-decoration: underline;
+  color: #26408C;
+  cursor: pointer;
+}
+
+.subtitleAlert {
+  display: flex;
+  flex-direction: row;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 24px;
+  color: #a3a3a3;
+  padding: 32px 20px;
+}

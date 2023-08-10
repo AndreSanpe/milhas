@@ -15,6 +15,8 @@ import ContentAccordionBuyMiles from '../../../components/ContentAccordionBuyMil
 import { BuyMiles } from '../../../types/BuyMiles';
 import Title from '../../../components/Title';
 import apiBuyMiles from '../../../libs/apiBuyMiles';
+import AddButton from '../../../components/AddButton';
+import FormModal from '../../../components/FormModal';
 
 const ExtratoCompra = (data: Props) => {
 
@@ -28,6 +30,7 @@ const ExtratoCompra = (data: Props) => {
   const [ buyedMilesData, setBuyedMilesData ] = useState<BuyMiles[]>([]);
   const [ noHaveBuyMiles, setNoHaveBuyMiles ] = useState<boolean>(false);
   const [ menuOpened, setMenuOpened ] = useState<string>('');
+  const [ showModal, setShowModal ] = useState<boolean>(false);
 
   /* Setting message for not have a buy miles//////////////////////////////////////////// */
   useEffect(() => {
@@ -56,6 +59,11 @@ const ExtratoCompra = (data: Props) => {
   let buyQuantity = 0;
   let investiment = 0;
   let averageCoastMiles = 0;
+  let averageCoastMilesLivelo = 0;
+  let averageCoastMilesEsfera = 0;
+  let averageCoastMilesAzul = 0;
+  let averageCoastMilesLatam = 0;
+  let averageCoastMilesSmiles = 0;
 
   for(let i = 0; i < buyedMilesData.length; i++) {
     if(buyedMilesData[i].miles) {
@@ -64,6 +72,8 @@ const ExtratoCompra = (data: Props) => {
       miles += buyedMilesData[i].pointsQuantity;
     }
     investiment += buyedMilesData[i].price;
+
+    
   }
 
   if(miles && investiment) {
@@ -73,7 +83,7 @@ const ExtratoCompra = (data: Props) => {
   if(buyedMilesData.length) {
     buyQuantity = buyedMilesData.length;
   }
-  
+
   /* Menu edit events //////////////////////////////////////////////////////////////// */
   const handleMenuEvent = (event: MouseEvent) => {
     const tagName = (event.target as Element).tagName;
@@ -162,7 +172,24 @@ const ExtratoCompra = (data: Props) => {
             /> 
         ))} 
 
-
+        {!noHaveBuyMiles &&
+          <div onClick={()=> setShowModal(true)}>
+            <AddButton />
+          </div>
+        }  
+        
+        {/* Alert modal*/}
+        {showModal && 
+          <FormModal maxWidth={'340px'} maxHeight={'1500px'}>
+            <div className={styles.modalContainer}>
+              <div className={styles.modalTitle}>Deseja cadastrar uma nova compra?</div>
+              <div className={styles.modalLink} onClick={() => router.push('/calculadoras/compra-pontos')}>Sim, cadastrar</div>
+              <div className={styles.modalLink} 
+                  onClick={() => {setShowModal(false)}}>Não, voltar ao extrato</div>
+            </div>
+          </FormModal>
+        }
+        
        {/* Message for when there is no registered buy miles yet */}
        {noHaveBuyMiles &&
           <div className={styles.alert}>
