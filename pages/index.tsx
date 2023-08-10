@@ -4,18 +4,26 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { useState } from 'react';
 import Loader from '../components/Loader';
+<<<<<<< HEAD
 import Recovery from '../emails/recovery';
 import EmailRecovery from '../emails/recuperar-senha';
 import { render } from '@react-email/components';
 
 export default function Home() {
 
+=======
+
+export default function Home() {
+
+  /* signIn() */
+>>>>>>> 09286d995f1b689fe699205bac56d945dc56c3e0
 
   const router = useRouter();
   const { data: session } = useSession();
   
   const [ loading, setLoading ] = useState<boolean>(false);
 
+<<<<<<< HEAD
   const html = render(<Recovery recoveryLink='httP://localhost:3000/reset/123456'/>, {
     pretty:true,
   })
@@ -29,6 +37,16 @@ export default function Home() {
       subject: 'Recupere sua senha',
       text: 'Texto',
       texthtml: html
+=======
+  const handlerMail = async () => {
+    
+    let data = {
+      mailplan: 'contato@planmilhas.com.br',
+      mailuser: 'brunofelisbertos@gmail.com',
+      subject: 'Está funfando ok agora!',
+      text: 'Texto',
+      texthtml: '<b>Este texto está em negrito</b>'
+>>>>>>> 09286d995f1b689fe699205bac56d945dc56c3e0
     }
     
     const sendMail = await fetch('/api/email', {

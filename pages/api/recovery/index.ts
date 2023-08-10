@@ -3,8 +3,12 @@ import prisma from '../../../libs/prisma';
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import bcrypt from "bcrypt";
+<<<<<<< HEAD
 import EmailRecovery from "../../../emails/recuperar-senha";
 import { render } from "@react-email/components";
+=======
+import { error } from "console";
+>>>>>>> 09286d995f1b689fe699205bac56d945dc56c3e0
 
 //Send link for update password
 const handlerPost:  NextApiHandler = async (req, res) => {
@@ -26,8 +30,12 @@ const handlerPost:  NextApiHandler = async (req, res) => {
       const userToken = jwt.sign({userId: user.id}, process.env.TOKEN_SECRET as string, {
         expiresIn: "1h"
       })
+<<<<<<< HEAD
       const url: string = `http://localhost:3000/reset/${userToken}`
       const htmlRecovery = render(EmailRecovery(url as any))
+=======
+      const url = `http://localhost:3000/reset/${userToken}`
+>>>>>>> 09286d995f1b689fe699205bac56d945dc56c3e0
 
       //Send recovery email
       const transporter = nodemailer.createTransport({
@@ -44,8 +52,13 @@ const handlerPost:  NextApiHandler = async (req, res) => {
         from: 'PlanMilhas <suporte@planmilhas.com.br>',
         to: user.email,
         subject: 'Recuperação de senha',
+<<<<<<< HEAD
         text: '',
         html: htmlRecovery
+=======
+        text: 'Recupere sua senha clicando no botão abaixo',
+        html: `<a href=${url}>Clique aqui</a>`
+>>>>>>> 09286d995f1b689fe699205bac56d945dc56c3e0
       }).catch(console.error) 
     
       res.status(201).json({message: 'Email enviado com sucesso'})
