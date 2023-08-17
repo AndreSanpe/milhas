@@ -31,12 +31,15 @@ const Dashboard = (data: Props) => {
  
   const { user, setUser } = useAuthContext();
   const router = useRouter();
+
+  const firstName = user?.name.split(" ")[0];
  
   useEffect(() => {
     if(user === null || user != data.user) {
       setUser(data.user)
     }
   }, [data, user, setUser]);
+
 
 
   return (<>
@@ -46,7 +49,7 @@ const Dashboard = (data: Props) => {
     <Layout>
       <div className={styles.container}>
       
-            <div className={styles.title}>Olá, {user?.name}!</div>
+            <div className={styles.title}>Olá, {firstName}!</div>
             <span className={styles.subtitle}>Gerenciamento</span>
           
         <div className={styles.buttons}>

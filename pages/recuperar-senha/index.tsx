@@ -8,6 +8,8 @@ import Button from '../../components/Button';
 import { useRouter } from 'next/router';
 import Loader from '../../components/Loader';
 import DoneIcon from './done.svg';
+import EmailRecovery from '../../emails/recovery';
+import { render } from '@react-email/components';
 
 const RecuperarSenha = () => {
 

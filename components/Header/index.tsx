@@ -21,6 +21,8 @@ const Header = () => {
 
   const { user, setUser } = useAuthContext();
   const [ menuOpen, setMenuOpen ] = useState(false);
+  
+  const firstName = user?.name.split(" ")[0];
 
   const router = useRouter();
 
@@ -54,7 +56,7 @@ const Header = () => {
 
             {user && 
             <>
-              <div className={styles.title}>Olá, {user?.name}!</div>
+              <div className={styles.title}>Olá, {firstName}!</div>
               <div className={styles.subtitle}>{user?.email}</div>
             </>
             }

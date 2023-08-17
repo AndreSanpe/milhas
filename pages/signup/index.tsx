@@ -8,6 +8,8 @@ import styles from './styles.module.css';
 import Head from 'next/head';
 import Image from 'next/image';
 import Loader from '../../components/Loader';
+import { render } from '@react-email/components';
+import Welcome from '../../emails/welcome';
 
 
 const Signup = () => {
@@ -132,6 +134,7 @@ const Signup = () => {
       }
 
       if(response.ok) {
+
         const request = await signIn('credentials', {
           redirect: false,
           email, password
@@ -147,24 +150,28 @@ const Signup = () => {
         router.push('/login');
       }
 
+      const firstName = name.split(" ")[0]
+      const htmlWelcome = render(<Welcome firstName={firstName}/>)
+
       //If it's ok >> send welcome email
       let dataEmail = {
-        emailplan: 'contato@planmilhas.com.br',
-        emailuser: email,
-        subject: 'Bem vindo a PlanMilhas!',
-        text: 'Texto',
-        texthtml: '<b>Olá fulano, obrigado por se cadastrar!</b>'
+      emailplan: 'PlanMilhas <no-reply@planmilhas.com.br>',
+      emailuser: email,
+      subject: 'Boas-vindas a PlanMilhas!',
+      text: '',
+      texthtml: htmlWelcome
       }
-      
+    
       const sendEmail = await fetch('/api/email', {
-        method: 'POST',
-        body: JSON.stringify(dataEmail),
-        headers: {
-          'content-Type': 'application/json',
-        },
+      method: 'POST',
+      body: JSON.stringify(dataEmail),
+      headers: {
+        'content-Type': 'application/json',
+      },
       }); 
   
     }
+
     setLoading(false);
   } 
    

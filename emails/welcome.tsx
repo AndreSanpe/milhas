@@ -11,12 +11,12 @@ import {
   Text,
 } from '@react-email/components';
 
-interface RecoveryProps {
-  recoveryLink: string;
+interface WelcomeProps {
+  firstName: string;
   politcsLink?: string;
 }
 
-const Recovery = (dataEmail: string) => {
+const Welcome = (dataEmail: WelcomeProps) => {
  
   const baseUrl = process.env.DOMAIN_URL ? `https://${process.env.DOMAIN_URL}/` : '';
  
@@ -27,7 +27,7 @@ const Recovery = (dataEmail: string) => {
       </Head>
       
       <Html>
-        <Preview>Recupere seu acesso na PlanMilhas</Preview>
+        <Preview>Nossas boas-vindas à sua conta PlanMilhas!</Preview>
 
         <Body style={main}>
           <Container style={container}>
@@ -44,28 +44,28 @@ const Recovery = (dataEmail: string) => {
 
             <div style={line}></div>
 
-            <Text style={title}>Recupere sua senha</Text>
+            <Text style={title}>Boas-vindas à PlanMilhas!</Text>
 
-            <Text style={textMain}>Você solicitou recentemente a redefinição de senha em nosso site. Recupere sua senha agora clicando no botão.*</Text>
+            <Text style={subtitle}>{dataEmail.firstName ? `Que bom ver você por aqui, ${dataEmail.firstName}` : 'Que bom ver você por aqui!'} </Text>
+
+            <Text style={textMain}>Agora você tem acesso a ferramenta PlanMilhas e tem uma seleção de recursos exclusivos para gerenciar seus pontos e/ou milhas.</Text>
+
+            <Text style={textMain}>Você pode controlar as contas que administra, calcular custo de milheiro, descobrir se determinada promoção é lucrativa, organizar a quantidade de milhas adquiridas e muito mais...</Text>
+
+            <Text style={textMain}>Comece agora a utilizar estes e outros recursos acessando sua conta.</Text>
 
             <Section style={buttonSection}>
-              <Button href={dataEmail} style={button}>
+              <Button href={'https://www.planmilhas.com.br/login'} style={button}>
                 <Text style={textButton}>
-                  Clique e altere sua senha
+                  Clique aqui e acesse sua conta
                 </Text>
               </Button>
             </Section>
 
-            <Section>
-              <Text style={linkDois}>Ou <Link href={dataEmail}><span style={linkSpan}><u><b>clique aqui</b></u></span></Link> para alterar</Text>
-            </Section>
-
-            <Section>
-              <Text style={textObs}><i>*O link gerado expira em <b>1 hora</b>, por isso não deixe de usá-lo o quanto antes.<br></br>** Se você não solicitou a redefinição, acesse sua conta e altere sua senha para sua segurança.</i></Text>
-            </Section>
-
+            <Text style={subtitle}>Abraços, <br></br> Equipe PlanMilhas </Text>
+        
             <div style={line}></div>
-
+            
             <Section>
               <Text style={footerOne}>
               Este é um e-mail automático disparado pelo sistema. Favor não respondê-lo, pois esta conta não é monitorada. Em caso de dúvidas, acesse o site <Link href='https://www.planmilhas.com.br'><span style={{color: '#26408c'}}><u>www.planmilhas.com.br</u></span></Link>
@@ -77,7 +77,8 @@ const Recovery = (dataEmail: string) => {
               Copyright © 2023 PlanMilhas. All rights reserved.<br></br>
               Você está recebendo este e-mail porque se cadastrou na PlanMilhas.<br></br>
               PlanMilhas LTDA | CNPJ xx.xxx.xxx/0001-00<br></br>
-              Confira nossa <Link href=''><span style={{color: '#26408c'}}><u>Política de privacidade.</u></span></Link> 
+              Confira nossa <Link href=''><span style={{color: '#26408c'}}><u>Política de privacidade.</u></span></Link><br></br>
+              
               </Text>
             </Section>
 
@@ -89,7 +90,7 @@ const Recovery = (dataEmail: string) => {
     </>)
 }
 
-export default Recovery;
+export default Welcome;
 
 const main: React.CSSProperties = {
   backgroundColor: '#ffffff',
@@ -111,6 +112,13 @@ const img: React.CSSProperties = {
 
 const title: React.CSSProperties = {
   textAlign: 'center',
+  fontSize: '20px',
+  fontWeight: '800',
+  marginTop: '48px'
+};
+
+const subtitle: React.CSSProperties = {
+  textAlign: 'center',
   fontSize: '16px',
   fontWeight: '600',
   marginTop: '48px'
@@ -126,8 +134,8 @@ const textMain: React.CSSProperties = {
 const buttonSection: React.CSSProperties = {
   textAlign: 'center',
   marginTop: '40px',
+  marginBottom: '40px',
   cursor: 'pointer',
-  
 };
 
 const button: React.CSSProperties = {
@@ -142,23 +150,6 @@ const textButton: React.CSSProperties = {
   fontSize: '16px',
   padding: '0px 32px'
 };
-
-const linkDois: React.CSSProperties = {
-  textAlign: 'center',
-  marginBottom: '48px'
-}
-
-const linkSpan: React.CSSProperties = {
-  color: '#26408c',
-  fontWeight: '600',
-  cursor: 'pointer',
-}
-
-const textObs: React.CSSProperties = {
-  textAlign: 'center',
-  fontSize: '11px',
-  color: '#4b5563'
-}
 
 const line: React.CSSProperties = {
   borderBottom: '1px solid #eaeaea',
