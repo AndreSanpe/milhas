@@ -1,0 +1,92 @@
+@media screen and (min-width: 720px){ 
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 720px;
+  }
+}
+
+@media screen and (max-width: 719px){
+
+  .container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  margin-right: 20px;
+  }
+}
+
+/* CSS general */
+
+.results {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 5px;
+  border: 1px solid #DCE7FF;
+  color: #525252;
+  padding: 20px 20px;
+  margin-bottom: 32px;
+  gap: 20px;
+}
+
+.title {
+  line-height: 24px;
+  font-weight: 600;
+  color: #525252;
+  padding-bottom: 12px;
+}
+
+.label {
+  font-size: 12px;
+  line-height: 24px;
+  font-weight: 600;
+  color: #292929;
+}
+
+.button {
+  display: flex;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* .input {
+  width: 300px;
+} */
+
+.alert {
+  font-size: 15px;
+  line-height: 24px;
+  color: #8F8F8F;
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.errors {
+  text-align: center;
+  font-size: 9.5px;
+  font-weight: 500;
+  color: #E92D30;
+}
+
+.forget {
+  display: flex;
+  flex-direction: row-reverse;
+  font-size: 12px;
+  font-weight: 500;
+  padding-top: 4px;
+  color: #666666;
+}

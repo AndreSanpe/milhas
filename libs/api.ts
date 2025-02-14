@@ -52,6 +52,7 @@ export default {
         name: user?.name,
         email: user?.email,
         birthDate: user?.birthdate,
+        cpf: user?.cpf,
         cellphone: user?.cellphone,
         subscriptionId: user?.subscriptionId,
         stripeCustomer: user?.stripeCustomer,

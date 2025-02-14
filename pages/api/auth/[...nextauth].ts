@@ -9,12 +9,13 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       id: 'credentials',
       credentials: {
-        email: { label: 'E-mail', type: 'text' },
-        password: { label: 'senha', type: 'password' }
+        email: {},
+        password: {}
       },
       authorize: async (credentials, req) => {
-        if(credentials) {
+        if(credentials?.email && credentials.password) {
           const user = await api.getAuthUser(credentials.email, credentials.password);
+
           if(!user) {
             return null as any;    
           } 
@@ -29,13 +30,12 @@ export const authOptions: NextAuthOptions = {
       }
   })
   ],
-  session: {
-    maxAge: 60 * 60 * 1,
-  },
-  jwt: {
-    maxAge: 60 * 60 * 1,
-  },
   callbacks: {
+    signIn: async({user}) => {
+      if(user) return true;
+
+      return false;
+    },
     jwt: async ({ token, user }) => {
       if (user) {
         token.user = user;
@@ -45,9 +45,16 @@ export const authOptions: NextAuthOptions = {
    session: async ({ session, token }) => {
     if(token) {
       session.user = token.user as AuthUser;
+
       return session as any;
     }
-  }
+    },
+  },
+  session: {
+    maxAge: 60 * 60 * 1,
+  },
+  jwt: {
+    maxAge: 60 * 60 * 1,
   },
   pages: {
     signIn: '/login'

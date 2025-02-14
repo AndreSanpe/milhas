@@ -59,6 +59,11 @@ const ExtratoCompra = (data: Props) => {
   let buyQuantity = 0;
   let investiment = 0;
   let averageCoastMiles = 0;
+  let averageCoastMilesLivelo = 0;
+  let averageCoastMilesEsfera = 0;
+  let averageCoastMilesAzul = 0;
+  let averageCoastMilesLatam = 0;
+  let averageCoastMilesSmiles = 0;
 
   for(let i = 0; i < buyedMilesData.length; i++) {
     if(buyedMilesData[i].miles) {
@@ -67,6 +72,8 @@ const ExtratoCompra = (data: Props) => {
       miles += buyedMilesData[i].pointsQuantity;
     }
     investiment += buyedMilesData[i].price;
+
+    
   }
 
   if(miles && investiment) {
@@ -76,7 +83,7 @@ const ExtratoCompra = (data: Props) => {
   if(buyedMilesData.length) {
     buyQuantity = buyedMilesData.length;
   }
-  
+
   /* Menu edit events //////////////////////////////////////////////////////////////// */
   const handleMenuEvent = (event: MouseEvent) => {
     const tagName = (event.target as Element).tagName;

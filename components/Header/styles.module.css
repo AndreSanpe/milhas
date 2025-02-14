@@ -1,3 +1,17 @@
+@media screen and (max-width: 719px){
+.imageLogo {
+    width: 150px;
+    height: 29px;
+  }
+}
+
+@media screen and (min-width: 720px){ 
+  .imageLogo {
+    width: 180px;
+    height: 35px;
+  }
+}
+
 
   .container {
     display: flex;
@@ -15,11 +29,16 @@
     z-index: 10;
   }
 
+  .iconMenu {
+    display: flex;
+    color: #26408c;
+    cursor: pointer;
+  }
+
   .icon {
     display: flex;
-    flex-direction: row;
-    color:#26408C;
-    width: 28px;
+    color:#26408c;
+    padding-right: 8px;
     cursor: pointer;  
   }
 
@@ -27,38 +46,6 @@
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
-    font-size: 18px;
-    font-weight: 600;
-    color: #26408C;
-    gap: 4px;
-  }
-
-  .circle {
-    height: 12px;
-    width: 12px;
-    border-radius: 50%;
-    background-color: #D92B05;
-  }
-
-  .circle2 {
-    height: 12px;
-    width: 12px;
-    border-radius: 50%;
-    background-color: #4D69A6;
-  }
-
-  .circle3 {
-    height: 12px;
-    width: 12px;
-    border-radius: 50%;
-    background-color: #F29E05;
-  }
-
-  .circle4 {
-    height: 12px;
-    width: 12px;
-    border-radius: 50%;
-    background-color: #F25C05;
   }
 
   .overlay{
@@ -107,19 +94,34 @@
     display: flex;
     font-size: 14px;
     padding-left: 20px;
-    margin-bottom: 60px;
+    margin-bottom: 30px;
     color: #666666;
   }
 
   .links {
     display: flex;
-    padding: 8px 20px;
+    flex-direction: column;
+  }
+
+  .link {
+    display: flex;
+    padding: 6px 20px;
     cursor: pointer;
   }
 
-  .submit {
-    border: none;
-    background-color: #fafafa;
-    font-size: 16px;
-    padding-left: 20px;
+  .link:hover {
+    background-color: #D6E1FF;
   }
+
+  .submit {
+    display: flex;
+    font-size: 16px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+
+
+
+  

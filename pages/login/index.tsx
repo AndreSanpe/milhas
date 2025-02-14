@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
-import Logo from './fitnezz_.png';
+import Logo from '../../public/logo_plamilhas.png';
 import styles from './styles.module.css';
 import Head from 'next/head';
 import Loader from '../../components/Loader';
@@ -59,7 +59,8 @@ const Login = () => {
         email, password
       });
 
-    if(request && request.ok && request.status){
+
+    if(request && request.error === null && request.ok){
       router.push('/dashboard');
       } else {
         router.push('/login');
@@ -76,18 +77,16 @@ const Login = () => {
     </Head>
 
     <div className={styles.container}>
-      <div className={styles.loginArea}>
-
-        <div className={styles.logo}>  
-          {/* <Image 
-          src={Logo}
-          width={140}
-          height={48}
-          alt=''
-          /> */}
-
-          <div style={{fontSize: '24px', fontWeight: '700', color: '#26408C'}}>LOGO</div>
-        </div>
+      <div className={styles.loginArea}> 
+        
+        <Image 
+        src={Logo}
+        width={180}
+        height={35}
+        alt=''
+        priority={true}
+        className={styles.image}
+        />       
 
         <div className={styles.title}>Identifique-se</div>
         <div className={styles.subtitle}>Digite seu e-mail e senha</div>
@@ -111,7 +110,7 @@ const Login = () => {
                 password
                 warning={errorFields.includes('password')}
               />
-            <div className={styles.forget}>Esqueci minha senha</div>
+            <div className={styles.forget} onClick={() => {router.push('/recuperar-senha')}}>Esqueci minha senha</div>
           </div>
         </div>
 

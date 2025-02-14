@@ -16,6 +16,8 @@
   }
 
   .icons {
+    display: flex;
+    justify-content: center;
     color: #F29E05;
   }
 
